@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/sample1"
+        android:title="sample"
+        android:icon="@drawable/ic_person"
+        android:iconTint="@color/colorWhite"
+    />
+
+    <item
+        android:id="@+id/sample2"
+        android:title="sample"
+        android:icon="@drawable/ic_library_books_"
+        />
+
+    <item
+        android:id="@+id/sample3"
+        android:title="sample"
+        android:icon="@drawable/ic_location"
+        />
+
+    <item
+        android:id="@+id/sample4"
+        android:title="sample"
+        android:icon="@drawable/ic_notifications"
+        />
+
+    <item
+        android:id="@+id/sample5"
+        android:title="sample"
+        android:icon="@drawable/ic_email"
+        />
+</menu>

@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="@dimen/material_text_body2"
-            android:text="Already have an account?"
+            android:text="Already have an account? Sign In"
             android:textAlignment="center"
             android:layout_marginTop="@dimen/margin_m"
             android:textColor="@color/colorWhite"/>
