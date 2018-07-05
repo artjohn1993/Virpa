@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/margin_m"
+    android:layout_marginTop="@dimen/margin_s"
+    android:background="@color/colorWhite"
+    >
+
+    <ImageView
+        android:id="@+id/profilePicture"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/ic_person"
+        android:background="@color/colorPrimaryDark"
+        android:tint="@color/colorWhite"
+        />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="4 hrs ago"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <TextView
+        android:id="@+id/userName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Art John Abidin"
+        android:textSize="@dimen/material_text_body2"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@id/profilePicture"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        />
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/profilePicture"
+        app:layout_constraintEnd_toStartOf="@id/time"
+        app:layout_constraintTop_toBottomOf="@id/userName"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginTop="@dimen/margin_xs"
+        android:layout_marginEnd="@dimen/margin_s"
+        android:text="Matina 300m. away"
+        android:textSize="@dimen/material_text_caption"
+        />
+    <ImageView
+        android:id="@+id/postImage"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:src="@drawable/ic_background"
+        android:scaleType="centerCrop"
+        app:layout_constraintTop_toBottomOf="@id/profilePicture"
+        android:layout_marginTop="@dimen/margin_m"
+        />
+
+
+</android.support.constraint.ConstraintLayout>
