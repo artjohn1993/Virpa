@@ -3,12 +3,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/sample1"
-        android:title="Account"
-        android:icon="@drawable/ic_person"
-    />
-
-    <item
         android:id="@+id/sample2"
         android:title="Feed"
         android:icon="@drawable/ic_library_books_"

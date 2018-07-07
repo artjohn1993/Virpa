@@ -13,9 +13,9 @@
         android:id="@+id/profilePicture"
         android:layout_width="50dp"
         android:layout_height="50dp"
-        android:src="@drawable/ic_person"
-        android:background="@color/colorPrimaryDark"
-        android:tint="@color/colorWhite"
+        android:src="@drawable/sample_pic"
+        android:scaleType="centerCrop"
+        android:background="@drawable/navigation_background"
         />
 
     <TextView
@@ -60,6 +60,59 @@
         app:layout_constraintTop_toBottomOf="@id/profilePicture"
         android:layout_marginTop="@dimen/margin_m"
         />
+    <LinearLayout
+        android:id="@+id/reactionGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/postImage"
+        android:layout_marginTop="@dimen/margin_xs">
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_pan_tool"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="100 apir"
+            android:textSize="@dimen/material_text_caption"
+            android:layout_marginStart="@dimen/margin_xs"/>
+        <ImageView
+            android:layout_width="15dp"
+            android:layout_height="15dp"
+            android:src="@drawable/ic_share"
+            android:layout_marginStart="@dimen/margin_m"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="32 share"
+            android:textSize="@dimen/material_text_caption"
+            android:layout_marginStart="@dimen/margin_xs"/>
+    </LinearLayout>
+    <TextView
+        android:id="@+id/caption"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum"
+        app:layout_constraintTop_toBottomOf="@id/reactionGroup"
+        android:layout_marginTop="@dimen/margin_s"
+        />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/caption"
+        >
+
+        <android.support.design.widget.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="comment"
+            />
+
+    </android.support.design.widget.TextInputLayout>
 
 
 </android.support.constraint.ConstraintLayout>

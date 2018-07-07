@@ -19,33 +19,29 @@ class HomeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
         supportActionBar?.elevation = 0F
         title = ""
-        changeFragment(AccountFragment(), 0)
+        changeFragment(FeedFragment(), 0)
 
         navigationBar.setOnNavigationItemSelectedListener(
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
-                        R.id.sample1 -> {
-                            changeFragment(AccountFragment(), 1)
-                            currentfragment = 1
-                        }
                         R.id.sample2 -> {
-                            changeFragment(FeedFragment(), 2)
-                            currentfragment = 2
+                            changeFragment(FeedFragment(), 1)
+                            currentfragment = 1
 
                         }
                         R.id.sample3 -> {
-                            changeFragment(LocationFragment(), 3)
-                            currentfragment = 3
+                            changeFragment(LocationFragment(), 2)
+                            currentfragment = 2
 
                         }
                         R.id.sample4 -> {
-                            changeFragment(NotificationFragment(), 4)
-                            currentfragment = 4
+                            changeFragment(NotificationFragment(), 3)
+                            currentfragment = 3
 
                         }
                         R.id.sample5 -> {
-                            changeFragment(MessageFragment(), 5)
-                            currentfragment = 5
+                            changeFragment(MessageFragment(), 4)
+                            currentfragment = 4
 
                         }
                     }
