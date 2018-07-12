@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/padding_s">
+
+    <ImageView
+        android:id="@+id/notifIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:src="@drawable/ic_share"
+        android:background="@color/colorPrimary"
+        android:tint="@color/colorWhite"
+        />
+    <TextView
+        android:id="@+id/notifUserName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/notifIcon"
+        app:layout_constraintEnd_toStartOf="@id/notifTime"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        app:layout_goneMarginEnd="@dimen/margin_s"
+        android:text="Art John Abidin"
+        android:textColor="@color/black"
+        android:textSize="@dimen/material_text_body1"
+        />
+    <TextView
+        android:id="@+id/notifDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/notifIcon"
+        app:layout_constraintTop_toBottomOf="@id/notifUserName"
+        android:layout_marginStart="@dimen/margin_s"
+        app:layout_goneMarginEnd="@dimen/margin_s"
+        app:layout_constraintEnd_toStartOf="@id/notifTime"
+        android:layout_marginEnd="@dimen/margin_s"
+        android:text="lorem ipsum dolor"
+        />
+    <TextView
+        android:id="@+id/notifTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1 hour ago"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+</android.support.constraint.ConstraintLayout>

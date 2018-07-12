@@ -7,6 +7,7 @@ import com.local.virpa.virpa.R
 import kotlinx.android.synthetic.main.activity_home.*
 import android.support.annotation.NonNull
 import android.support.design.widget.BottomNavigationView
+import android.view.Menu
 import com.local.virpa.virpa.fragments.*
 
 
@@ -27,21 +28,23 @@ class HomeActivity : AppCompatActivity() {
                         R.id.sample2 -> {
                             changeFragment(FeedFragment(), 1)
                             currentfragment = 1
-
+                            assignTitle("Feed")
                         }
                         R.id.sample3 -> {
                             changeFragment(LocationFragment(), 2)
                             currentfragment = 2
+                            assignTitle("Location")
 
                         }
                         R.id.sample4 -> {
                             changeFragment(NotificationFragment(), 3)
                             currentfragment = 3
-
+                            assignTitle("Notification")
                         }
                         R.id.sample5 -> {
                             changeFragment(MessageFragment(), 4)
                             currentfragment = 4
+                            assignTitle("Message")
 
                         }
                     }
@@ -53,11 +56,19 @@ class HomeActivity : AppCompatActivity() {
         var fragment = supportFragmentManager.beginTransaction()
 
         if( currentfragment > selectedFragment) {
-            fragment.setCustomAnimations(R.anim.slide_right, R.anim.fade_out)
+            fragment.setCustomAnimations(R.anim.abc_fade_in, R.anim.fade_out)
         }
         else if(currentfragment < selectedFragment) {
-            fragment.setCustomAnimations(R.anim.slide_left, R.anim.fade_out)
+            fragment.setCustomAnimations(R.anim.abc_fade_in, R.anim.fade_out)
         }
         fragment.replace(R.id.homeFrameLayout, data).commit()
+    }
+    private fun assignTitle(data : String) {
+        title = data
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.navigation, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 }

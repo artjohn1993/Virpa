@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/padding_s">
+
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/mProf"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:src="@drawable/sample_pic"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/mTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1h ago"
+        android:textSize="@dimen/material_text_body1"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+    <TextView
+        android:id="@+id/mName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="Art John Abidin"
+        app:layout_constraintStart_toEndOf="@id/mProf"
+        app:layout_constraintEnd_toStartOf="@id/mTime"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        android:textColor="@color/black"
+        />
+    <TextView
+        android:id="@+id/mDesc"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/mProf"
+        app:layout_constraintEnd_toStartOf="@id/mTime"
+        app:layout_constraintTop_toBottomOf="@id/mName"
+        android:layout_marginStart="@dimen/margin_s"
+        android:layout_marginEnd="@dimen/margin_s"
+        android:text="Lorem Ipsum Dolor"
+        android:textSize="@dimen/material_text_body2"
+        />
+
+</android.support.constraint.ConstraintLayout>

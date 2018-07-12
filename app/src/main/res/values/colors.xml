@@ -7,4 +7,5 @@
     <color name="transparentPrimaryDark">#800053b7</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="gray">#b9bdc2</color>
+    <color name="black">#000000</color>
 </resources>
