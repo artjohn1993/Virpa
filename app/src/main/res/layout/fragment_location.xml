@@ -3,13 +3,45 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.LocationFragment"
-    android:background="#b7379d">
+    >
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <com.guo.duoduo.library.RadarScanView
+        android:id="@+id/radar"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="Location" />
+        android:backgroundTint="@color/colorWhite"
+        app:circleColor="@color/colorWhite"
+        app:radarColor="@color/colorPrimaryDark"
+        app:tailColor="@color/colorPrimaryDark"
+        />
 
+    <com.guo.duoduo.randomtextview.RandomTextView
+        android:id="@+id/random_textview"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_centerInParent="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/mProf"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/sample_pic"
+            app:layout_constraintTop_toTopOf="@id/random_textview"
+            app:layout_constraintStart_toStartOf="@id/random_textview"
+            app:layout_constraintBottom_toBottomOf="@id/random_textview"
+            app:layout_constraintEnd_toEndOf="@id/random_textview"
+            />
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>

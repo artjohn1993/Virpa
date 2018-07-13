@@ -44,4 +44,6 @@ dependencies {
 
     //circle image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+    //radar
+    implementation 'com.github.gpfduoduo:RadarScanView:bda53b8b9c'
 }
