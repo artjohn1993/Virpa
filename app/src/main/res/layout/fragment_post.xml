@@ -3,13 +3,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.FeedFragment"
-    >
+    tools:context=".fragments.PostFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/feedRecyclerView"
+    <!-- TODO: Update blank fragment layout -->
+    <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#cccc"/>
+        android:text="@string/hello_blank_fragment" />
 
 </FrameLayout>

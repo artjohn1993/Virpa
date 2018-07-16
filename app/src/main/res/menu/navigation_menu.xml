@@ -3,25 +3,31 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/sample2"
+        android:id="@+id/feed"
         android:title="Feed"
         android:icon="@drawable/ic_library_books_"
         />
 
     <item
-        android:id="@+id/sample3"
+        android:id="@+id/location"
         android:title="Location"
         android:icon="@drawable/ic_location"
         />
 
     <item
-        android:id="@+id/sample4"
+        android:id="@+id/post"
+        android:title="Job Post"
+        android:icon="@drawable/ic_rate_review"
+        />
+
+    <item
+        android:id="@+id/notif"
         android:title="Notification"
         android:icon="@drawable/ic_notifications"
         />
 
     <item
-        android:id="@+id/sample5"
+        android:id="@+id/message"
         android:title="Message"
         android:icon="@drawable/ic_email"
         />

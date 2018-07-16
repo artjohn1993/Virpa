@@ -25,10 +25,6 @@ class LocationFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_location, container, false)
 
-        random_textview.setOnRippleViewClickListener {
-
-        }
-
         Handler().postDelayed(Runnable {
             var array : ArrayList<String> = ArrayList()
             array.add("sample 1")
@@ -41,8 +37,13 @@ class LocationFragment : Fragment() {
             array.add("sample 8")
             array.add("sample 9")
             array.add("sample 10")
-            random_textview.keyWords.addAll(array)
-            random_textview.show()
+            try{
+                random_textview.keyWords.addAll(array)
+                random_textview.show()
+            }catch (e : Exception) {
+
+            }
+
         }, 2 * 1000)
 
         return view
