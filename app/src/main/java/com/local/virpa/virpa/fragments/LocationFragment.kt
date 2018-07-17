@@ -1,5 +1,6 @@
 package com.local.virpa.virpa.fragments
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -14,16 +15,26 @@ import com.guo.duoduo.randomtextview.RandomTextView
 import kotlinx.android.synthetic.main.fragment_location.*
 import com.local.virpa.virpa.activity.MainActivity
 import android.content.Intent
+import android.widget.ImageButton
+import com.local.virpa.virpa.activity.HomeActivity
 import org.jetbrains.anko.sdk25.coroutines.onContextClick
 import org.jetbrains.anko.view
 
 
-class LocationFragment : Fragment() {
+@SuppressLint("ValidFragment")
+class LocationFragment @SuppressLint("ValidFragment") constructor
+(val activity: HomeActivity) : Fragment() {
 
+    val fragment = activity.supportFragmentManager.beginTransaction()
+    var changeView : ImageButton? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_location, container, false)
+        changeView = view.findViewById(R.id.changeView)
+        changeView?.setOnClickListener {
+            fragment.replace(R.id.homeFrameLayout, ImageListFragment()).commit()
+        }
 
         Handler().postDelayed(Runnable {
             var array : ArrayList<String> = ArrayList()
@@ -48,5 +59,6 @@ class LocationFragment : Fragment() {
 
         return view
     }
+
 
 }

@@ -15,7 +15,6 @@
         android:layout_height="50dp"
         android:src="@drawable/sample_pic"
         android:scaleType="centerCrop"
-        android:background="@drawable/navigation_background"
         />
 
     <TextView

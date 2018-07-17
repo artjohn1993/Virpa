@@ -3,12 +3,85 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".fragments.PostFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="match_parent">
+       <RadioGroup
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:padding="8dp"
+           android:background="@drawable/border_layout"
+           android:id="@+id/menu1">
+           <RadioButton
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="LF (Looking for)"
+               android:layout_marginEnd="8dp"
+               />
+           <RadioButton
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:text="Announcement"
+               />
+       </RadioGroup>
 
+
+
+        <LinearLayout
+            android:id="@+id/menu2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            >
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Post"
+                android:textAllCaps="false"
+                android:background="@color/colorPrimary"
+                android:textSize="@dimen/material_text_title"
+                android:textColor="@color/colorWhite"
+                />
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Tag Category"
+                android:textSize="@dimen/material_text_title"
+                android:padding="@dimen/padding_m"
+                android:background="@drawable/border_layout"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Expires On"
+                android:textSize="@dimen/material_text_title"
+                android:padding="@dimen/padding_m"
+                android:background="@drawable/border_layout"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Post Radius"
+                android:textSize="@dimen/material_text_title"
+                android:padding="@dimen/padding_m"
+                android:background="@drawable/border_layout"/>
+        </LinearLayout>
+
+        <EditText
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toBottomOf="@id/menu1"
+            app:layout_constraintBottom_toTopOf="@id/menu2"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:inputType="textMultiLine"
+            android:gravity="top"
+            android:padding="@dimen/padding_s"
+           />
+
+    </android.support.constraint.ConstraintLayout>
 </FrameLayout>

@@ -16,4 +16,11 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <string-array
+        name="category">
+        <item>tutorial</item>
+        <item>singing</item>
+        <item>cooking</item>
+        <item>dancing</item>
+    </string-array>
 </resources>

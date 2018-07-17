@@ -43,7 +43,7 @@ class HomeActivity : AppCompatActivity() {
                             currentfragment = 1
                         }
                         R.id.location -> {
-                            changeFragment(LocationFragment(), 2)
+                            changeFragment(LocationFragment(this), 2)
                             currentfragment = 2
                         }
                         R.id.post -> {
