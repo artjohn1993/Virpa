@@ -33,7 +33,7 @@ class LocationFragment @SuppressLint("ValidFragment") constructor
         assignView(view)
 
         changeView?.setOnClickListener {
-            setLayout(LocationView2Fragment(), "2")
+            setLayout(LocationView2Fragment())
         }
 
         return view
@@ -42,15 +42,17 @@ class LocationFragment @SuppressLint("ValidFragment") constructor
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         this.fragment = childFragmentManager.beginTransaction()
-        setLayout(LocationView1Fragment(), "1")
+        setLayout(LocationView1Fragment())
     }
 
     private fun assignView(view : View) {
         changeView = view.findViewById(R.id.changeView)
     }
 
-    private fun setLayout(data : android.support.v4.app.Fragment, type : String) {
-        this.fragment?.replace(R.id.locationFrame, data, type)
-        this.fragment?.commit()
+    private fun setLayout(data : android.support.v4.app.Fragment) {
+        var fragment : FragmentTransaction = childFragmentManager.beginTransaction()
+        fragment.replace(R.id.locationFrame, data)
+        fragment.addToBackStack(null)
+        fragment.commit()
     }
 }
