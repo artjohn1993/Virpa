@@ -24,7 +24,7 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                             }
                         },{
                             error ->
-                            println(error)
+                                view.createFailed()
                         })
         )
     }
@@ -38,6 +38,10 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                             if (result.succeed) {
                                 view.loginSuccess(result)
                             }
+                            else
+                            {
+                                view.loginFailed(result.message[0])
+                            }
                         },{
                             error ->
                             println(error)
@@ -48,7 +52,9 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
 
 interface MainView {
     fun createSuccess(data : CreateUser.Result)
+    fun createFailed()
     fun loginSuccess(data : SignIn.Result)
+    fun loginFailed(data : String)
 }
 interface MainPresenter {
     fun createUser(data : CreateUser.Post)

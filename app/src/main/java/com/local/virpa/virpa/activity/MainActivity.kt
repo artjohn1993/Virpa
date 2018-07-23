@@ -6,6 +6,7 @@ import android.os.Bundle
 import com.local.virpa.virpa.fragments.SignInFragment
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.event.LoginChangeFragment
 import com.local.virpa.virpa.event.LoginEvent
 import com.local.virpa.virpa.event.RegisterEvent
@@ -20,11 +21,14 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
+import android.support.design.widget.Snackbar
+import android.view.View
+
 
 class MainActivity : AppCompatActivity(), MainView {
 
-
     //region - Variables
+    var loading = Loading(this)
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
@@ -69,7 +73,10 @@ class MainActivity : AppCompatActivity(), MainView {
         startActivity<HomeActivity>()
         finish()
     }
-
+    private fun snackBar(data : String) {
+        val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), data, Snackbar.LENGTH_LONG)
+        snackbar.show()
+    }
     //endregion
 
     //region - EventBus Method
@@ -85,6 +92,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event : LoginEvent) {
+        loading.show()
         var data = SignIn.Request(
                 event.username,
                 event.password,
@@ -95,6 +103,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onRegisterEvent(event : RegisterEvent) {
+        loading.show()
         var data = CreateUser.Post(
                 event.fullname,
                 event.mobilenumber,
@@ -106,10 +115,19 @@ class MainActivity : AppCompatActivity(), MainView {
     //endregion
 
     override fun createSuccess(data : CreateUser.Result) {
+        loading.hide()
         nextActivity()
     }
     override fun loginSuccess(data: SignIn.Result) {
+        loading.hide()
         nextActivity()
+    }
+    override fun loginFailed(data: String) {
+        loading.hide()
+        snackBar(data)
+    }
+    override fun createFailed() {
+        loading.hide()
     }
 }
 
