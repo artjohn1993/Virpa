@@ -93,12 +93,17 @@ class MainActivity : AppCompatActivity(), MainView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginEvent(event : LoginEvent) {
         loading.show()
-        var data = SignIn.Request(
-                event.username,
-                event.password,
-                true
-        )
-        presenter.login(data)
+        if(event.username=="" || event.password=="") {
+            snackBar("Please fill up correctly")
+        }
+        else {
+            var data = SignIn.Request(
+                    event.username,
+                    event.password,
+                    true
+            )
+            presenter.login(data)
+        }
     }
 
     @Subscribe(threadMode = ThreadMode.MAIN)
@@ -116,6 +121,7 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun createSuccess(data : CreateUser.Result) {
         loading.hide()
+        snackBar(data.message[0])
         nextActivity()
     }
     override fun loginSuccess(data: SignIn.Result) {
@@ -126,8 +132,9 @@ class MainActivity : AppCompatActivity(), MainView {
         loading.hide()
         snackBar(data)
     }
-    override fun createFailed() {
+    override fun createFailed(data: String) {
         loading.hide()
+        snackBar(data)
     }
 }
 

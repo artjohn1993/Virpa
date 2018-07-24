@@ -56,7 +56,7 @@
             app:layout_constraintTop_toBottomOf="@id/passwordLayout"
             android:layout_marginTop="@dimen/margin_m"
             android:textSize="@dimen/material_text_button"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparentPrimaryDark"
             android:textColor="@color/colorWhite"
             />
         <TextView

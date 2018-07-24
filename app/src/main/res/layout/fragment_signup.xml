@@ -123,7 +123,7 @@
             android:text="Sign Up"
             android:textSize="@dimen/material_text_button"
             android:textAllCaps="false"
-            android:background="@color/colorPrimary"
+            android:background="@color/transparentPrimaryDark"
             android:textColor="@color/colorWhite"
             android:layout_marginTop="@dimen/margin_m"
 

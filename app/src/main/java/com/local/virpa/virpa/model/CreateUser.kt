@@ -3,7 +3,8 @@ package com.local.virpa.virpa.model
 object CreateUser {
     data class Result(
             var succeed : Boolean,
-            var data : Data
+            var data : Data,
+            var message : List<String>
     )
     data class Data(
             var id : String,
