@@ -3,4 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="amount_to_offer">Enter amount to offer(Talent Fee)</string>
+    <string name="forget_password">Enter your email address to request a password reset.</string>
+    <string name="back_signin">Back to SignIn</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.local.virpa.virpa.event
 
-class LoginChangeFragment {
-    var type : String
+import com.local.virpa.virpa.enum.LoginFragment
 
-    constructor(type : String) {
+class LoginChangeFragment {
+    var type : LoginFragment
+
+    constructor(type : LoginFragment) {
         this.type = type
     }
 

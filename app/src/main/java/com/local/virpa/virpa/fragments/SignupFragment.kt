@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.enum.LoginFragment
 import com.local.virpa.virpa.event.LoginChangeFragment
 import com.local.virpa.virpa.event.LoginEvent
 import com.local.virpa.virpa.event.RegisterEvent
@@ -31,7 +32,7 @@ class SignupFragment : Fragment() {
         setVariable(view)
         signin?.setOnClickListener {
             hide(view)
-            EventBus.getDefault().post(LoginChangeFragment("signin"))
+            EventBus.getDefault().post(LoginChangeFragment(LoginFragment.SIGNIN))
         }
         signup?.setOnClickListener {
             EventBus.getDefault().post(RegisterEvent(

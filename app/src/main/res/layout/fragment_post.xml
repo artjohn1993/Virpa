@@ -9,25 +9,93 @@
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-       <RadioGroup
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:padding="8dp"
-           android:background="@drawable/border_layout"
-           android:id="@+id/menu1">
-           <RadioButton
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="LF (Looking for)"
-               android:layout_marginEnd="8dp"
-               />
-           <RadioButton
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:text="Announcement"
-               />
-       </RadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:id="@+id/menu1">
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="LF (Looking for)"
+                    android:layout_marginEnd="8dp"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Announcement"
+                    />
+            </RadioGroup>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PHP"
+                    android:layout_marginEnd="8dp"
+                    android:textColor="@color/black"/>
+                <EditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="@string/amount_to_offer"
+                    android:background="@color/transparent"
+                    android:inputType="phone"/>
+            </LinearLayout>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                />
+            <RadioGroup
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="8dp"
+                >
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Hour"
+                    android:layout_marginEnd="8dp"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Day"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Week"
+                    />
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Month"
+                    />
+
+            </RadioGroup>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                />
+        </LinearLayout>
+
 
 
 
@@ -44,30 +112,40 @@
                 android:text="Post"
                 android:textAllCaps="false"
                 android:background="@color/colorPrimary"
-                android:textSize="@dimen/material_text_title"
+                android:textSize="@dimen/material_text_body1"
                 android:textColor="@color/colorWhite"
                 />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Tag Category"
-                android:textSize="@dimen/material_text_title"
-                android:padding="@dimen/padding_m"
-                android:background="@drawable/border_layout"/>
+                android:textSize="@dimen/material_text_caption"
+                android:padding="@dimen/padding_s"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Expires On"
-                android:textSize="@dimen/material_text_title"
-                android:padding="@dimen/padding_m"
-                android:background="@drawable/border_layout"/>
+                android:textSize="@dimen/material_text_caption"
+                android:padding="@dimen/padding_s"
+                />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/gray"
+                />
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post Radius"
-                android:textSize="@dimen/material_text_title"
-                android:padding="@dimen/padding_m"
-                android:background="@drawable/border_layout"/>
+                android:textSize="@dimen/material_text_caption"
+                android:padding="@dimen/padding_s"
+                />
         </LinearLayout>
 
         <EditText

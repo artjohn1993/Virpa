@@ -1,6 +1,5 @@
 package com.local.virpa.virpa.activity
 
-import android.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.local.virpa.virpa.fragments.SignInFragment
@@ -23,6 +22,8 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import android.support.design.widget.Snackbar
 import android.view.View
+import com.local.virpa.virpa.fragments.ForgetPassFragment
+import com.local.virpa.virpa.enum.LoginFragment
 
 
 class MainActivity : AppCompatActivity(), MainView {
@@ -82,8 +83,12 @@ class MainActivity : AppCompatActivity(), MainView {
     //region - EventBus Method
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onLoginChangeFragment(event : LoginChangeFragment) {
-        if(event.type == "signup") {
+        if(event.type == LoginFragment.SIGNUP) {
             changeFragment(SignupFragment())
+        }
+        else if(event.type == LoginFragment.FORGET_PASSWORD) {
+            changeFragment(ForgetPassFragment())
+
         }
         else {
             changeFragment(SignInFragment())
@@ -94,6 +99,7 @@ class MainActivity : AppCompatActivity(), MainView {
     fun onLoginEvent(event : LoginEvent) {
         loading.show()
         if(event.username=="" || event.password=="") {
+            loading.hide()
             snackBar("Please fill up correctly")
         }
         else {
@@ -137,4 +143,5 @@ class MainActivity : AppCompatActivity(), MainView {
         snackBar(data)
     }
 }
+
 

@@ -15,21 +15,25 @@
 
                 <ImageView
                     android:id="@+id/toolbar_logo"
-                    android:src="@drawable/ic_logo"
+                    android:src="@mipmap/ic_logo"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:tint="@color/colorWhite"
+                    android:scaleType="center"
                     />
 
-                <ImageButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="40dp"
-                    android:src="@drawable/ic_person"
+
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="35dp"
+                    android:layout_height="35dp"
+                    android:src="@drawable/sample_pic"
+                    android:scaleType="centerCrop"
                     android:layout_gravity="right"
                     android:layout_marginEnd="@dimen/padding_s"
-                    android:background="?android:attr/selectableItemBackground"
-                    style="@style/Base.Widget.AppCompat.ActionButton"
+                    app:civ_border_color="@color/colorWhite"
+                    app:civ_border_width="1dp"
                     />
 
                 <ImageButton
