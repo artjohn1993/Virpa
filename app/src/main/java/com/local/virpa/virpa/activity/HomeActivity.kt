@@ -16,6 +16,7 @@ import android.view.Menu
 import android.widget.Toolbar
 import com.local.virpa.virpa.fragments.*
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import org.jetbrains.anko.startActivity
 
 
 class HomeActivity : AppCompatActivity() {
@@ -63,6 +64,9 @@ class HomeActivity : AppCompatActivity() {
                     }
                     true
                 })
+        profilePicture.setOnClickListener {
+            startActivity<SettingActivity>()
+        }
     }
 
 
