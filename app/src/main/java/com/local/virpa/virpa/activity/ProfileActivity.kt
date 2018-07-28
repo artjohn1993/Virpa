@@ -6,22 +6,20 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.widget.LinearLayout
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.adapter.ProfileAdapter
 import com.local.virpa.virpa.adapter.SettingsAdapter
+import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_setting.*
-import org.jetbrains.anko.startActivity
 
-class SettingActivity : AppCompatActivity() {
-
+class ProfileActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_setting)
-        title = "Me"
+        setContentView(R.layout.activity_profile)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         bind()
     }
-
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             android.R.id.home -> {
@@ -35,13 +33,12 @@ class SettingActivity : AppCompatActivity() {
         scrollTop()
     }
     private fun scrollTop() {
-        settingScrollView.smoothScrollTo(0,0)
+        profileScroll.smoothScrollTo(0,0)
     }
     private fun setRecycler() {
-        settingsRecycler.layoutManager = LinearLayoutManager(this,
+        profileRecycler.layoutManager = LinearLayoutManager(this,
                 LinearLayout.VERTICAL,
                 false)
-        settingsRecycler.adapter = SettingsAdapter(this)
-        settingsRecycler.isFocusable = false
+        profileRecycler.adapter = ProfileAdapter()
     }
 }

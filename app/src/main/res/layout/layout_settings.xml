@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:paddingBottom="@dimen/padding_s">
+    <ImageView
+        android:padding="@dimen/padding_xs"
+        android:id="@+id/settingsIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:tint="@color/colorPrimary"
+        android:src="@drawable/ic_person"/>
+    <TextView
+        android:id="@+id/settingsItem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sample txt"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/settingsIcon"
+        android:layout_marginStart="@dimen/margin_m"
+        android:textColor="@color/darkGray"
+        android:textSize="18sp"/>
+
+</android.support.constraint.ConstraintLayout>

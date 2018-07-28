@@ -5,32 +5,68 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SettingActivity">
-    <ScrollView
+    <android.support.v4.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/settingScrollView"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
+        >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center"
-            android:background="@drawable/gradient_background"
-            android:padding="16dp"
-            >
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/profilePicture"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
-                android:src="@drawable/sample_pic"
-                android:scaleType="centerCrop"
-                />
-            <TextView
-                android:layout_width="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:id="@+id/profileGroup"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Jessica Sanchez"
-                android:textColor="@color/colorWhite"
-                android:textSize="20dp"
-                android:layout_marginTop="@dimen/margin_m"
-                android:textStyle="bold"/>
+                android:orientation="vertical"
+                android:gravity="center"
+                android:background="@drawable/gradient_background"
+                android:padding="16dp"
+                >
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profilePicture"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/sample_pic"
+                    android:scaleType="centerCrop"
+                    app:civ_border_color="@color/colorWhite"
+                    app:civ_border_width="2dp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Jessica Sanchez"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="20dp"
+                    android:layout_marginTop="@dimen/margin_m"
+                    android:textStyle="bold"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="jessica@gmail.com"
+                    android:textColor="@color/colorWhite"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="09151722088"
+                    android:textColor="@color/colorWhite"
+                    android:textSize="12sp"
+
+                    />
+            </LinearLayout>
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/settingsRecycler"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
+                android:padding="@dimen/padding_m"
+                android:focusableInTouchMode="false"
+                android:focusable="false"
+                />
         </LinearLayout>
-    </ScrollView>
+
+    </android.support.v4.widget.NestedScrollView>
 </android.support.constraint.ConstraintLayout>
