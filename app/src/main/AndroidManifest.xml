@@ -23,7 +23,11 @@
             android:name=".activity.HomeActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".activity.SettingActivity" />
-        <activity android:name=".activity.ProfileActivity"></activity>
+        <activity android:name=".activity.ProfileActivity" />
+        <activity android:name=".activity.ListViewActivity" />
+        <activity android:name=".activity.RatingActivity" />
+        <activity android:name=".activity.UpvotesActivity" />
+        <activity android:name=".activity.EditInfoActivity"></activity>
     </application>
 
 </manifest>

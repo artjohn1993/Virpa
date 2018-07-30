@@ -126,7 +126,6 @@
             android:background="@color/transparentPrimaryDark"
             android:textColor="@color/colorWhite"
             android:layout_marginTop="@dimen/margin_m"
-
             />
         <TextView
             android:id="@+id/signin"

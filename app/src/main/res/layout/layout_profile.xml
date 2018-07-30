@@ -26,8 +26,8 @@
             />
        <ImageView
            android:id="@+id/nextIcon"
-           android:layout_width="40dp"
-           android:layout_height="40dp"
+           android:layout_width="30dp"
+           android:layout_height="30dp"
            app:layout_constraintEnd_toEndOf="parent"
            android:src="@drawable/ic_right"
            app:layout_constraintTop_toTopOf="parent"
@@ -42,5 +42,6 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:layout_marginEnd="@dimen/margin_s"
             android:text="View Item"
+            android:textSize="12sp"
             />
 </android.support.constraint.ConstraintLayout>

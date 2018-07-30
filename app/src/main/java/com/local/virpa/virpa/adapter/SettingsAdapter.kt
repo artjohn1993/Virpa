@@ -10,11 +10,14 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.activity.*
 import org.jetbrains.anko.backgroundDrawable
+import org.jetbrains.anko.startActivity
 import java.util.zip.Inflater
 
 class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>() {
     var title : ArrayList<String> = ArrayList()
+    var guide : ArrayList<String> = ArrayList()
     var icon : ArrayList<Int> = ArrayList()
     var color: ArrayList<Int> = ArrayList()
     init {
@@ -23,6 +26,12 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         title.add("Upvotes")
         title.add("Edit Profile")
         title.add("Logout")
+
+        guide.add("See who viewed you")
+        guide.add("View ratings")
+        guide.add("View your upvotes")
+        guide.add("Edit info")
+        guide.add("")
 
         icon.add(R.drawable.ic_view)
         icon.add(R.drawable.ic_rate_review)
@@ -51,9 +60,30 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         holder.icon.setImageResource(icon[position])
         holder.icon.backgroundDrawable = ContextCompat.getDrawable(activity,color[position])
         holder.title.text = title[position]
+        holder.guide.text = guide[position]
         if (title[position] == "Logout") {
             holder.guide.visibility = View.GONE
             holder.next.visibility = View.GONE
+        }
+        holder.itemView.setOnClickListener {
+            when(position) {
+                0 -> {
+                    activity.startActivity<ListViewActivity>()
+                }
+                1 -> {
+                    activity.startActivity<RatingActivity>()
+                }
+                2 -> {
+                    activity.startActivity<UpvotesActivity>()
+                }
+                3 -> {
+                    activity.startActivity<EditInfoActivity>()
+                }
+                4 -> {
+                    activity.startActivity<MainActivity>()
+                    activity.finish()
+                }
+            }
         }
     }
 
@@ -62,6 +92,5 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         val title = itemview.findViewById<TextView>(R.id.itemTitle)
         val guide = itemview.findViewById<TextView>(R.id.itemGuide)
         val next = itemview.findViewById<ImageView>(R.id.nextIcon)
-
     }
 }
