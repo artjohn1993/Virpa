@@ -99,12 +99,14 @@
             android:layout_marginStart="@dimen/margin_xs"/>
 
         <ImageView
+            android:id="@+id/commentIcon"
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:src="@drawable/ic_mode_comment"
             android:layout_marginStart="@dimen/margin_m"
             />
         <TextView
+            android:id="@+id/commentText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="5 comments"

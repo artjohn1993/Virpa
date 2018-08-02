@@ -10,7 +10,8 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:tint="@color/colorPrimary"
-        android:src="@drawable/ic_person"/>
+        android:src="@drawable/ic_person"
+        />
     <TextView
         android:id="@+id/settingsItem"
         android:layout_width="wrap_content"

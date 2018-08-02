@@ -1,5 +1,7 @@
 package com.local.virpa.virpa.fragments
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -14,7 +16,9 @@ import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.FeedAdapter
 
-class FeedFragment() : Fragment() {
+@SuppressLint("ValidFragment")
+class FeedFragment @SuppressLint("ValidFragment") constructor
+(val activity: Activity) : Fragment() {
 
     var feedRecycler : android.support.v7.widget.RecyclerView? = null
 
@@ -26,7 +30,7 @@ class FeedFragment() : Fragment() {
         feedRecycler?.layoutManager = LinearLayoutManager(context,
                 LinearLayout.VERTICAL,
                 false)
-        feedRecycler?.adapter = FeedAdapter()
+        feedRecycler?.adapter = FeedAdapter(activity)
 
         return view
     }

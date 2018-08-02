@@ -34,13 +34,13 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        changeFragment(FeedFragment(), 0)
+        changeFragment(FeedFragment(this), 0)
         navigationBar.disableShiftMode()
         navigationBar.setOnNavigationItemSelectedListener(
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
                         R.id.feed -> {
-                            changeFragment(FeedFragment(), 1)
+                            changeFragment(FeedFragment(this), 1)
                             currentfragment = 1
                         }
                         R.id.location -> {

@@ -27,7 +27,9 @@
         <activity android:name=".activity.ListViewActivity" />
         <activity android:name=".activity.RatingActivity" />
         <activity android:name=".activity.UpvotesActivity" />
-        <activity android:name=".activity.EditInfoActivity"></activity>
+        <activity android:name=".activity.EditInfoActivity" />
+        <activity android:name=".activity.VisitedProfileActivity" />
+        <activity android:name=".activity.CommentActivity"></activity>
     </application>
 
 </manifest>

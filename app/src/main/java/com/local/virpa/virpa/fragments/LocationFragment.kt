@@ -7,6 +7,9 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentTransaction
+import android.support.v7.widget.GridLayoutManager
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,7 +17,10 @@ import android.view.ViewGroup
 import com.local.virpa.virpa.R
 
 import android.widget.ImageButton
+import android.widget.LinearLayout
 import com.local.virpa.virpa.activity.HomeActivity
+import com.local.virpa.virpa.adapter.FeedAdapter
+import com.local.virpa.virpa.adapter.LocationAdapter
 
 
 @SuppressLint("ValidFragment")
@@ -22,37 +28,17 @@ class LocationFragment @SuppressLint("ValidFragment") constructor
 (val activity: HomeActivity) : Fragment() {
 
 
-    var fragment : FragmentTransaction? = null
-    var changeView : ImageButton? = null
+    var fragment : RecyclerView? = null
+    var locationRecycler : android.support.v7.widget.RecyclerView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_location, container, false)
-
-        assignView(view)
-
-        changeView?.setOnClickListener {
-            setLayout(LocationView2Fragment())
-        }
-
+        locationRecycler = view.findViewById(R.id.locationRecycler)
+        locationRecycler?.layoutManager = GridLayoutManager(context, 3)
+        locationRecycler?.adapter = LocationAdapter(activity)
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        this.fragment = childFragmentManager.beginTransaction()
-        setLayout(LocationView1Fragment())
-    }
-
-    private fun assignView(view : View) {
-        changeView = view.findViewById(R.id.changeView)
-    }
-
-    private fun setLayout(data : android.support.v4.app.Fragment) {
-        var fragment : FragmentTransaction = childFragmentManager.beginTransaction()
-        fragment.replace(R.id.locationFrame, data)
-        fragment.addToBackStack(null)
-        fragment.commit()
-    }
 }

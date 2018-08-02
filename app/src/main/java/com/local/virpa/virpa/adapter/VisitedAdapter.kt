@@ -9,29 +9,21 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.CommentActivity
-import com.local.virpa.virpa.activity.VisitedProfileActivity
-import kotlinx.android.synthetic.main.fragment_feed.view.*
 import org.jetbrains.anko.startActivity
 
-class FeedAdapter(val activity: Activity) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
+class VisitedAdapter(val activity: Activity) : RecyclerView.Adapter<VisitedAdapter.VisitediewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VisitediewHolder {
         val inflater = LayoutInflater.from(parent?.context)
         val layout = inflater.inflate(R.layout.layout_post_feed, parent, false)
-        return FeedViewHolder(layout)
+        return VisitediewHolder(layout)
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return 2
     }
 
-    override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.profile.setOnClickListener {
-            activity.startActivity<VisitedProfileActivity>()
-        }
-        holder.name.setOnClickListener {
-            activity.startActivity<VisitedProfileActivity>()
-        }
+    override fun onBindViewHolder(holder: VisitediewHolder, position: Int) {
         holder.commentText.setOnClickListener {
             activity.startActivity<CommentActivity>()
         }
@@ -41,7 +33,7 @@ class FeedAdapter(val activity: Activity) : RecyclerView.Adapter<FeedAdapter.Fee
     }
 
 
-    class FeedViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
+    class VisitediewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {
         var profile : ImageView = itemView.findViewById(R.id.profilePicture)
         var name : TextView = itemView.findViewById(R.id.userName)
         var time : TextView = itemView.findViewById(R.id.time)

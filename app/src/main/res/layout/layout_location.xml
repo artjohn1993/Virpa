@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="1dp">
+    <ImageView
+        android:id="@+id/img"
+        android:adjustViewBounds="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:src="@drawable/sample_pic"
+        />
+    <TextView
+        android:id="@+id/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textColor="@color/colorWhite"
+        android:text="sample name"
+        app:layout_constraintStart_toStartOf="@id/img"
+        app:layout_constraintEnd_toEndOf="@id/img"
+        app:layout_constraintBottom_toTopOf="@id/distance"
+        android:textStyle="bold"
+        android:paddingStart="@dimen/padding_s"
+        android:paddingEnd="@dimen/padding_s"
+        />
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:lines="1"
+        android:textColor="@color/colorWhite"
+        android:text="4km"
+        app:layout_constraintStart_toStartOf="@id/img"
+        app:layout_constraintEnd_toEndOf="@id/img"
+        app:layout_constraintBottom_toBottomOf="@id/img"
+        android:paddingStart="@dimen/padding_s"
+        android:paddingEnd="@dimen/padding_s"
+        />
+</android.support.constraint.ConstraintLayout>
