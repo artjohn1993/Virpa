@@ -8,6 +8,7 @@ import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.ProfileAdapter
 import com.local.virpa.virpa.adapter.SettingsAdapter
+import com.local.virpa.virpa.local_db.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_profile.*
 import kotlinx.android.synthetic.main.activity_setting.*
 
@@ -41,4 +42,5 @@ class ProfileActivity : AppCompatActivity() {
                 false)
         profileRecycler.adapter = ProfileAdapter()
     }
+
 }

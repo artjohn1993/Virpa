@@ -25,18 +25,21 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         title.add("Ratings")
         title.add("Upvotes")
         title.add("Edit Profile")
+        title.add("Skills")
         title.add("Logout")
 
         guide.add("See who viewed you")
         guide.add("View ratings")
         guide.add("View your upvotes")
         guide.add("Edit info")
+        guide.add("Update your skills")
         guide.add("")
 
         icon.add(R.drawable.ic_view)
         icon.add(R.drawable.ic_rate_review)
         icon.add(R.drawable.ic_up_vote)
         icon.add(R.drawable.ic_edit)
+        icon.add(R.drawable.ic_star_border)
         icon.add(R.drawable.ic_logout)
 
         color.add(R.drawable.circle_green)
@@ -44,6 +47,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         color.add(R.drawable.circle_yellow)
         color.add(R.drawable.cirle_blue)
         color.add(R.drawable.circle_green)
+        color.add(R.drawable.circle_red)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SettingsViewHolder {
@@ -80,6 +84,9 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
                     activity.startActivity<EditInfoActivity>()
                 }
                 4 -> {
+
+                }
+                5 -> {
                     activity.startActivity<MainActivity>()
                     activity.finish()
                 }

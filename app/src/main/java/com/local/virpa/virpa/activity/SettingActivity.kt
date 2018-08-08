@@ -7,12 +7,13 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.SettingsAdapter
+import com.local.virpa.virpa.local_db.DatabaseHandler
 import kotlinx.android.synthetic.main.activity_setting.*
 import org.jetbrains.anko.startActivity
 
 class SettingActivity : AppCompatActivity() {
 
-
+    val db = DatabaseHandler(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
@@ -33,6 +34,7 @@ class SettingActivity : AppCompatActivity() {
     private fun bind() {
         setRecycler()
         scrollTop()
+        setProfile()
     }
     private fun scrollTop() {
         settingScrollView.smoothScrollTo(0,0)
@@ -43,5 +45,11 @@ class SettingActivity : AppCompatActivity() {
                 false)
         settingsRecycler.adapter = SettingsAdapter(this)
         settingsRecycler.isFocusable = false
+    }
+    private fun setProfile() {
+        var data = db.readSignResult()
+        userNameSettings.text = data[0].user.fullname
+        userEmailSettings.text = data[0].user.email
+        userNumberSettings.text = data[0].user.mobileNumber
     }
 }

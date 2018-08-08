@@ -1,5 +1,6 @@
 package com.local.virpa.virpa.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.local.virpa.virpa.fragments.SignInFragment
@@ -24,12 +25,17 @@ import android.support.design.widget.Snackbar
 import android.view.View
 import com.local.virpa.virpa.fragments.ForgetPassFragment
 import com.local.virpa.virpa.enum.LoginFragment
+import com.local.virpa.virpa.local_db.DatabaseHandler
+import com.squareup.moshi.Moshi
+
+
 
 
 class MainActivity : AppCompatActivity(), MainView {
 
     //region - Variables
     var loading = Loading(this)
+    var db = DatabaseHandler(this)
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
@@ -74,6 +80,14 @@ class MainActivity : AppCompatActivity(), MainView {
         startActivity<HomeActivity>()
         finish()
     }
+    private fun successSignup(data : CreateUser.Result) {
+
+        var intent = Intent(this, SuccessActivity::class.java)
+        intent.putExtra("name", data.data.fullname)
+        intent.putExtra("email", data.data.userName)
+        startActivity(intent)
+        finish()
+    }
     private fun snackBar(data : String) {
         val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), data, Snackbar.LENGTH_LONG)
         snackbar.show()
@@ -108,7 +122,12 @@ class MainActivity : AppCompatActivity(), MainView {
                     event.password,
                     true
             )
-            presenter.login(data)
+            try{
+                presenter.login(data)
+            } catch (e : Exception) {
+                snackBar("Invalid email or password")
+            }
+
         }
     }
 
@@ -127,12 +146,17 @@ class MainActivity : AppCompatActivity(), MainView {
 
     override fun createSuccess(data : CreateUser.Result) {
         loading.hide()
-        snackBar(data.message[0])
-        nextActivity()
+        successSignup(data)
     }
     override fun loginSuccess(data: SignIn.Result) {
-        loading.hide()
-        nextActivity()
+        var success = db.insertSignInResult(data)
+        if(success) {
+            loading.hide()
+            nextActivity()
+        }
+        else {
+            snackBar("Saving to local database failed")
+        }
     }
     override fun loginFailed(data: String) {
         loading.hide()
