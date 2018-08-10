@@ -2,6 +2,7 @@ package com.local.virpa.virpa.presenter
 
 import com.local.virpa.virpa.api.ApiServices
 import com.local.virpa.virpa.model.CreateUser
+import com.local.virpa.virpa.model.ForgetPass
 import com.local.virpa.virpa.model.SignIn
 import io.reactivex.Scheduler
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -53,6 +54,19 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                         })
         )
     }
+    override fun forgetPass(data: ForgetPass.Post) {
+        compositeDisposable.add(
+                api.forgetPassword(data)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe({ result ->
+                            view.forgetPassSuccess(result)
+                        },{
+                            error ->
+                           view.forgetPassFailed(error.message.toString())
+                        })
+        )
+    }
 }
 
 interface MainView {
@@ -60,8 +74,11 @@ interface MainView {
     fun createFailed(data : String)
     fun loginSuccess(data : SignIn.Result)
     fun loginFailed(data : String)
+    fun forgetPassSuccess(data : ForgetPass.Result)
+    fun forgetPassFailed(data : String)
 }
 interface MainPresenter {
     fun createUser(data : CreateUser.Post)
     fun login(data : SignIn.Request)
+    fun forgetPass(data : ForgetPass.Post)
 }

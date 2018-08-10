@@ -11,6 +11,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.*
+import com.local.virpa.virpa.event.SignOutEvent
+import com.local.virpa.virpa.model.SignOut
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.startActivity
 import java.util.zip.Inflater
@@ -87,8 +90,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
 
                 }
                 5 -> {
-                    activity.startActivity<MainActivity>()
-                    activity.finish()
+                    EventBus.getDefault().post(SignOutEvent())
                 }
             }
         }

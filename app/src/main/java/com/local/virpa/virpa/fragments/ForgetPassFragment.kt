@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.TextView
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.enum.LoginFragment
+import com.local.virpa.virpa.event.ForgetPassEvent
 import com.local.virpa.virpa.event.LoginChangeFragment
 import org.greenrobot.eventbus.EventBus
 
@@ -23,6 +24,9 @@ class ForgetPassFragment : Fragment() {
         setVariables(view)
         back?.setOnClickListener {
             EventBus.getDefault().post(LoginChangeFragment(LoginFragment.SIGNIN))
+        }
+        continueButton?.setOnClickListener {
+            EventBus.getDefault().post(ForgetPassEvent(email?.text.toString()))
         }
 
         return view

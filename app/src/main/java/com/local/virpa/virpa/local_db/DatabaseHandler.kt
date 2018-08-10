@@ -101,6 +101,7 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
                 list.add(data)
             }while(result1.moveToNext() && result2.moveToNext() && result3.moveToNext())
         }
+        db.close()
         return list
     }
 

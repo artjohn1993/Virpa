@@ -7,9 +7,6 @@ import com.local.virpa.virpa.fragments.SignInFragment
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.dialog.Loading
-import com.local.virpa.virpa.event.LoginChangeFragment
-import com.local.virpa.virpa.event.LoginEvent
-import com.local.virpa.virpa.event.RegisterEvent
 import com.local.virpa.virpa.fragments.SignupFragment
 import com.local.virpa.virpa.model.CreateUser
 import com.local.virpa.virpa.model.SignIn
@@ -25,7 +22,9 @@ import android.support.design.widget.Snackbar
 import android.view.View
 import com.local.virpa.virpa.fragments.ForgetPassFragment
 import com.local.virpa.virpa.enum.LoginFragment
+import com.local.virpa.virpa.event.*
 import com.local.virpa.virpa.local_db.DatabaseHandler
+import com.local.virpa.virpa.model.ForgetPass
 import com.squareup.moshi.Moshi
 
 
@@ -65,7 +64,6 @@ class MainActivity : AppCompatActivity(), MainView {
     public override fun onStop() {
         super.onStop()
         EventBus.getDefault().unregister(this)
-
     }
     //endregion
 
@@ -81,7 +79,6 @@ class MainActivity : AppCompatActivity(), MainView {
         finish()
     }
     private fun successSignup(data : CreateUser.Result) {
-
         var intent = Intent(this, SuccessActivity::class.java)
         intent.putExtra("name", data.data.fullname)
         intent.putExtra("email", data.data.userName)
@@ -106,6 +103,20 @@ class MainActivity : AppCompatActivity(), MainView {
         }
         else {
             changeFragment(SignInFragment())
+        }
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onForgetPass(event : ForgetPassEvent) {
+        var forgetPass = ForgetPass.Post(event.email)
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter<ForgetPass.Post>(ForgetPass.Post::class.java)
+        val json = jsonAdapter.toJson(forgetPass)
+        println(json)
+        try {
+            presenter.forgetPass(forgetPass)
+        }catch (e : Exception) {
+            ShowSnackBar.present("Invalid email", this)
         }
     }
 
@@ -144,6 +155,7 @@ class MainActivity : AppCompatActivity(), MainView {
     }
     //endregion
 
+    //region - Presenter delegates
     override fun createSuccess(data : CreateUser.Result) {
         loading.hide()
         successSignup(data)
@@ -166,6 +178,15 @@ class MainActivity : AppCompatActivity(), MainView {
         loading.hide()
         snackBar(data)
     }
+    override fun forgetPassSuccess(data: ForgetPass.Result) {
+        ShowSnackBar.present("Check your email!", this)
+        changeFragment(SignInFragment())
+    }
+
+    override fun forgetPassFailed(data: String) {
+        ShowSnackBar.present(data, this)
+    }
+    //endregion
 }
 
 
