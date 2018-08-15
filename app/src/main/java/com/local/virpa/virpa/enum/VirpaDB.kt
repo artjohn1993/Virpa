@@ -1,5 +1,7 @@
 package com.local.virpa.virpa.enum
 
+var publicToken : String? = null
+
  enum class VirpaDB {
     DATABASE_NAME { override fun getValue() = "Virpa" },
     TABLE_SESSION { override fun getValue() = "Session_Token" },

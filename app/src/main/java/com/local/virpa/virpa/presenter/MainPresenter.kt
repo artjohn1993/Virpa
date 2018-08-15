@@ -1,6 +1,7 @@
 package com.local.virpa.virpa.presenter
 
 import com.local.virpa.virpa.api.ApiServices
+import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.model.CreateUser
 import com.local.virpa.virpa.model.ForgetPass
 import com.local.virpa.virpa.model.SignIn
@@ -42,7 +43,9 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
                             if (result.succeed) {
+                                publicToken = result.data.authorization.sessionToken.token
                                 view.loginSuccess(result)
+
                             }
                             else
                             {

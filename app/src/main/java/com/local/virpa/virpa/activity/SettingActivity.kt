@@ -98,6 +98,8 @@ class SettingActivity : AppCompatActivity(), SettingsView {
     //endregion
 
     override fun success(data: SignOut.Result) {
+        var db = DatabaseHandler(this)
+        db.deleteDatabase()
         loading.hide()
         startActivity<MainActivity>()
         finish()

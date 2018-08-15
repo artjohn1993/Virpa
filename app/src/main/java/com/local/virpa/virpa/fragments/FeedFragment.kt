@@ -15,10 +15,11 @@ import android.widget.LinearLayout
 
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.FeedAdapter
+import com.local.virpa.virpa.model.Feed
 
 @SuppressLint("ValidFragment")
 class FeedFragment @SuppressLint("ValidFragment") constructor
-(val activity: Activity) : Fragment() {
+(val activity: Activity,val data : Feed.Result) : Fragment() {
 
     var feedRecycler : android.support.v7.widget.RecyclerView? = null
 

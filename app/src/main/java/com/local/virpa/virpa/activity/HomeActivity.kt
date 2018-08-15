@@ -14,15 +14,32 @@ import android.support.v7.app.ActionBar
 import android.util.Log
 import android.view.Menu
 import android.widget.Toolbar
+import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.event.ShowSnackBar
 import com.local.virpa.virpa.fragments.*
+import com.local.virpa.virpa.model.Feed
+import com.local.virpa.virpa.model.SaveFeed
+import com.local.virpa.virpa.presenter.HomePresenterClass
+import com.local.virpa.virpa.presenter.HomeView
+import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.toolbar_layout.*
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 
-class HomeActivity : AppCompatActivity() {
+class HomeActivity : AppCompatActivity(), HomeView {
 
+    //region - Variables
     var currentfragment : Int = 0
+    private val apiServer by lazy {
+        VirpaApi.create(this)
+    }
+    val presenter = HomePresenterClass(this, apiServer)
+    private var compositeDisposable : CompositeDisposable = CompositeDisposable()
+    var data : Feed.Result? = null
+    //endregion
 
+    //region - Life Cycle
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -34,13 +51,13 @@ class HomeActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
 
-        changeFragment(FeedFragment(this), 0)
+        presenter.getMyFeed()
         navigationBar.disableShiftMode()
         navigationBar.setOnNavigationItemSelectedListener(
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
                         R.id.feed -> {
-                            changeFragment(FeedFragment(this), 1)
+                            changeFragment(FeedFragment(this, this!!.data!!), 1)
                             currentfragment = 1
                         }
                         R.id.location -> {
@@ -69,7 +86,13 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    override fun onPause() {
+        super.onPause()
+        compositeDisposable.clear()
+    }
+    //endregion
 
+    //region - Private/public methods
     private fun changeFragment(data : android.support.v4.app.Fragment, selectedFragment : Int) {
         var fragment = supportFragmentManager.beginTransaction()
 
@@ -82,10 +105,6 @@ class HomeActivity : AppCompatActivity() {
         fragment.replace(R.id.homeFrameLayout, data).commit()
     }
 
-    /*override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.navigation, menu)
-        return super.onCreateOptionsMenu(menu)
-    }*/
 
     @SuppressLint("RestrictedApi")
     fun BottomNavigationView.disableShiftMode() {
@@ -106,5 +125,23 @@ class HomeActivity : AppCompatActivity() {
         } catch (e: IllegalStateException) {
 
         }
+    }
+    //endregion
+
+    override fun feedResponse(data: Feed.Result) {
+        this.data = data
+        changeFragment(FeedFragment(this, this.data!!), 1)
+    }
+
+    override fun feedError(data: String) {
+        ShowSnackBar.present(data, this)
+    }
+
+    override fun saveFeedResponse(data: SaveFeed.Result) {
+
+    }
+
+    override fun saveFeedError(data: String) {
+
     }
 }

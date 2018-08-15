@@ -1,6 +1,9 @@
 package com.local.virpa.virpa.api
 
 import android.content.Context
+import android.database.sqlite.SQLiteDatabase
+import com.local.virpa.virpa.enum.publicToken
+import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.squareup.moshi.Moshi
 import okhttp3.Interceptor
 import okhttp3.OkHttpClient
@@ -12,18 +15,24 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import java.util.*
 
 class CustomHttp {
-    companion object {
-        fun createOkhttp() : OkHttpClient {
-            val okhttp = OkHttpClient.Builder()
 
+    companion object {
+        fun createOkhttp(context: Context) : OkHttpClient {
+            val okhttp = OkHttpClient.Builder()
             val interceptor = Interceptor { chain ->
                 var request: Request? = null
+                var token : String  = ""
+
+                if (publicToken != null) {
+                    token = publicToken as String
+                }
 
                 request = chain?.request()?.newBuilder()
-                        ?.addHeader("Content-Type",
-                                "application/json")
+                        ?.addHeader("Content-Type", "application/json")
                         ?.addHeader("api-version",
                                 "1.0")
+                        ?.addHeader("Authorization",
+                                "Bearer $token")
                         ?.build()
 
                 chain.proceed(request)
@@ -42,7 +51,7 @@ class VirpaApi {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())
                     .baseUrl("http://13.229.223.116/api/")
-                    .client(CustomHttp.createOkhttp())
+                    .client(CustomHttp.createOkhttp(context))
                     .build()
             return retrofit.create(ApiServices::class.java)
         }
