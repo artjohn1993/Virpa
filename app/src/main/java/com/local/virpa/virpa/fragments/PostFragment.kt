@@ -9,15 +9,16 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.RadioButton
-import android.widget.RadioGroup
-import android.widget.TextView
 
 import com.local.virpa.virpa.R
 import android.graphics.Bitmap
 import android.R.attr.data
 import android.app.Activity.RESULT_OK
+import android.widget.*
+import com.local.virpa.virpa.event.PostEvent
+import org.greenrobot.eventbus.EventBus
+
+
 
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
@@ -27,6 +28,9 @@ class PostFragment : Fragment() {
     var body : EditText? = null
     var budget : EditText? = null
     var image : TextView? = null
+    var captureImage : ImageView? = null
+    var postButton : Button? = null
+    var bitmapImage : Bitmap? = null
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -36,7 +40,10 @@ class PostFragment : Fragment() {
 
         image?.setOnClickListener {
             var cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-            startActivity(cameraIntent)
+            startActivityForResult(cameraIntent, 1000)
+        }
+        postButton?.setOnClickListener {
+            EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString(), this!!.bitmapImage!!))
         }
 
         return view
@@ -47,7 +54,9 @@ class PostFragment : Fragment() {
         if (resultCode === RESULT_OK) {
             if (requestCode === 1000) {
                 val returnUri = data?.data
-                //val bitmapImage = MediaStore.Images.Media.getBitmap(getActivity.getContentResolver(), returnUri)
+                bitmapImage = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, returnUri)
+                captureImage?.setImageBitmap(bitmapImage)
+                captureImage?.visibility = View.VISIBLE
             }
         }
     }
@@ -58,6 +67,8 @@ class PostFragment : Fragment() {
         body = view.findViewById(R.id.postBody)
         budget = view.findViewById(R.id.postBudget)
         image  = view.findViewById(R.id.image)
+        captureImage  = view.findViewById(R.id.postLocalImage)
+        postButton  = view.findViewById(R.id.postButton)
     }
 
 }

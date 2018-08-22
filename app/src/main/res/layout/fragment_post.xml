@@ -74,6 +74,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             >
             <Button
+                android:id="@+id/postButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Post"
@@ -128,19 +129,30 @@
                 />
         </LinearLayout>
 
-        <EditText
-            android:id="@+id/postBody"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:background="@color/transparent"
-            app:layout_constraintTop_toBottomOf="@id/menu1"
-            app:layout_constraintBottom_toTopOf="@id/menu2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:inputType="textMultiLine"
-            android:gravity="top"
-            android:padding="@dimen/padding_s"
-           />
+
+
+                <EditText
+                    android:id="@+id/postBody"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:background="@color/transparent"
+                    android:inputType="textMultiLine"
+                    android:gravity="top"
+                    android:padding="@dimen/padding_s"
+                    app:layout_constraintBottom_toTopOf="@id/postLocalImage"
+                    app:layout_constraintTop_toBottomOf="@id/menu1"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    />
+                <ImageView
+                    android:id="@+id/postLocalImage"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:scaleType="centerCrop"
+                    android:layout_marginTop="@dimen/margin_s"
+                    app:layout_constraintBottom_toTopOf="@id/menu2"
+                    android:visibility="gone"
+                    />
 
     </android.support.constraint.ConstraintLayout>
 </FrameLayout>

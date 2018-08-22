@@ -31,7 +31,7 @@ class FeedFragment @SuppressLint("ValidFragment") constructor
         feedRecycler?.layoutManager = LinearLayoutManager(context,
                 LinearLayout.VERTICAL,
                 false)
-        feedRecycler?.adapter = FeedAdapter(activity)
+        feedRecycler?.adapter = FeedAdapter(activity, data)
 
         return view
     }

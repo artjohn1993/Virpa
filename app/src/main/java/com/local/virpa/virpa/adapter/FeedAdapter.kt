@@ -7,13 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.CommentActivity
 import com.local.virpa.virpa.activity.VisitedProfileActivity
-import kotlinx.android.synthetic.main.fragment_feed.view.*
+import com.local.virpa.virpa.model.Feed
 import org.jetbrains.anko.startActivity
 
-class FeedAdapter(val activity: Activity) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
+class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.Adapter<FeedAdapter.FeedViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FeedViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
@@ -22,10 +23,21 @@ class FeedAdapter(val activity: Activity) : RecyclerView.Adapter<FeedAdapter.Fee
     }
 
     override fun getItemCount(): Int {
-        return 10
+        return feed.data.feeds.size
     }
 
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
+        holder.caption.text = feed.data.feeds[position].body
+
+        try {
+            Glide.with(activity)
+                    .load(feed.data.feeds[position].coverPhotos[0].filePath)
+                    .into(holder.post)
+        }catch (e : Exception) {
+            holder.post.visibility = View.GONE
+        }
+
+
         holder.profile.setOnClickListener {
             activity.startActivity<VisitedProfileActivity>()
         }
@@ -45,6 +57,7 @@ class FeedAdapter(val activity: Activity) : RecyclerView.Adapter<FeedAdapter.Fee
         var profile : ImageView = itemView.findViewById(R.id.profilePicture)
         var name : TextView = itemView.findViewById(R.id.userName)
         var time : TextView = itemView.findViewById(R.id.time)
+        var caption : TextView = itemView.findViewById(R.id.caption)
         var post : ImageView = itemView.findViewById(R.id.postImage)
         var commentText : TextView = itemView.findViewById(R.id.commentText)
         var commentIcon : ImageView = itemView.findViewById(R.id.commentIcon)

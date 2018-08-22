@@ -5,3 +5,8 @@ enum class LoginFragment {
     SIGNUP,
     FORGET_PASSWORD
 }
+
+enum class RequestError {
+    UNAUTHORIZED,
+    INVALID
+}

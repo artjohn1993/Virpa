@@ -35,6 +35,20 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
 
     }
+    fun updateRefresh(token : String, expiredAt : String) {
+        val db = this.readableDatabase
+        var query = "Select *  from " + VirpaDB.TABLE_SESSION.getValue()
+        val result = db.rawQuery(query,null)
+        if(result.moveToFirst()){
+            do{
+                var cv = ContentValues()
+                cv.put(Table.Session.TOKEN.getValue(),token)
+                cv.put(Table.Session.EXPIRED.getValue(),expiredAt)
+                db.update(VirpaDB.TABLE_SESSION.getValue(),cv, "",null)
+            }while (result.moveToNext())
+        }
+        db.close()
+    }
 
     fun insertSignInResult(data : SignIn.Result) : Boolean {
         val db = this.writableDatabase
