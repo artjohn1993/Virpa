@@ -34,14 +34,14 @@ interface ApiServices {
     fun refreshToken(@Body client : TokenRefresh.Post) : Observable<TokenRefresh.Result>
 
     @Headers("content-type: application/x-www-form-urlencoded")
+    @FormUrlEncoded
     @POST("feeds")
     fun saveMyFeed(@Field("feedId") feedId : String,
                    @Field("type") type : String,
                    @Field("body") body : String,
                    @Field("budget") budget : String,
                    @Field("expiredOn") expiredOn : String,
-                   @Field("coverPhoto") coverPhoto : File) : Observable<SaveFeed.Result>
-
+                   @Field("coverPhoto") coverPhoto : File?) : Observable<SaveFeed.Result>
 
     @Headers("api-version: 1.0")
     @GET("feeds")

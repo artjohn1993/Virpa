@@ -29,7 +29,7 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
         )
     }
 
-    override fun saveMyFeed(feedid: String, type: String, body: String, budget: String, expiredOn: String, coverPhoto: File) {
+    override fun saveMyFeed(feedid: String, type: String, body: String, budget: String, expiredOn: String, coverPhoto: File?) {
         compositeDisposable.add(
                 api.saveMyFeed(feedid, type, body, budget, expiredOn, coverPhoto)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -59,5 +59,5 @@ interface HomePresenter{
                    body : String,
                    budget : String,
                    expiredOn : String,
-                   coverPhoto : File)
+                   coverPhoto : File?)
 }

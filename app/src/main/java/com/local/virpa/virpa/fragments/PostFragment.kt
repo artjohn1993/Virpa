@@ -13,16 +13,26 @@ import android.view.ViewGroup
 import com.local.virpa.virpa.R
 import android.graphics.Bitmap
 import android.R.attr.data
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.os.Build
+import android.support.annotation.RequiresApi
+import android.util.Log
 import android.widget.*
 import com.local.virpa.virpa.event.PostEvent
 import org.greenrobot.eventbus.EventBus
+import java.io.File
+import java.io.FileOutputStream
+import java.io.OutputStream
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 
-
-
+@SuppressLint("ValidFragment")
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
-class PostFragment : Fragment() {
+class PostFragment @SuppressLint("ValidFragment") constructor
+(val activity: Activity) : Fragment() {
     var type : RadioButton? = null
     var group : RadioGroup? = null
     var body : EditText? = null
@@ -69,6 +79,25 @@ class PostFragment : Fragment() {
         image  = view.findViewById(R.id.image)
         captureImage  = view.findViewById(R.id.postLocalImage)
         postButton  = view.findViewById(R.id.postButton)
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertBitmap(data : Bitmap)  : File {
+        val filesDir = activity.applicationContext.filesDir
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val formatted = LocalDateTime.now().format(formatter)
+        val imageFile = File(filesDir, "$formatted.jpg")
+
+        val os : OutputStream
+        try {
+            os = FileOutputStream(imageFile) as OutputStream
+            data.compress(Bitmap.CompressFormat.JPEG, 100, os)
+            os.flush()
+            os.close()
+        } catch (e: Exception) {
+            Log.e(javaClass.simpleName, "Error writing bitmap", e)
+        }
+        return imageFile
     }
 
 }
