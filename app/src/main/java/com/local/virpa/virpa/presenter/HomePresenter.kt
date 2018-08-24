@@ -6,6 +6,7 @@ import com.local.virpa.virpa.model.SaveFeed
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import java.io.File
 
@@ -38,7 +39,7 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
                             view.saveFeedResponse(result)
                         },{
                             error ->
-                            view.saveFeedError(error.toString())
+                            view.saveFeedError(error.message.toString())
                         })
         )
 

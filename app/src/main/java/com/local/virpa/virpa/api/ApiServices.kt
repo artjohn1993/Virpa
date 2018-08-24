@@ -33,15 +33,15 @@ interface ApiServices {
     @POST("auth/generate-token")
     fun refreshToken(@Body client : TokenRefresh.Post) : Observable<TokenRefresh.Result>
 
-    @Headers("content-type: application/x-www-form-urlencoded")
-    @FormUrlEncoded
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @Multipart
     @POST("feeds")
-    fun saveMyFeed(@Field("feedId") feedId : String,
-                   @Field("type") type : String,
-                   @Field("body") body : String,
-                   @Field("budget") budget : String,
-                   @Field("expiredOn") expiredOn : String,
-                   @Field("coverPhoto") coverPhoto : File?) : Observable<SaveFeed.Result>
+    fun saveMyFeed(@Part("feedId") feedId : String,
+                   @Part("type") type : String,
+                   @Part("body") body : String,
+                   @Part("budget") budget : String,
+                   @Part("expiredOn") expiredOn : String,
+                   @Part("coverPhoto") coverPhoto : File?) : Observable<SaveFeed.Result>
 
     @Headers("api-version: 1.0")
     @GET("feeds")

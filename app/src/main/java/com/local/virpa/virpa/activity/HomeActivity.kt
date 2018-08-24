@@ -43,6 +43,9 @@ import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.TokenRefresh
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -88,7 +91,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                             currentfragment = 2
                         }
                         R.id.post -> {
-                            changeFragment(PostFragment(), 3)
+                            changeFragment(PostFragment(this), 3)
                             currentfragment = 3
 
                         }
@@ -228,6 +231,16 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPostEvent(event : PostEvent) {
         loading.show()
+       val feedId = RequestBody.create(okhttp3.MultipartBody.FORM, "0")
+        val type = RequestBody.create(okhttp3.MultipartBody.FORM, event.type)
+        val body = RequestBody.create(okhttp3.MultipartBody.FORM, event.body)
+        val budget = RequestBody.create(okhttp3.MultipartBody.FORM, event.budget)
+        val expired = RequestBody.create(okhttp3.MultipartBody.FORM, "3")
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val formatted = LocalDateTime.now().format(formatter)
+        val image = RequestBody.create(MediaType.parse("multipart/form-data"), convertBitmap(event.image!!))
+        val image2 = MultipartBody.Part.createFormData("Image", formatted, image)
         presenter.saveMyFeed("0", event.type, event.body, event.budget, "3", convertBitmap(event.image!!))
     }
     //endregion

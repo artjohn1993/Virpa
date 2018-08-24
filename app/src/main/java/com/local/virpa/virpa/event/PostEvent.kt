@@ -11,7 +11,7 @@ class PostEvent {
     constructor( type : String,
                 body : String,
                 budget : String,
-                image : Bitmap) {
+                image : Bitmap?) {
         this.type = type
         this.body = body
         this.budget = budget
