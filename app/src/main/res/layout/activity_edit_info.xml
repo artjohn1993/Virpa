@@ -67,17 +67,20 @@
                     android:inputType="phone"/>
             </android.support.design.widget.TextInputLayout>
 
-            <Button
-                android:id="@+id/registerButton"
+           <TextView
+               android:id="@+id/changeID"
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:text="Set Attachment"
+               android:layout_marginTop="16dp"/>
+
+            <ImageView
+                android:id="@+id/attachment"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Sign Up"
-                android:textSize="@dimen/material_text_button"
-                android:textAllCaps="false"
-                android:background="@color/colorPrimary"
-                android:textColor="@color/colorWhite"
-                android:layout_marginTop="@dimen/margin_m"
-                />
+                android:layout_height="200dp"
+                android:layout_marginTop="8dp"
+                android:src="@drawable/sample_pic"
+                android:scaleType="centerCrop"/>
         </LinearLayout>
     </ScrollView>
 </android.support.constraint.ConstraintLayout>

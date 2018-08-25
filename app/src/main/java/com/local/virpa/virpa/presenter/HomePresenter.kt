@@ -30,7 +30,7 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
         )
     }
 
-    override fun saveMyFeed(feedid: String, type: String, body: String, budget: String, expiredOn: String, coverPhoto: File?) {
+    override fun saveMyFeed(feedid: RequestBody, type: RequestBody, body: RequestBody, budget: RequestBody, expiredOn: RequestBody, coverPhoto: RequestBody?) {
         compositeDisposable.add(
                 api.saveMyFeed(feedid, type, body, budget, expiredOn, coverPhoto)
                         .observeOn(AndroidSchedulers.mainThread())
@@ -39,7 +39,7 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
                             view.saveFeedResponse(result)
                         },{
                             error ->
-                            view.saveFeedError(error.message.toString())
+                        view.saveFeedError(error.toString())
                         })
         )
 
@@ -53,12 +53,13 @@ interface HomeView {
     fun saveFeedResponse(data : SaveFeed.Result)
     fun saveFeedError(data : String)
 }
+
 interface HomePresenter{
     fun getMyFeed()
-    fun saveMyFeed(feedid : String,
-                   type : String,
-                   body : String,
-                   budget : String,
-                   expiredOn : String,
-                   coverPhoto : File?)
+    fun saveMyFeed(feedid : RequestBody,
+                   type : RequestBody,
+                   body : RequestBody,
+                   budget : RequestBody,
+                   expiredOn : RequestBody,
+                   coverPhoto : RequestBody?)
 }

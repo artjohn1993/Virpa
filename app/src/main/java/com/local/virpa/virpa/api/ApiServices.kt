@@ -36,12 +36,17 @@ interface ApiServices {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @Multipart
     @POST("feeds")
-    fun saveMyFeed(@Part("feedId") feedId : String,
-                   @Part("type") type : String,
-                   @Part("body") body : String,
-                   @Part("budget") budget : String,
-                   @Part("expiredOn") expiredOn : String,
-                   @Part("coverPhoto") coverPhoto : File?) : Observable<SaveFeed.Result>
+    fun saveMyFeed(@Part("feedId") feedId : RequestBody,
+                   @Part("type") type : RequestBody,
+                   @Part("body") body : RequestBody,
+                   @Part("budget") budget : RequestBody,
+                   @Part("expiredOn") expiredOn : RequestBody,
+                   @Part("file\"; filename=\"pp.png\" ") coverPhoto : RequestBody?) : Observable<SaveFeed.Result>
+
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    @Multipart
+    @POST("files")
+    fun saveFiles(@Part files : MultipartBody.Part) : Observable<SaveFiles.Result>
 
     @Headers("api-version: 1.0")
     @GET("feeds")

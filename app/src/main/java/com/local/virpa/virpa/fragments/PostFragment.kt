@@ -53,7 +53,7 @@ class PostFragment @SuppressLint("ValidFragment") constructor
             startActivityForResult(cameraIntent, 1000)
         }
         postButton?.setOnClickListener {
-            EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString(), null))
+            EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString(), bitmapImage))
         }
 
         return view

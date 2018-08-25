@@ -46,6 +46,7 @@ import com.local.virpa.virpa.presenter.TokenView
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -231,17 +232,23 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPostEvent(event : PostEvent) {
         loading.show()
-       val feedId = RequestBody.create(okhttp3.MultipartBody.FORM, "0")
-        val type = RequestBody.create(okhttp3.MultipartBody.FORM, event.type)
-        val body = RequestBody.create(okhttp3.MultipartBody.FORM, event.body)
-        val budget = RequestBody.create(okhttp3.MultipartBody.FORM, event.budget)
-        val expired = RequestBody.create(okhttp3.MultipartBody.FORM, "3")
 
+        val file = convertBitmap(event.image!!)
+/*        val requestBody = RequestBody.create(mediaType, file)
+        val byteArray = ByteArrayOutputStream()
+        var bitmap = event.image
+        bitmap?.compress(Bitmap.CompressFormat.PNG,0,byteArray)
         val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-        val formatted = LocalDateTime.now().format(formatter)
-        val image = RequestBody.create(MediaType.parse("multipart/form-data"), convertBitmap(event.image!!))
-        val image2 = MultipartBody.Part.createFormData("Image", formatted, image)
-        presenter.saveMyFeed("0", event.type, event.body, event.budget, "3", convertBitmap(event.image!!))
+        val formatted = LocalDateTime.now().format(formatter)*/
+        val finalFile = File(file.path)
+        val image = RequestBody.create(MediaType.parse("image/*"), finalFile)
+        val feedId = RequestBody.create(MediaType.parse("text/plain"), "0")
+        val type = RequestBody.create(MediaType.parse("text/plain"), event.type)
+        val body = RequestBody.create(MediaType.parse("text/plain"), event.body)
+        val budget = RequestBody.create(MediaType.parse("text/plain"), event.budget)
+        val expiredOn = RequestBody.create(MediaType.parse("text/plain"), "3")
+
+        presenter.saveMyFeed(feedId, type, body, budget, expiredOn, image)
     }
     //endregion
 }

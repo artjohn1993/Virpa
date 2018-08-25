@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/private/var/folders/dh/jw_8bsc122s8j2mmf9h56jj40000gn/T/AppTranslocation/43F81FCA-4F96-48C6-890A-02BC75AB46D4/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/toggle/ic_star_border_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/private/var/folders/dh/jw_8bsc122s8j2mmf9h56jj40000gn/T/AppTranslocation/F975A935-1590-431F-95A3-B5339829B713/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_star_border" />
+                            <entry key="outputName" value="ic_check_" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>
