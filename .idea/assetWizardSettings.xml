@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/private/var/folders/dh/jw_8bsc122s8j2mmf9h56jj40000gn/T/AppTranslocation/F975A935-1590-431F-95A3-B5339829B713/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/private/var/folders/dh/jw_8bsc122s8j2mmf9h56jj40000gn/T/AppTranslocation/DA7BFF97-4930-45BD-8B87-78A327825ECD/d/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_edit_location_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,7 +28,7 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_check_" />
+                            <entry key="outputName" value="ic_edit_location" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>

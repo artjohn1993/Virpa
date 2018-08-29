@@ -48,7 +48,21 @@ interface ApiServices {
     @POST("files")
     fun saveFiles(@Part files : MultipartBody.Part) : Observable<SaveFiles.Result>
 
+    @Headers("Content-Type: application/json")
+    @POST("skills")
+    fun saveMySkills(@Body client : SaveMySkills.Post) : Observable<MySkills.Result>
+
+    //=========================================================
+
     @Headers("api-version: 1.0")
     @GET("feeds")
     fun getMyFeed() : Observable<Feed.Result>
+
+    @Headers("api-version: 1.0")
+    @GET("skills/list")
+    fun getSkills() : Observable<Skills.Result>
+
+    @Headers("api-version: 1.0")
+    @GET("skills")
+    fun getMySkills() : Observable<MySkills.Result>
 }

@@ -2,6 +2,7 @@ package com.local.virpa.virpa.api
 
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
+import com.local.virpa.virpa.BuildConfig
 import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.squareup.moshi.Moshi
@@ -9,6 +10,7 @@ import okhttp3.Interceptor
 import okhttp3.OkHttpClient
 import okhttp3.Protocol
 import okhttp3.Request
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.moshi.MoshiConverterFactory
@@ -26,6 +28,11 @@ class CustomHttp {
                 if (publicToken != null) {
                     token = publicToken as String
                 }
+                if (BuildConfig.DEBUG) {
+                    val sample = HttpLoggingInterceptor()
+                    sample.level = HttpLoggingInterceptor.Level.BASIC
+                    okhttp.addInterceptor(sample)
+                }
 
                 request = chain?.request()?.newBuilder()
                         ?.addHeader("Content-Type", "application/json")
@@ -38,7 +45,7 @@ class CustomHttp {
                 chain.proceed(request)
             }
             okhttp.networkInterceptors().add(interceptor)
-            okhttp.protocols(Arrays.asList(Protocol.HTTP_1_1))
+            //okhttp.protocols(Arrays.asList(Protocol.HTTP_1_1))
             return okhttp.build()
         }
     }
@@ -50,7 +57,7 @@ class VirpaApi {
             val retrofit = Retrofit.Builder()
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                     .addConverterFactory(MoshiConverterFactory.create())
-                    .baseUrl("http://13.229.223.116/api/")
+                    .baseUrl("http://54.169.135.20/api/")
                     .client(CustomHttp.createOkhttp(context))
                     .build()
             return retrofit.create(ApiServices::class.java)

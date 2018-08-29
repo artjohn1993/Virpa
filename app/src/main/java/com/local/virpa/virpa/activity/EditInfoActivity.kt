@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -29,6 +30,8 @@ import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.greenrobot.eventbus.EventBus
+import org.jetbrains.anko.image
+import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.FileOutputStream
 import java.io.OutputStream
@@ -96,11 +99,16 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
                 this.finish()
             }
             R.id.saveData -> {
-
                 val file : File = File(this.path)
-                val reqFile = RequestBody.create(MediaType.parse("image/*"), file)
-                val body = MultipartBody.Part.createFormData("file", file.name, reqFile)
-                presenter.saveFiles(body)
+                val myBitmap = BitmapFactory.decodeFile(this.path)
+                val stream = ByteArrayOutputStream()
+                myBitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
+                val byteArray = stream.toByteArray()
+                myBitmap.recycle()
+                profilePicture.setImageBitmap(myBitmap)
+                val reqFile = RequestBody.create(MediaType.parse("image/*"), byteArray)
+                val multiPart = MultipartBody.Part.createFormData("files", file.name, reqFile)
+                presenter.saveFiles(multiPart)
             }
         }
         return true
@@ -113,13 +121,13 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     fun getPath(context: Context, uri: Uri): String {
         var result: String? = null
         val proj = arrayOf(MediaStore.Images.Media.DATA)
-        val cursor = context.getContentResolver().query(uri, proj, null, null, null)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
         if (cursor != null) {
-            if (cursor!!.moveToFirst()) {
-                val column_index = cursor!!.getColumnIndexOrThrow(proj[0])
-                result = cursor!!.getString(column_index)
+            if (cursor.moveToFirst()) {
+                val column_index = cursor.getColumnIndexOrThrow(proj[0])
+                result = cursor.getString(column_index)
             }
-            cursor!!.close()
+            cursor.close()
         }
         if (result == null) {
             result = "Not found"
