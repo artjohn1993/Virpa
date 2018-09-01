@@ -16,14 +16,12 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
 
     override fun createUser(data : CreateUser.Post) {
-        var returnData : CreateUser.Result? = null
         compositeDisposable.add(
                 api.createUser(data)
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
                             if (result.message.isEmpty()) {
-                                returnData = result
                                 view.createSuccess(result)
                             }
                             else {
@@ -53,6 +51,7 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                             }
                         },{
                             error ->
+                            println(error.toString())
                             view.loginFailed("Invalid email!")
                         })
         )

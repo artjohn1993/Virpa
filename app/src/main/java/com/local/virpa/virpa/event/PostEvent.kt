@@ -5,16 +5,16 @@ import android.graphics.Bitmap
 class PostEvent {
     var type : String
     var body : String
-    var budget : String
-    var image : Bitmap?
+    var budget : Double
+    var path : String?
 
     constructor( type : String,
                 body : String,
-                budget : String,
-                image : Bitmap?) {
+                budget : Double,
+                 path : String?) {
         this.type = type
         this.body = body
         this.budget = budget
-        this.image = image
+        this.path = path
     }
 }

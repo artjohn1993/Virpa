@@ -80,8 +80,8 @@ class MainActivity : AppCompatActivity(), MainView {
     }
     private fun successSignup(data : CreateUser.Result) {
         var intent = Intent(this, SuccessActivity::class.java)
-        intent.putExtra("name", data.data.fullname)
-        intent.putExtra("email", data.data.userName)
+        intent.putExtra("name", data.data.user.detail.fullname)
+        intent.putExtra("email", data.data.user.detail.email)
         startActivity(intent)
         finish()
     }
@@ -151,6 +151,11 @@ class MainActivity : AppCompatActivity(), MainView {
                 event.email,
                 event.password
         )
+        var moshi = Moshi.Builder().build()
+        val adapter = moshi.adapter<CreateUser.Post>(CreateUser.Post::class.java)
+        var sample = adapter.toJson(data)
+        println("=============================")
+        println(sample)
         presenter.createUser(data)
     }
     //endregion
@@ -161,6 +166,10 @@ class MainActivity : AppCompatActivity(), MainView {
         successSignup(data)
     }
     override fun loginSuccess(data: SignIn.Result) {
+        val moshi = Moshi.Builder().build()
+        val jsonAdapter = moshi.adapter<SignIn.Result>(SignIn.Result::class.java)
+        val json = jsonAdapter.toJson(data)
+        println(json)
         var success = db.insertSignInResult(data)
         if(success) {
             loading.hide()
@@ -175,6 +184,7 @@ class MainActivity : AppCompatActivity(), MainView {
         snackBar(data)
     }
     override fun createFailed(data: String) {
+        println(data)
         loading.hide()
         snackBar(data)
     }

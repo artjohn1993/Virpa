@@ -91,9 +91,9 @@ class SettingActivity : AppCompatActivity(), SettingsView {
     private fun setProfile() {
         val db = DatabaseHandler(this)
         var data = db.readSignResult()
-        userNameSettings.text = data[0].user.fullname
-        userEmailSettings.text = data[0].user.email
-        userNumberSettings.text = data[0].user.mobileNumber
+        userNameSettings.text = data[0].user.detail.fullname
+        userEmailSettings.text = data[0].user.detail.email
+        userNumberSettings.text = data[0].user.detail.mobileNumber
     }
     //endregion
 

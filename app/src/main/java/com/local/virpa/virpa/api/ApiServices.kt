@@ -33,15 +33,9 @@ interface ApiServices {
     @POST("auth/generate-token")
     fun refreshToken(@Body client : TokenRefresh.Post) : Observable<TokenRefresh.Result>
 
-    @Headers("Content-Type: application/x-www-form-urlencoded")
-    @Multipart
+    @Headers("content-type: application/json")
     @POST("feeds")
-    fun saveMyFeed(@Part("feedId") feedId : RequestBody,
-                   @Part("type") type : RequestBody,
-                   @Part("body") body : RequestBody,
-                   @Part("budget") budget : RequestBody,
-                   @Part("expiredOn") expiredOn : RequestBody,
-                   @Part("file\"; filename=\"pp.png\" ") coverPhoto : RequestBody?) : Observable<SaveFeed.Result>
+    fun saveMyFeed(@Body client : SaveFeed.Post) : Observable<SaveFeed.Result>
 
     @Headers("Content-Type: application/x-www-form-urlencoded")
     @Multipart

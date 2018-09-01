@@ -41,6 +41,7 @@ class PostFragment @SuppressLint("ValidFragment") constructor
     var captureImage : ImageView? = null
     var postButton : Button? = null
     var bitmapImage : Bitmap? = null
+    var path : String = ""
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -53,7 +54,7 @@ class PostFragment @SuppressLint("ValidFragment") constructor
             startActivityForResult(cameraIntent, 1000)
         }
         postButton?.setOnClickListener {
-            EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString(), bitmapImage))
+            EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString().toDouble(), path))
         }
 
         return view
@@ -65,10 +66,27 @@ class PostFragment @SuppressLint("ValidFragment") constructor
             if (requestCode === 1000) {
                 val returnUri = data?.data
                 bitmapImage = MediaStore.Images.Media.getBitmap(activity!!.contentResolver, returnUri)
+                path = getPath(activity , data?.data!!)
                 captureImage?.setImageBitmap(bitmapImage)
                 captureImage?.visibility = View.VISIBLE
             }
         }
+    }
+    fun getPath(context: Context, uri: Uri): String {
+        var result: String? = null
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = context.contentResolver.query(uri, proj, null, null, null)
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                val column_index = cursor.getColumnIndexOrThrow(proj[0])
+                result = cursor.getString(column_index)
+            }
+            cursor.close()
+        }
+        if (result == null) {
+            result = "Not found"
+        }
+        return result
     }
 
     private fun setVar(view : View) {

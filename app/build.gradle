@@ -52,5 +52,9 @@ dependencies {
 
     //location
     implementation 'com.github.ankitdubey021:GPSTracker:1.1'
+    
     implementation 'com.github.alirezaashrafi:GoogleMapView:1.0.4'
+
+    //base64
+    implementation 'com.github.amanjeetsingh150:ImageZipper:1.3'
 }

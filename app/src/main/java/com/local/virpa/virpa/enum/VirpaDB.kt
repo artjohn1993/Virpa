@@ -31,6 +31,8 @@ object Table {
         EMAIL { override fun getValue() = "email" },
         FULLNAME { override fun getValue() = "fullname" },
         MOBILE_NUMBER { override fun getValue() = "mobileNumber" },
+        FOLLOWERS { override fun getValue() = "followersCount" },
+        SUMMARY { override fun getValue() = "backgroundSummary" },
         CREATED_AT { override fun getValue() = "createdAt" },
         UPDATED_AT { override fun getValue() = "updatedAt" };
 

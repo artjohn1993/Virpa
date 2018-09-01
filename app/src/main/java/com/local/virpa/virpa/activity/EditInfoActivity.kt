@@ -76,6 +76,7 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
                 this.uri = data?.data
                 this.path = getPath(this, data?.data!!)
                 println(path)
+
                 bitmapImage = MediaStore.Images.Media.getBitmap(contentResolver, this.uri )
                 attachment?.setImageBitmap(bitmapImage)
             }
@@ -93,20 +94,20 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         return true
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             android.R.id.home -> {
                 this.finish()
             }
             R.id.saveData -> {
-                val file : File = File(this.path)
-                val myBitmap = BitmapFactory.decodeFile(this.path)
-                val stream = ByteArrayOutputStream()
-                myBitmap.compress(Bitmap.CompressFormat.JPEG,50,stream)
-                val byteArray = stream.toByteArray()
-                myBitmap.recycle()
-                profilePicture.setImageBitmap(myBitmap)
-                val reqFile = RequestBody.create(MediaType.parse("image/*"), byteArray)
+                var file : File = File(this.path)
+                var stream = ByteArrayOutputStream()
+                bitmapImage?.compress(Bitmap.CompressFormat.PNG,20,stream)
+                var byteArray = stream.toByteArray()
+
+                profilePicture.setImageBitmap(bitmapImage)
+                val reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArray)
                 val multiPart = MultipartBody.Part.createFormData("files", file.name, reqFile)
                 presenter.saveFiles(multiPart)
             }
@@ -117,7 +118,24 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     override fun successSaveFiles(data : SaveFiles.Result) {
 
     }
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun convertBitmap(data : Bitmap)  : File {
+        val filesDir = applicationContext.filesDir
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
+        val formatted = LocalDateTime.now().format(formatter)
+        val imageFile = File(filesDir, "$formatted.jpg")
 
+        val os : OutputStream
+        try {
+            os = FileOutputStream(imageFile) as OutputStream
+            data.compress(Bitmap.CompressFormat.JPEG, 100, os)
+            os.flush()
+            os.close()
+        } catch (e: Exception) {
+            Log.e(javaClass.simpleName, "Error writing bitmap", e)
+        }
+        return imageFile
+    }
     fun getPath(context: Context, uri: Uri): String {
         var result: String? = null
         val proj = arrayOf(MediaStore.Images.Media.DATA)

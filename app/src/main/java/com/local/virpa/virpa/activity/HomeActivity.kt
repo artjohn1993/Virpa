@@ -32,9 +32,11 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import android.R.attr.bitmap
+import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Handler
 import android.support.annotation.RequiresApi
+import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R.id.name
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.enum.RequestError
@@ -84,7 +86,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
                         R.id.feed -> {
-                            changeFragment(FeedFragment(this, this!!.data!!), 1)
+                            changeFragment(FeedFragment(this, this.data!!), 1)
                             currentfragment = 1
                         }
                         R.id.location -> {
@@ -150,25 +152,6 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         fragment.replace(R.id.homeFrameLayout, data).commit()
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertBitmap(data : Bitmap)  : File {
-        val filesDir = applicationContext.filesDir
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-        val formatted = LocalDateTime.now().format(formatter)
-        val imageFile = File(filesDir, "$formatted.jpg")
-
-        val os : OutputStream
-        try {
-            os = FileOutputStream(imageFile) as OutputStream
-            data.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-        } catch (e: Exception) {
-            Log.e(javaClass.simpleName, "Error writing bitmap", e)
-        }
-        return imageFile
-    }
-
     @SuppressLint("RestrictedApi")
     fun BottomNavigationView.disableShiftMode() {
         val menuView = getChildAt(0) as BottomNavigationMenuView
@@ -192,7 +175,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
     private fun refreshToken(tokenType : String) {
         var data = DatabaseHandler(this).readSignResult()
-        var email = data[0].user.email
+        var email = data[0].user.detail.email
         var token  = data[0].authorization.refreshToken.token
         var tokenResource = TokenRefresh.TokenResource(tokenType, token)
         var postData = TokenRefresh.Post(email, tokenResource)
@@ -221,7 +204,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         if (data.succeed) {
             publicToken = data.data.token
             DatabaseHandler(this).updateRefresh(data.data.token,data.data.expiredAt)
-        presenter.getMyFeed()
+            presenter.getMyFeed()
         }
     }
 
@@ -232,23 +215,10 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPostEvent(event : PostEvent) {
         loading.show()
-
-        val file = convertBitmap(event.image!!)
-/*        val requestBody = RequestBody.create(mediaType, file)
-        val byteArray = ByteArrayOutputStream()
-        var bitmap = event.image
-        bitmap?.compress(Bitmap.CompressFormat.PNG,0,byteArray)
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-        val formatted = LocalDateTime.now().format(formatter)*/
-        val finalFile = File(file.path)
-        val image = RequestBody.create(MediaType.parse("image/*"), finalFile)
-        val feedId = RequestBody.create(MediaType.parse("text/plain"), "0")
-        val type = RequestBody.create(MediaType.parse("text/plain"), event.type)
-        val body = RequestBody.create(MediaType.parse("text/plain"), event.body)
-        val budget = RequestBody.create(MediaType.parse("text/plain"), event.budget)
-        val expiredOn = RequestBody.create(MediaType.parse("text/plain"), "3")
-
-        presenter.saveMyFeed(feedId, type, body, budget, expiredOn, image)
+        var file = File(event.path)
+        var base64 = ImageZipper.getBase64forImage(file)
+        val saveFeed = SaveFeed.PostCoverPhoto(file.name, base64)
+        presenter.saveMyFeed(SaveFeed.Post("0",0, event.body,event.budget,3, saveFeed))
     }
     //endregion
 }

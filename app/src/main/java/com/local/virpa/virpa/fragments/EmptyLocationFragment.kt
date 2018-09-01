@@ -17,11 +17,17 @@ import org.greenrobot.eventbus.EventBus
 import java.util.jar.Manifest
 import android.Manifest.permission
 import android.Manifest.permission.ACCESS_FINE_LOCATION
+import android.app.AlertDialog
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.location.LocationManager
 import android.os.Build
+import android.provider.Settings
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import android.test.mock.MockPackageManager
 import com.local.virpa.virpa.event.ShowSnackBar
 import org.ankit.gpslibrary.MyTracker
 
@@ -29,8 +35,8 @@ import org.ankit.gpslibrary.MyTracker
 @SuppressLint("ValidFragment")
 class EmptyLocationFragment(var activity : Activity) : Fragment() {
     var getLocation : Button? = null
-    var permission = android.Manifest.permission.ACCESS_FINE_LOCATION
-    var REQUEST_CODE = 1
+
+    private val REQUEST_CODE = 1
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -38,35 +44,13 @@ class EmptyLocationFragment(var activity : Activity) : Fragment() {
         getLocation = view.findViewById(R.id.getLocationButton)
 
         getLocation?.setOnClickListener {
-            getLocation()
+            EventBus.getDefault().post(GetLocationEvent())
         }
 
-        if(ContextCompat.checkSelfPermission(activity, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(activity, arrayOf(permission), REQUEST_CODE)
-        }
-        else {
-
-        }
 
         return view
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode) {
-            REQUEST_CODE -> {
-                if (grantResults.isEmpty()) {
-                    ShowSnackBar.present("Permission denied", activity)
-                }
-            }
-        }
-    }
 
-    fun getLocation() {
-        val tracker = MyTracker(activity)
-        println(tracker.latitude)
-        println(tracker.longitude)
-        EventBus.getDefault().post(GetLocationEvent())
-    }
 
 }
