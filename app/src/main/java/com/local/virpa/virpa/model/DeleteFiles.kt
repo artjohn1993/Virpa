@@ -1,16 +1,20 @@
 package com.local.virpa.virpa.model
 
-object SaveFiles {
-    data class Result(
-            var succeed : Boolean,
-            var data : Data,
-            var message : List<String>
-
-    )
-    data class Data(
+object DeleteFiles {
+    data class Post(
             var files : List<Files>
     )
     data class Files(
+            var fileId : String
+    )
+    data class Result(
+            var succeed : Boolean,
+            var data : Data
+    )
+    data class Data(
+            var files : List<Files2>
+    )
+    data class Files2(
             var id : String,
             var name : String,
             var codeName : String,
@@ -18,13 +22,5 @@ object SaveFiles {
             var filePath : String,
             var type : Int,
             var createdAt : String
-    )
-
-    data class Post(
-            var files : List<FilesInfo>
-    )
-    data class FilesInfo(
-            var name : String,
-            var base64 : String
     )
 }

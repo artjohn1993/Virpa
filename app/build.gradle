@@ -46,13 +46,13 @@ dependencies {
 
     //circle image
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
     //radar
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.squareup.picasso:picasso:2.71828'
 
     //location
-    implementation 'com.github.ankitdubey021:GPSTracker:1.1'
-    
     implementation 'com.github.alirezaashrafi:GoogleMapView:1.0.4'
 
     //base64

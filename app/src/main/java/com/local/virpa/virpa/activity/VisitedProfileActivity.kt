@@ -7,6 +7,9 @@ import android.view.MenuItem
 import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.VisitedAdapter
+import com.local.virpa.virpa.model.UserList
+import com.squareup.moshi.Moshi
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_visited_profile.*
 
 class VisitedProfileActivity : AppCompatActivity() {
@@ -18,6 +21,7 @@ class VisitedProfileActivity : AppCompatActivity() {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         title = "Visit"
         setRecycler()
+        getIntentData()
         visitedScroll.smoothScrollTo(0,0)
     }
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -35,4 +39,23 @@ class VisitedProfileActivity : AppCompatActivity() {
         visitedProfileRecycler?.adapter = VisitedAdapter(this)
         visitedProfileRecycler.isFocusable = false
     }
+    private fun getIntentData() {
+        if (intent.extras != null) {
+            val bundle = intent.extras
+            val jsonData = intent.getStringExtra("userInfo")
+            assignUserInfo(convertToObject(jsonData))
+        }
+    }
+    private fun assignUserInfo(data : UserList.Users) {
+        userName.text = data.fullname
+        if (data.profilePicture != null) {
+            Picasso.get().load(data.profilePicture[0]?.filePath).into(profilePicture)
+        }
+    }
+    private fun convertToObject(data : String) :  UserList.Users {
+        val moshi = Moshi.Builder().build()
+        val adapter = moshi.adapter<UserList.Users>(UserList.Users::class.java)
+        return adapter.fromJson(data)
+    }
+
 }

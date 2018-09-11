@@ -1,48 +1,45 @@
 package com.local.virpa.virpa.activity
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
+import android.location.Location
+import android.location.LocationListener
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import com.local.virpa.virpa.R
-import com.local.virpa.virpa.event.GetLocationEvent
-import com.local.virpa.virpa.fragments.EmptyLocationFragment
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import com.local.virpa.virpa.event.ShowSnackBar
-import org.ankit.gpslibrary.MyTracker
+import android.location.LocationManager
 import android.test.mock.MockPackageManager
-
-
-
-
-
+import com.alirezaashrafi.library.MapType
+import kotlinx.android.synthetic.main.activity_set_location.*
 
 
 class SetLocationActivity : AppCompatActivity() {
-    var permission = android.Manifest.permission.ACCESS_FINE_LOCATION
+
+    var permissionFineLoc = android.Manifest.permission.ACCESS_FINE_LOCATION
+    var permissionCoarseLoc = android.Manifest.permission.ACCESS_COARSE_LOCATION
     var REQUEST_CODE = 1
+    var permissionArray = arrayOf(permissionFineLoc)
+    lateinit var locationManager : LocationManager
+    var location : Location? = null
+    var longitude : Double = 0.0
+    var latitude : Double = 0.0
+    var interval : Float = 0F
+
+    @SuppressLint("MissingPermission")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_set_location)
-        changeFragment(EmptyLocationFragment(this))
-        if(ContextCompat.checkSelfPermission(this, permission) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, arrayOf(permission), REQUEST_CODE)
+
+        if(ContextCompat.checkSelfPermission(this, permissionFineLoc) != MockPackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissionArray, REQUEST_CODE)
+        }
+        else {
+            getLocation()
         }
 
-    }
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -52,34 +49,37 @@ class SetLocationActivity : AppCompatActivity() {
                 if (grantResults.isEmpty()) {
                     ShowSnackBar.present("Permission denied", this)
                 }
+                else {
+                    getLocation()
+                }
             }
         }
     }
 
-    private fun changeFragment(data : android.support.v4.app.Fragment) {
-        var fragment = supportFragmentManager.beginTransaction()
-        fragment.setCustomAnimations(R.anim.abc_fade_in, R.anim.fade_out)
-        fragment.replace(R.id.setLocationFrame, data).commit()
-    }
-
+    @SuppressLint("MissingPermission")
     fun getLocation() {
-        val tracker = MyTracker(this)
-        println("latitude:"+tracker.latitude)
-        println("longitude:"+tracker.longitude)
-        println("address:"+tracker.address)
-        println("cityName:"+tracker.cityName)
-        println("countryCode:"+tracker.countryCode)
-        println("countryName:"+tracker.countryName)
-        println("ipAddress:"+tracker.ipAddress)
-        println("macAddress:"+tracker.macAddress)
-        println("state:"+tracker.state)
-        println("zip:"+tracker.zip)
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        location = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+        locationTitle?.text = "latitude : " + this.location?.latitude.toString() +  "   longitude : " + this.location?.longitude.toString()
+
+        val locationListener: LocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                latitude = location.latitude
+                longitude = location.longitude
+                println("latitude : " + location.latitude)
+                println("longitude : " + location.longitude)
+                locationTitle?.text = "latitude : " + location.latitude +  "   longitude : " + location.longitude
+                locationView.setLocation(location)
+            }
+            override fun onStatusChanged(provider: String, status: Int, extras: Bundle) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {
+    //            ShowSnackBar.present("GPS Disabled", SetLocationActivity())
+            }
+        }
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,2000,interval,locationListener)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onGetLocationEvent(event : GetLocationEvent) {
-        //changeFragment(PopulatedLocationFragment())
-        getLocation()
-    }
 }
+
+

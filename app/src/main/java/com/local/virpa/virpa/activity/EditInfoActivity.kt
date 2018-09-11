@@ -19,8 +19,11 @@ import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import com.bumptech.glide.Glide
+import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.model.DeleteFiles
 import com.local.virpa.virpa.model.SaveFiles
 import com.local.virpa.virpa.presenter.EditInfoPresenterClass
 import com.local.virpa.virpa.presenter.EditInfoView
@@ -40,6 +43,7 @@ import java.time.format.DateTimeFormatter
 
 class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRequestPermissionsResultCallback{
 
+
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
@@ -49,6 +53,8 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     var  path : String = ""
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val REQUEST_WRITE_PERMISSION = 786
+    var fileID : String? = null
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,9 +62,12 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         title = "Edit Information"
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
+        presenter.getFiles()
         changeID.setOnClickListener {
             requestPermission()
+        }
+        deleteID.setOnClickListener {
+            deleteFile()
         }
     }
 
@@ -101,23 +110,34 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
                 this.finish()
             }
             R.id.saveData -> {
+                var imageArray : ArrayList<SaveFiles.FilesInfo> = ArrayList()
                 var file : File = File(this.path)
-                var stream = ByteArrayOutputStream()
-                bitmapImage?.compress(Bitmap.CompressFormat.PNG,20,stream)
-                var byteArray = stream.toByteArray()
-
-                profilePicture.setImageBitmap(bitmapImage)
-                val reqFile = RequestBody.create(MediaType.parse("multipart/form-data"), byteArray)
-                val multiPart = MultipartBody.Part.createFormData("files", file.name, reqFile)
-                presenter.saveFiles(multiPart)
+                var base64 = ImageZipper.getBase64forImage(file).toString()
+                var files = SaveFiles.FilesInfo(file.name,base64)
+                imageArray.add(files)
+                var savePost = SaveFiles.Post(imageArray)
+                presenter.saveFiles(savePost)
             }
         }
         return true
     }
 
     override fun successSaveFiles(data : SaveFiles.Result) {
-
+        presenter.getFiles()
     }
+
+    override fun successGetFiles(data: SaveFiles.Result) {
+        fileID = data.data.files[0].id
+        Glide.with(this)
+                .load(data.data.files[0].filePath)
+                .into(attachment)
+    }
+
+    override fun sucessDeleteFile(data: DeleteFiles.Result) {
+        fileID = null
+        attachment.setImageResource(R.drawable.ic_default_image)
+    }
+
     @RequiresApi(Build.VERSION_CODES.O)
     private fun convertBitmap(data : Bitmap)  : File {
         val filesDir = applicationContext.filesDir
@@ -152,7 +172,12 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         }
         return result
     }
-
+    private fun deleteFile() {
+        var dataArray : ArrayList<DeleteFiles.Files> = ArrayList()
+        var data = DeleteFiles.Files(this.fileID!!)
+        dataArray.add(data)
+        presenter.deleteFile(DeleteFiles.Post(dataArray))
+    }
     private fun openFilePicker() {
         var cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
         startActivityForResult(cameraIntent, 1000)

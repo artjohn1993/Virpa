@@ -114,12 +114,12 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
                         result1.getString(result1.getColumnIndex(Table.UserInfo.FULLNAME.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.MOBILE_NUMBER.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.FOLLOWERS.getValue())).toInt(),
-                        "",
+                        null,
                         result1.getString(result1.getColumnIndex(Table.UserInfo.CREATED_AT.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.UPDATED_AT.getValue()))
                 )
 
-                var user = SignIn.User(detail)
+                var user = SignIn.User(detail, null)
                 var data = SignIn.Data(authorization, user)
                 list.add(data)
             }while(result1.moveToNext() && result2.moveToNext() && result3.moveToNext())

@@ -30,9 +30,16 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         holder.caption.text = feed.data.feeds[position].body
 
         try {
-            Glide.with(activity)
-                    .load(feed.data.feeds[position].coverPhotos[0].filePath)
-                    .into(holder.post)
+            var sample = feed.data.feeds[position].coverPhotos[0].extension
+            if(sample != "") {
+                Glide.with(activity)
+                        .load(feed.data.feeds[position].coverPhotos[0].filePath)
+                        .into(holder.post)
+            }
+            else {
+                holder.post.visibility = View.GONE
+            }
+
         }catch (e : Exception) {
             holder.post.visibility = View.GONE
         }

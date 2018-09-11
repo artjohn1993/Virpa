@@ -3,6 +3,7 @@ package com.local.virpa.virpa.presenter
 import com.local.virpa.virpa.api.ApiServices
 import com.local.virpa.virpa.model.Feed
 import com.local.virpa.virpa.model.SaveFeed
+import com.local.virpa.virpa.model.UserList
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -44,6 +45,19 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
         )
 
     }
+    override fun getUserList() {
+        compositeDisposable.add(
+                api.getUserList()
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe({ result ->
+                            view.getUserListResponse(result)
+                        },{
+                            error ->
+                            view.saveFeedError(error.toString())
+                        })
+        )
+    }
 
 }
 
@@ -52,9 +66,11 @@ interface HomeView {
     fun feedError(data : String)
     fun saveFeedResponse(data : SaveFeed.Result)
     fun saveFeedError(data : String)
+    fun getUserListResponse(data : UserList.Result)
 }
 
 interface HomePresenter{
     fun getMyFeed()
     fun saveMyFeed(data : SaveFeed.Post)
+    fun getUserList()
 }

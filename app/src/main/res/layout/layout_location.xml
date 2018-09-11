@@ -8,8 +8,10 @@
         android:id="@+id/img"
         android:adjustViewBounds="true"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:src="@drawable/sample_pic"
+        android:layout_height="100dp"
+        android:src="@drawable/ic_person"
+        android:background="@color/gray"
+        android:scaleType="centerCrop"
         />
     <TextView
         android:id="@+id/name"

@@ -15,8 +15,28 @@ object TokenRefresh {
             var message : List<String>
     )
     data class Data(
+            var authorization : Authorization,
+            var user : User
+
+    )
+    data class Authorization(
             var token : String,
             var expiredAt : String
+    )
 
+    data class User(
+            var detail : Detail
+    )
+
+    data class Detail(
+            var id : String,
+            var userName : String,
+            var email : String,
+            var fullname : String,
+            var mobileNumber : String,
+            var followersCount : Int,
+            var backgroundSummary : String,
+            var createdAt : String,
+            var updatedAt : String
     )
 }

@@ -19,8 +19,9 @@
                 android:id="@+id/profilePicture"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
-                android:src="@drawable/sample_pic"
+                android:src="@drawable/ic_person"
                 android:scaleType="centerCrop"
+                android:background="@drawable/circle_gray"
                 />
             <TextView
                 android:layout_width="wrap_content"
@@ -67,19 +68,32 @@
                     android:inputType="phone"/>
             </android.support.design.widget.TextInputLayout>
 
-           <TextView
-               android:id="@+id/changeID"
-               android:layout_width="match_parent"
-               android:layout_height="wrap_content"
-               android:text="Set Attachment"
-               android:layout_marginTop="16dp"/>
-
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_m"
+                >
+                <TextView
+                    android:id="@+id/changeID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Browse ID Picture"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintStart_toStartOf="parent"/>
+                <TextView
+                    android:id="@+id/deleteID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Delete Id"
+                    android:layout_marginTop="16dp"
+                    app:layout_constraintEnd_toEndOf="parent"/>
+            </android.support.constraint.ConstraintLayout>
             <ImageView
                 android:id="@+id/attachment"
                 android:layout_width="match_parent"
                 android:layout_height="200dp"
                 android:layout_marginTop="8dp"
-                android:src="@drawable/sample_pic"
+                android:src="@drawable/ic_default_image"
                 android:scaleType="centerCrop"/>
         </LinearLayout>
     </ScrollView>

@@ -8,7 +8,7 @@ object SaveFeed {
             var body : String,
             var budget : Double,
             var expiredOn : Int,
-            var coverPhoto : PostCoverPhoto
+            var coverPhoto : PostCoverPhoto?
     )
 
     data class PostCoverPhoto(

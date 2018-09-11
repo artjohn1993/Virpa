@@ -19,10 +19,11 @@
         <com.alirezaashrafi.library.GoogleMapView
             android:id="@+id/locationView"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="250dp"
+            app:setMapType="roadmap"
+            app:setMapScale="high"
             app:layout_constraintTop_toBottomOf="@id/locationTitle"
             />
-
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

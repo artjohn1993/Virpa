@@ -32,10 +32,12 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import android.R.attr.bitmap
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Handler
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityCompat
 import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R.id.name
 import com.local.virpa.virpa.dialog.Loading
@@ -43,6 +45,7 @@ import com.local.virpa.virpa.enum.RequestError
 import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.TokenRefresh
+import com.local.virpa.virpa.model.UserList
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
 import okhttp3.MediaType
@@ -59,6 +62,7 @@ import kotlin.Error
 
 class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
+
     //region - Variables
     var currentfragment : Int = 0
     private val apiServer by lazy {
@@ -69,6 +73,8 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     var data : Feed.Result? = null
     var loading = Loading(this)
+    var EXTERNAL_STORAGE_PERMISSION = 1
+    var permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     //endregion
 
     //region - Life Cycle
@@ -80,6 +86,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        checkStoragePermission()
         refreshToken("session")
         navigationBar.disableShiftMode()
         navigationBar.setOnNavigationItemSelectedListener(
@@ -90,7 +97,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                             currentfragment = 1
                         }
                         R.id.location -> {
-                            changeFragment(LocationFragment(this), 2)
+                            presenter.getUserList()
                             currentfragment = 2
                         }
                         R.id.post -> {
@@ -120,6 +127,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 },1500000)
             }while (true)
         }).start()*/
+
     }
 
     override fun onStart() {
@@ -181,6 +189,20 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         var postData = TokenRefresh.Post(email, tokenResource)
         presenterToken.refreshToken(postData)
     }
+    fun checkStoragePermission() : Boolean {
+        if(Build.VERSION.SDK_INT >= 23) {
+            if( checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED) {
+                return true
+            }
+            else {
+                ActivityCompat.requestPermissions(this, arrayOf(permission), EXTERNAL_STORAGE_PERMISSION)
+                return false
+            }
+        }
+        else {
+            return true
+        }
+    }
     //endregion
 
     //region - Presenter
@@ -195,17 +217,24 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
     override fun saveFeedResponse(data: SaveFeed.Result) {
         loading.hide()
+        presenter.getMyFeed()
+        navigationBar.menu.getItem(0).isChecked = true
     }
 
     override fun saveFeedError(data: String) {
         loading.hide()
     }
+
     override fun refreshSuccess(data : TokenRefresh.Result) {
         if (data.succeed) {
-            publicToken = data.data.token
-            DatabaseHandler(this).updateRefresh(data.data.token,data.data.expiredAt)
+            publicToken = data.data.authorization.token
+            DatabaseHandler(this).updateRefresh(data.data.authorization.token,data.data.authorization.expiredAt)
             presenter.getMyFeed()
         }
+    }
+
+    override fun getUserListResponse(data: UserList.Result) {
+        changeFragment(LocationFragment(this, data), 2)
     }
 
     //endregion
@@ -214,11 +243,24 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     @RequiresApi(Build.VERSION_CODES.O)
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onPostEvent(event : PostEvent) {
-        loading.show()
-        var file = File(event.path)
-        var base64 = ImageZipper.getBase64forImage(file)
-        val saveFeed = SaveFeed.PostCoverPhoto(file.name, base64)
-        presenter.saveMyFeed(SaveFeed.Post("0",0, event.body,event.budget,3, saveFeed))
+        if(checkStoragePermission()) {
+            loading.show()
+            var file = File(event.path)
+            if(event.path != "") {
+                var base64 = ImageZipper.getBase64forImage(file).toString()
+                val saveFeed = SaveFeed.PostCoverPhoto(file.name, base64.toString())
+                var data = SaveFeed.Post("0",0, event.body,event.budget,3, saveFeed)
+                presenter.saveMyFeed(data)
+            }
+            else {
+                var data = SaveFeed.Post("0",0, event.body,event.budget,3, null)
+                presenter.saveMyFeed(data)
+            }
+
+        }
+        else {
+            ShowSnackBar.present("Storage permission denied", this)
+        }
     }
     //endregion
 }

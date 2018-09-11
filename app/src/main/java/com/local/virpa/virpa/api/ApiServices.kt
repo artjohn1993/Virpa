@@ -37,14 +37,18 @@ interface ApiServices {
     @POST("feeds")
     fun saveMyFeed(@Body client : SaveFeed.Post) : Observable<SaveFeed.Result>
 
-    @Headers("Content-Type: application/x-www-form-urlencoded")
-    @Multipart
+    @Headers("content-type: application/json")
     @POST("files")
-    fun saveFiles(@Part files : MultipartBody.Part) : Observable<SaveFiles.Result>
+    fun saveFiles(@Body files : SaveFiles.Post) : Observable<SaveFiles.Result>
+
 
     @Headers("Content-Type: application/json")
     @POST("skills")
     fun saveMySkills(@Body client : SaveMySkills.Post) : Observable<MySkills.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("files/delete")
+    fun deleteFiles(@Body client : DeleteFiles.Post) : Observable<DeleteFiles.Result>
 
     //=========================================================
 
@@ -59,4 +63,12 @@ interface ApiServices {
     @Headers("api-version: 1.0")
     @GET("skills")
     fun getMySkills() : Observable<MySkills.Result>
+
+    @Headers("content-type: application/json")
+    @GET("files")
+    fun getFiles() : Observable<SaveFiles.Result>
+
+    @Headers("content-type: application/json")
+    @GET("user/list")
+    fun getUserList() : Observable<UserList.Result>
 }

@@ -21,11 +21,12 @@ import android.widget.LinearLayout
 import com.local.virpa.virpa.activity.HomeActivity
 import com.local.virpa.virpa.adapter.FeedAdapter
 import com.local.virpa.virpa.adapter.LocationAdapter
+import com.local.virpa.virpa.model.UserList
 
 
 @SuppressLint("ValidFragment")
 class LocationFragment @SuppressLint("ValidFragment") constructor
-(val activity: HomeActivity) : Fragment() {
+(val activity: HomeActivity,val data: UserList.Result) : Fragment() {
 
 
     var fragment : RecyclerView? = null
@@ -37,7 +38,7 @@ class LocationFragment @SuppressLint("ValidFragment") constructor
         val view = inflater.inflate(R.layout.fragment_location, container, false)
         locationRecycler = view.findViewById(R.id.locationRecycler)
         locationRecycler?.layoutManager = GridLayoutManager(context, 3)
-        locationRecycler?.adapter = LocationAdapter(activity)
+        locationRecycler?.adapter = LocationAdapter(activity, data)
         return view
     }
 

@@ -29,8 +29,8 @@ object SignIn {
             var expiredAt : String
     )
     data class User(
-            var detail : Detail/*,
-            var profilePicture : ProfilePicture?*/
+            var detail : Detail,
+            var profilePicture : ProfilePicture?
     )
 
     data class Detail(
@@ -40,12 +40,12 @@ object SignIn {
             var fullname : String,
             var mobileNumber : String,
             var followersCount : Int,
-            var backgroundSummary : String,
+            var backgroundSummary : String?,
             var createdAt : String,
             var updatedAt : String
     )
 
-    /*data class ProfilePicture(
+    data class ProfilePicture(
             var id : String,
             var name : String,
             var codeName : String,
@@ -53,5 +53,5 @@ object SignIn {
             var filePath : String,
             var type : Int,
             var createdAt : String
-    )*/
+    )
 }
