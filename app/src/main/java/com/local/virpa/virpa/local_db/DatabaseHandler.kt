@@ -139,6 +139,7 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db.delete(VirpaDB.TABLE_REFRESH.getValue(),null,null)
         db.delete(VirpaDB.TABLE_SESSION.getValue(),null,null)
         db.delete(VirpaDB.USER_INFO.getValue(),null,null)
+        db.close()
     }
 
 }

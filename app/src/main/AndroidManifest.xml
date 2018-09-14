@@ -41,7 +41,8 @@
             android:name=".activity.SuccessActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".activity.SkillsActivity" />
-        <activity android:name=".activity.SetLocationActivity"></activity>
+        <activity android:name=".activity.SetLocationActivity" />
+        <activity android:name=".activity.PostActivity"></activity>
     </application>
 
 </manifest>

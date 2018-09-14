@@ -78,6 +78,11 @@ class SettingActivity : AppCompatActivity(), SettingsView {
         setProfile()
 
     }
+    fun backToHome() {
+        startActivity<HomeActivity>()
+        finish()
+    }
+
     private fun scrollTop() {
         settingScrollView.smoothScrollTo(0,0)
     }
@@ -111,10 +116,15 @@ class SettingActivity : AppCompatActivity(), SettingsView {
         ShowSnackBar.present(data, this)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        backToHome()
+    }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         when(item?.itemId) {
             android.R.id.home -> {
-                this.finish()
+                backToHome()
             }
         }
         return true

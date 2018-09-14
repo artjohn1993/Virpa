@@ -15,12 +15,6 @@
         />
 
     <item
-        android:id="@+id/post"
-        android:title="Job Post"
-        android:icon="@drawable/ic_rate_review"
-        />
-
-    <item
         android:id="@+id/notif"
         android:title="Notification"
         android:icon="@drawable/ic_notifications"

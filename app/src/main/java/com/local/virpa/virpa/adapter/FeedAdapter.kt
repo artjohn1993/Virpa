@@ -1,5 +1,6 @@
 package com.local.virpa.virpa.adapter
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.bumptech.glide.Glide
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.CommentActivity
 import com.local.virpa.virpa.activity.VisitedProfileActivity
+import com.local.virpa.virpa.event.GetTime
 import com.local.virpa.virpa.model.Feed
 import org.jetbrains.anko.startActivity
 
@@ -26,23 +28,35 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         return feed.data.feeds.size
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
+
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: FeedViewHolder, position: Int) {
-        holder.caption.text = feed.data.feeds[position].body
+        var pos = getItemViewType(position)
+        var sample1 =  feed.data.feeds[pos].createdAt
 
-        try {
-            var sample = feed.data.feeds[position].coverPhotos[0].extension
-            if(sample != "") {
-                Glide.with(activity)
-                        .load(feed.data.feeds[position].coverPhotos[0].filePath)
-                        .into(holder.post)
-            }
-            else {
-                holder.post.visibility = View.GONE
-            }
+        holder.time.text = GetTime.calculate(feed.data.feeds[pos].createdAt)
+        holder.name.text = feed.data.feeds[pos].feeder
+        holder.caption.text = feed.data.feeds[pos].budget.toString() + "\n \n" + feed.data.feeds[pos].body
+        holder.upvotesTotal.text = feed.data.feeds[pos].upVoteCounts.toString() + " upvotes"
+        holder.biddingTotal.text = feed.data.feeds[pos].biddingCounts.toString() + " bidding"
+        if (feed.data.feeds[pos].profilePicture != null) {
+            Glide.with(activity)
+                    .load(feed.data.feeds[pos].profilePicture?.filePath)
+                    .into(holder.profile)
+        }
 
-        }catch (e : Exception) {
+        if(feed.data.feeds[pos].coverPhotos != null) {
+            Glide.with(activity)
+                    .load(feed.data.feeds[pos].coverPhotos!![0].filePath)
+                    .into(holder.post)
+        }
+        else {
             holder.post.visibility = View.GONE
         }
+
 
 
         holder.profile.setOnClickListener {
@@ -51,7 +65,7 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         holder.name.setOnClickListener {
             activity.startActivity<VisitedProfileActivity>()
         }
-        holder.commentText.setOnClickListener {
+        holder.biddingTotal.setOnClickListener {
             activity.startActivity<CommentActivity>()
         }
         holder.commentIcon.setOnClickListener {
@@ -66,7 +80,8 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         var time : TextView = itemView.findViewById(R.id.time)
         var caption : TextView = itemView.findViewById(R.id.caption)
         var post : ImageView = itemView.findViewById(R.id.postImage)
-        var commentText : TextView = itemView.findViewById(R.id.commentText)
+        var upvotesTotal : TextView = itemView.findViewById(R.id.upVotesTotal)
+        var biddingTotal : TextView = itemView.findViewById(R.id.biddingTotal)
         var commentIcon : ImageView = itemView.findViewById(R.id.commentIcon)
     }
 }

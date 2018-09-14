@@ -16,9 +16,13 @@ import android.R.attr.data
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.Activity.RESULT_OK
+import android.content.ContentValues.TAG
+import android.graphics.Rect
 import android.os.Build
 import android.support.annotation.RequiresApi
 import android.util.Log
+import android.view.ViewTreeObserver
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import com.local.virpa.virpa.event.PostEvent
 import org.greenrobot.eventbus.EventBus
@@ -37,7 +41,7 @@ class PostFragment @SuppressLint("ValidFragment") constructor
     var group : RadioGroup? = null
     var body : EditText? = null
     var budget : EditText? = null
-    var image : TextView? = null
+    var image : ImageView? = null
     var captureImage : ImageView? = null
     var postButton : Button? = null
     var bitmapImage : Bitmap? = null
@@ -56,6 +60,7 @@ class PostFragment @SuppressLint("ValidFragment") constructor
         postButton?.setOnClickListener {
             EventBus.getDefault().post(PostEvent("0", body?.text.toString(), budget?.text.toString().toDouble(), path))
         }
+
 
         return view
     }
@@ -99,23 +104,5 @@ class PostFragment @SuppressLint("ValidFragment") constructor
         postButton  = view.findViewById(R.id.postButton)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertBitmap(data : Bitmap)  : File {
-        val filesDir = activity.applicationContext.filesDir
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-        val formatted = LocalDateTime.now().format(formatter)
-        val imageFile = File(filesDir, "$formatted.jpg")
-
-        val os : OutputStream
-        try {
-            os = FileOutputStream(imageFile) as OutputStream
-            data.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-        } catch (e: Exception) {
-            Log.e(javaClass.simpleName, "Error writing bitmap", e)
-        }
-        return imageFile
-    }
 
 }

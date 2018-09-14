@@ -86,6 +86,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        changeFragment(FeedFragment(this, null), 1)
         checkStoragePermission()
         refreshToken("session")
         navigationBar.disableShiftMode()
@@ -93,31 +94,33 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 BottomNavigationView.OnNavigationItemSelectedListener { item ->
                     when (item.itemId) {
                         R.id.feed -> {
-                            changeFragment(FeedFragment(this, this.data!!), 1)
+                            try {
+                                changeFragment(FeedFragment(this, this.data!!), 1)
+                            } catch (e : Exception) {
+                                changeFragment(FeedFragment(this, null), 1)
+                            }
+                            presenter.getMyFeed()
                             currentfragment = 1
                         }
                         R.id.location -> {
+                            changeFragment(LocationFragment(this, null), 2)
                             presenter.getUserList()
                             currentfragment = 2
                         }
-                        R.id.post -> {
-                            changeFragment(PostFragment(this), 3)
-                            currentfragment = 3
-
-                        }
                         R.id.notif -> {
                             changeFragment(NotificationFragment(), 4)
-                            currentfragment = 4
+                            currentfragment = 3
                         }
                         R.id.message -> {
                             changeFragment(MessageFragment(), 5)
-                            currentfragment = 5
+                            currentfragment = 4
                         }
                     }
                     true
                 })
         profilePicture.setOnClickListener {
             startActivity<SettingActivity>()
+            finish()
         }
 
         /*Thread(Runnable {
@@ -130,19 +133,9 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        EventBus.getDefault().register(this)
-    }
-
     override fun onPause() {
         super.onPause()
         compositeDisposable.clear()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        EventBus.getDefault().unregister(this)
     }
 
     //endregion
@@ -208,21 +201,11 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     //region - Presenter
     override fun feedResponse(data: Feed.Result) {
         this.data = data
-        changeFragment(FeedFragment(this, this.data!!), 1)
+        changeFragment(FeedFragment(this, data), 1)
     }
 
     override fun feedError(data: String) {
 
-    }
-
-    override fun saveFeedResponse(data: SaveFeed.Result) {
-        loading.hide()
-        presenter.getMyFeed()
-        navigationBar.menu.getItem(0).isChecked = true
-    }
-
-    override fun saveFeedError(data: String) {
-        loading.hide()
     }
 
     override fun refreshSuccess(data : TokenRefresh.Result) {
@@ -240,27 +223,5 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     //endregion
 
     //region - EventBus
-    @RequiresApi(Build.VERSION_CODES.O)
-    @Subscribe(threadMode = ThreadMode.MAIN)
-    fun onPostEvent(event : PostEvent) {
-        if(checkStoragePermission()) {
-            loading.show()
-            var file = File(event.path)
-            if(event.path != "") {
-                var base64 = ImageZipper.getBase64forImage(file).toString()
-                val saveFeed = SaveFeed.PostCoverPhoto(file.name, base64.toString())
-                var data = SaveFeed.Post("0",0, event.body,event.budget,3, saveFeed)
-                presenter.saveMyFeed(data)
-            }
-            else {
-                var data = SaveFeed.Post("0",0, event.body,event.budget,3, null)
-                presenter.saveMyFeed(data)
-            }
-
-        }
-        else {
-            ShowSnackBar.present("Storage permission denied", this)
-        }
-    }
     //endregion
 }

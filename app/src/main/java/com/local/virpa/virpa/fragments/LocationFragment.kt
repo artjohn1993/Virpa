@@ -26,7 +26,7 @@ import com.local.virpa.virpa.model.UserList
 
 @SuppressLint("ValidFragment")
 class LocationFragment @SuppressLint("ValidFragment") constructor
-(val activity: HomeActivity,val data: UserList.Result) : Fragment() {
+(val activity: HomeActivity,val data: UserList.Result?) : Fragment() {
 
 
     var fragment : RecyclerView? = null
@@ -38,7 +38,10 @@ class LocationFragment @SuppressLint("ValidFragment") constructor
         val view = inflater.inflate(R.layout.fragment_location, container, false)
         locationRecycler = view.findViewById(R.id.locationRecycler)
         locationRecycler?.layoutManager = GridLayoutManager(context, 3)
-        locationRecycler?.adapter = LocationAdapter(activity, data)
+        if(data != null) {
+            locationRecycler?.adapter = LocationAdapter(activity, this.data!!)
+        }
+
         return view
     }
 

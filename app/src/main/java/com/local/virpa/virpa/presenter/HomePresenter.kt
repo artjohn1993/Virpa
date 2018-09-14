@@ -31,20 +31,6 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
         )
     }
 
-    override fun saveMyFeed(data : SaveFeed.Post) {
-        compositeDisposable.add(
-                api.saveMyFeed(data)
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribeOn(Schedulers.newThread())
-                        .subscribe({ result ->
-                            view.saveFeedResponse(result)
-                        },{
-                            error ->
-                            view.saveFeedError(error.toString())
-                        })
-        )
-
-    }
     override fun getUserList() {
         compositeDisposable.add(
                 api.getUserList()
@@ -54,7 +40,7 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
                             view.getUserListResponse(result)
                         },{
                             error ->
-                            view.saveFeedError(error.toString())
+
                         })
         )
     }
@@ -64,13 +50,10 @@ class HomePresenterClass(val view : HomeView, val api : ApiServices) : HomePrese
 interface HomeView {
     fun feedResponse(data : Feed.Result)
     fun feedError(data : String)
-    fun saveFeedResponse(data : SaveFeed.Result)
-    fun saveFeedError(data : String)
     fun getUserListResponse(data : UserList.Result)
 }
 
 interface HomePresenter{
     fun getMyFeed()
-    fun saveMyFeed(data : SaveFeed.Post)
     fun getUserList()
 }

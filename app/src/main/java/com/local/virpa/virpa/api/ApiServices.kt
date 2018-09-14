@@ -50,11 +50,23 @@ interface ApiServices {
     @POST("files/delete")
     fun deleteFiles(@Body client : DeleteFiles.Post) : Observable<DeleteFiles.Result>
 
+    @Headers("Content-Type: application/json")
+    @POST("followers")
+    fun follow(@Body client : Follow.Post) : Observable<Follow.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("followers/unfollow")
+    fun unFollow(@Body client : Follow.Post) : Observable<Follow.Result>
+
     //=========================================================
 
     @Headers("api-version: 1.0")
     @GET("feeds")
     fun getMyFeed() : Observable<Feed.Result>
+
+    @Headers("api-version: 1.0")
+    @GET("feeds/wall/{user_id}")
+    fun getFeedByUser(@Path(value = "user_id", encoded = true) userId : String) : Observable<FeedByUser.Result>
 
     @Headers("api-version: 1.0")
     @GET("skills/list")

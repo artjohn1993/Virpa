@@ -1,6 +1,6 @@
 package com.local.virpa.virpa.model
 
-object Feed {
+object FeedByUser {
     data class Result(
             var succeed : Boolean,
             var data : Data
@@ -9,8 +9,6 @@ object Feed {
             var feeds: List<Feeds>
     )
     data class Feeds(
-            var feeder : String,
-            var profilePicture : ProfilePicture?,
             var feedId : String,
             var type : Int,
             var body : String,
@@ -24,15 +22,6 @@ object Feed {
             var coverPhotos : List<CoverPhotos>?
     )
     data class CoverPhotos(
-            var id : String,
-            var name : String,
-            var codeName : String,
-            var extension : String,
-            var filePath : String,
-            var type : Int,
-            var createdAt : String
-    )
-    data class ProfilePicture(
             var id : String,
             var name : String,
             var codeName : String,
