@@ -10,3 +10,8 @@ enum class RequestError {
     UNAUTHORIZED,
     INVALID
 }
+
+enum class Follow {
+    FOLLOWERS,
+    FOLLOWED
+}

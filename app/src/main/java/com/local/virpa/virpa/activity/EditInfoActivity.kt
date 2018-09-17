@@ -138,24 +138,6 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         attachment.setImageResource(R.drawable.ic_default_image)
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun convertBitmap(data : Bitmap)  : File {
-        val filesDir = applicationContext.filesDir
-        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSS")
-        val formatted = LocalDateTime.now().format(formatter)
-        val imageFile = File(filesDir, "$formatted.jpg")
-
-        val os : OutputStream
-        try {
-            os = FileOutputStream(imageFile) as OutputStream
-            data.compress(Bitmap.CompressFormat.JPEG, 100, os)
-            os.flush()
-            os.close()
-        } catch (e: Exception) {
-            Log.e(javaClass.simpleName, "Error writing bitmap", e)
-        }
-        return imageFile
-    }
     fun getPath(context: Context, uri: Uri): String {
         var result: String? = null
         val proj = arrayOf(MediaStore.Images.Media.DATA)
@@ -179,8 +161,15 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         presenter.deleteFile(DeleteFiles.Post(dataArray))
     }
     private fun openFilePicker() {
-        var cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        startActivityForResult(cameraIntent, 1000)
+        var intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
+        intent.putExtra("outputX", 200);
+        intent.putExtra("outputY", 200);
+        intent.putExtra("aspectX", 1);
+        intent.putExtra("aspectY", 1);
+        intent.putExtra("scale", true);
+        intent.putExtra("return-data", true);
+        startActivityForResult(intent, 1000)
+
     }
     private fun requestPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

@@ -42,7 +42,9 @@
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />
         <activity android:name=".activity.SkillsActivity" />
         <activity android:name=".activity.SetLocationActivity" />
-        <activity android:name=".activity.PostActivity"></activity>
+        <activity android:name=".activity.PostActivity" />
+        <activity android:name=".activity.Follow" />
+        <activity android:name=".activity.FollowActivity"></activity>
     </application>
 
 </manifest>

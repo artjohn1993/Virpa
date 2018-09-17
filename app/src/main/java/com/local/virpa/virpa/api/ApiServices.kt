@@ -83,4 +83,12 @@ interface ApiServices {
     @Headers("content-type: application/json")
     @GET("user/list")
     fun getUserList() : Observable<UserList.Result>
+
+    @Headers("content-type: application/json")
+    @GET("followed")
+    fun getFollowed() : Observable<GetFollow.ResultFollowed>
+
+    @Headers("content-type: application/json")
+    @GET("followers")
+    fun getFollower() : Observable<GetFollow.ResultFollower>
 }

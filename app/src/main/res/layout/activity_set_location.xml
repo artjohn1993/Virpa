@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:lines="3"
         android:minLines="1"/>
-    <com.alirezaashrafi.library.GoogleMapView
+    <!--<com.alirezaashrafi.library.GoogleMapView
         android:id="@+id/locationView"
         android:layout_width="match_parent"
         android:layout_height="250dp"
@@ -19,5 +19,5 @@
         app:setMapScale="high"
         app:setMapZoom="20"
         app:layout_constraintTop_toBottomOf="@id/locationTitle"
-        />
+        />-->
 </android.support.constraint.ConstraintLayout>

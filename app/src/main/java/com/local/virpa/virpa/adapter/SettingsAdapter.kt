@@ -29,6 +29,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         title.add("Location")
         title.add("Edit Profile")
         title.add("Skills")
+        title.add("Follow")
         title.add("Logout")
 
         guide.add("See who viewed you")
@@ -36,6 +37,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         guide.add("Set your location")
         guide.add("Edit info")
         guide.add("Update your skills")
+        guide.add("Check Following/Followers")
         guide.add("")
 
         icon.add(R.drawable.ic_view)
@@ -43,6 +45,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         icon.add(R.drawable.ic_edit_location)
         icon.add(R.drawable.ic_edit)
         icon.add(R.drawable.ic_star_border)
+        icon.add(R.drawable.ic_person)
         icon.add(R.drawable.ic_logout)
 
         color.add(R.drawable.circle_green)
@@ -51,6 +54,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
         color.add(R.drawable.cirle_blue)
         color.add(R.drawable.circle_green)
         color.add(R.drawable.circle_red)
+        color.add(R.drawable.circle_yellow)
 
     }
 
@@ -91,6 +95,9 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
                     activity.startActivity<SkillsActivity>()
                 }
                 5 -> {
+                    activity.startActivity<FollowActivity>()
+                }
+                6 -> {
                     EventBus.getDefault().post(SignOutEvent())
                 }
 
