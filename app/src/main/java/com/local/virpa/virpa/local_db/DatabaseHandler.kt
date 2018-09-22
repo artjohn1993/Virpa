@@ -37,6 +37,7 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
 
     }
+
     fun updateRefresh(token : String, expiredAt : String) {
         val db = this.readableDatabase
         var query = "Select *  from " + VirpaDB.TABLE_SESSION.getValue()
@@ -83,10 +84,23 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
     }
 
     fun checkSignInResult() : Boolean {
+        val list : MutableList<String> = ArrayList()
         val db = this.readableDatabase
         val query = "SELECT * from " + VirpaDB.USER_INFO.getValue()
         var result = db.rawQuery(query, null)
-        return result != null && result.moveToFirst()
+        var checkResult = result.moveToFirst()
+
+        if(result.moveToFirst()) {
+            do {
+                result.getString(result.getColumnIndex(Table.UserInfo.FULLNAME.getValue()))
+                list.add(result.getString(result.getColumnIndex(Table.UserInfo.FULLNAME.getValue())))
+            } while (result.moveToNext())
+        }
+
+        db.close()
+        result.close()
+
+        return list.size != 0
     }
 
     fun readSignResult() : MutableList<SignIn.Data> {

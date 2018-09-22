@@ -26,19 +26,25 @@ class FeedFragment @SuppressLint("ValidFragment") constructor
 
     var feedRecycler : android.support.v7.widget.RecyclerView? = null
     var fab : android.support.design.widget.FloatingActionButton? = null
+    var empty :android.support.constraint.ConstraintLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         var view = inflater.inflate(R.layout.fragment_feed, container, false)
 
         feedRecycler = view.findViewById(R.id.feedRecyclerView)
-        fab = view.findViewById(R.id.fab)
+        fab = view.findViewById(R.id.fabButton)
+        empty = view.findViewById(R.id.emptyFeedCon)
 
         feedRecycler?.layoutManager = LinearLayoutManager(context,
                 LinearLayout.VERTICAL,
                 false)
-        if(data?.data != null || data != null) {
+        if(data?.data != null) {
             feedRecycler?.adapter = FeedAdapter(activity, data)
+            empty?.visibility = View.GONE
+        }
+        else {
+            empty?.visibility = View.VISIBLE
         }
         fab?.setOnClickListener {
             activity.startActivity<PostActivity>()

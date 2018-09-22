@@ -15,3 +15,10 @@ enum class Follow {
     FOLLOWERS,
     FOLLOWED
 }
+
+enum class OpenGallery {
+    ID { override fun getValue() = 1000 },
+    PROFILE { override fun getValue() = 1001 };
+
+    abstract fun getValue() : Int
+}

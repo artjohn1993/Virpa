@@ -1,6 +1,7 @@
 package com.local.virpa.virpa.presenter
 
 import com.local.virpa.virpa.api.ApiServices
+import com.local.virpa.virpa.model.ChangeProfile
 import com.local.virpa.virpa.model.DeleteFiles
 import com.local.virpa.virpa.model.SaveFiles
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -11,8 +12,6 @@ import okhttp3.RequestBody
 
 class EditInfoPresenterClass(var view : EditInfoView, var api : ApiServices) : EditInfoPresenter {
 
-
-
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
 
     override fun saveFiles(data : SaveFiles.Post) {
@@ -22,6 +21,19 @@ class EditInfoPresenterClass(var view : EditInfoView, var api : ApiServices) : E
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
                             view.successSaveFiles(result)
+                        },{
+                            error ->
+                            println(error.cause?.message.toString())
+                        })
+        )
+    }
+    override fun changeProfile(data: ChangeProfile.Post) {
+        compositeDisposable.add(
+                api.changeProfile(data)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe({ result ->
+                            view.successProfile(result)
                         },{
                             error ->
                             println(error.cause?.message.toString())
@@ -61,9 +73,11 @@ interface EditInfoPresenter {
     fun saveFiles(data : SaveFiles.Post)
     fun getFiles()
     fun deleteFile(data : DeleteFiles.Post)
+    fun changeProfile(data : ChangeProfile.Post)
 }
 interface EditInfoView {
     fun successSaveFiles(data : SaveFiles.Result)
     fun successGetFiles(data : SaveFiles.Result)
     fun sucessDeleteFile(data : DeleteFiles.Result)
+    fun successProfile(data : ChangeProfile.Result)
 }

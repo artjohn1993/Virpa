@@ -5,19 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activity.SetLocationActivity">
-    <TextView
-        android:id="@+id/locationTitle"
+
+    <com.google.android.gms.maps.MapView
+        android:id="@+id/mapView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:lines="3"
-        android:minLines="1"/>
-    <!--<com.alirezaashrafi.library.GoogleMapView
-        android:id="@+id/locationView"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        app:setMapType="roadmap"
-        app:setMapScale="high"
-        app:setMapZoom="20"
-        app:layout_constraintTop_toBottomOf="@id/locationTitle"
-        />-->
+        android:layout_height="match_parent"
+        android:apiKey="AIzaSyCULFod-yNFSP7EkYcXch7xdUMmYpNNK7U"
+        />
+
+
 </android.support.constraint.ConstraintLayout>

@@ -12,20 +12,22 @@ class SplashActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
+        try {
+            Handler().postDelayed({
+                var db = DatabaseHandler(this)
+                var login = db.checkSignInResult()
+                if (login) {
+                    startActivity<HomeActivity>()
+                    finish()
+                } else {
+                    startActivity<MainActivity>()
+                    finish()
+                }
 
-        Handler().postDelayed({
-            var db = DatabaseHandler(this)
-            var login = db.checkSignInResult()
-            if(login){
-                startActivity<HomeActivity>()
-                finish()
-            }
-            else{
-                startActivity<MainActivity>()
-                finish()
-            }
 
-
-        },2000)
+            }, 2000)
+        }catch (e : Exception) {
+            println(e.toString())
+        }
     }
 }

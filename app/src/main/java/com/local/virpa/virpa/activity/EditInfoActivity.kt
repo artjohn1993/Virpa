@@ -23,6 +23,9 @@ import com.bumptech.glide.Glide
 import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.enum.OpenGallery
+import com.local.virpa.virpa.event.ShowSnackBar
+import com.local.virpa.virpa.model.ChangeProfile
 import com.local.virpa.virpa.model.DeleteFiles
 import com.local.virpa.virpa.model.SaveFiles
 import com.local.virpa.virpa.presenter.EditInfoPresenterClass
@@ -41,8 +44,8 @@ import java.io.OutputStream
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
+@Suppress("DEPRECATED_IDENTITY_EQUALS")
 class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRequestPermissionsResultCallback{
-
 
     private val apiServer by lazy {
         VirpaApi.create(this)
@@ -50,10 +53,13 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     val presenter = EditInfoPresenterClass(this, apiServer)
     var bitmapImage : Bitmap? = null
     var uri : Uri? = null
-    var  path : String = ""
+    var  pathID : String = ""
+    var  pathProfile : String = ""
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     private val REQUEST_WRITE_PERMISSION = 786
     var fileID : String? = null
+    var isChangeProfile = false
+    var isChangeID = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,8 +70,12 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         supportActionBar?.setDisplayShowHomeEnabled(true)
         presenter.getFiles()
         changeID.setOnClickListener {
-            requestPermission()
+            requestPermission(OpenGallery.ID)
         }
+        changeProPic.setOnClickListener {
+            requestPermission(OpenGallery.PROFILE)
+        }
+
         deleteID.setOnClickListener {
             deleteFile()
         }
@@ -81,20 +91,27 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode === Activity.RESULT_OK) {
-            if (requestCode === 1000) {
-                this.uri = data?.data
-                this.path = getPath(this, data?.data!!)
-                println(path)
-
-                bitmapImage = MediaStore.Images.Media.getBitmap(contentResolver, this.uri )
+            this.uri = data?.data
+            bitmapImage = MediaStore.Images.Media.getBitmap(contentResolver, this.uri )
+            if (requestCode === OpenGallery.ID.getValue()) {
+                this.pathID = getPath(this, data?.data!!)
                 attachment?.setImageBitmap(bitmapImage)
+                isChangeID = true
+            }
+            else if (requestCode === OpenGallery.PROFILE.getValue()) {
+                this.pathProfile = getPath(this, data?.data!!)
+                profilePicture.setImageBitmap(bitmapImage)
+                isChangeProfile = true
             }
         }
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-            openFilePicker()
+        if (requestCode == OpenGallery.ID.getValue() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openFilePicker(OpenGallery.ID)
+        }
+        else if (requestCode == OpenGallery.PROFILE.getValue() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            openFilePicker(OpenGallery.PROFILE)
         }
     }
 
@@ -110,13 +127,12 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
                 this.finish()
             }
             R.id.saveData -> {
-                var imageArray : ArrayList<SaveFiles.FilesInfo> = ArrayList()
-                var file : File = File(this.path)
-                var base64 = ImageZipper.getBase64forImage(file).toString()
-                var files = SaveFiles.FilesInfo(file.name,base64)
-                imageArray.add(files)
-                var savePost = SaveFiles.Post(imageArray)
-                presenter.saveFiles(savePost)
+                if (isChangeID) {
+                    saveID()
+                }
+                if (isChangeProfile) {
+                    saveProfile()
+                }
             }
         }
         return true
@@ -136,6 +152,27 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     override fun sucessDeleteFile(data: DeleteFiles.Result) {
         fileID = null
         attachment.setImageResource(R.drawable.ic_default_image)
+    }
+
+    override fun successProfile(data: ChangeProfile.Result) {
+        ShowSnackBar.present("Profile Save" , this)
+    }
+
+    private fun saveID() {
+        var imageArray : ArrayList<SaveFiles.FilesInfo> = ArrayList()
+        var file : File = File(this.pathID)
+        var base64 = ImageZipper.getBase64forImage(file).toString()
+        var files = SaveFiles.FilesInfo(file.name,base64)
+        imageArray.add(files)
+        var savePost = SaveFiles.Post(imageArray)
+        presenter.saveFiles(savePost)
+    }
+
+    private fun saveProfile() {
+        var file : File = File(this.pathProfile)
+        var base64 = ImageZipper.getBase64forImage(file).toString()
+        var data = ChangeProfile.File(file.name,base64)
+        presenter.changeProfile(ChangeProfile.Post(data))
     }
 
     fun getPath(context: Context, uri: Uri): String {
@@ -160,22 +197,16 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
         dataArray.add(data)
         presenter.deleteFile(DeleteFiles.Post(dataArray))
     }
-    private fun openFilePicker() {
+    private fun openFilePicker(data : OpenGallery) {
         var intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
-        intent.putExtra("outputX", 200);
-        intent.putExtra("outputY", 200);
-        intent.putExtra("aspectX", 1);
-        intent.putExtra("aspectY", 1);
-        intent.putExtra("scale", true);
-        intent.putExtra("return-data", true);
-        startActivityForResult(intent, 1000)
+        startActivityForResult(intent, data.getValue())
 
     }
-    private fun requestPermission() {
+    private fun requestPermission(data : OpenGallery) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), REQUEST_WRITE_PERMISSION)
+            requestPermissions(arrayOf(android.Manifest.permission.WRITE_EXTERNAL_STORAGE), data.getValue())
         } else {
-            openFilePicker()
+            openFilePicker(data)
         }
     }
 }

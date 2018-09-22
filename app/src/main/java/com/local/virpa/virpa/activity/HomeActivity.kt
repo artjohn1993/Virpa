@@ -86,6 +86,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+
         changeFragment(FeedFragment(this, null), 1)
         checkStoragePermission()
         refreshToken("session")

@@ -72,7 +72,12 @@ class PostActivity : AppCompatActivity(), PostView {
                 backToHome()
             }
             R.id.post -> {
-                saveFeed()
+                if(postBody.text.toString() != "" && postBudget.text.toString() != "") {
+                    saveFeed()
+                }
+                else {
+                    ShowSnackBar.present("Incomplete information", this)
+                }
             }
         }
         return true

@@ -58,6 +58,14 @@ interface ApiServices {
     @POST("followers/unfollow")
     fun unFollow(@Body client : Follow.Post) : Observable<Follow.Result>
 
+    @Headers("Content-Type: application/json")
+    @POST("location")
+    fun pinLocation(@Body client : Location.Post) : Observable<Location.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("user/profilePicture/change")
+    fun changeProfile(@Body client : ChangeProfile.Post) : Observable<ChangeProfile.Result>
+
     //=========================================================
 
     @Headers("api-version: 1.0")
