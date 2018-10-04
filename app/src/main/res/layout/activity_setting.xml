@@ -26,10 +26,11 @@
                 android:padding="16dp"
                 >
                 <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profilePicture"
+                    android:id="@+id/settingProfile"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@drawable/sample_pic"
+                    android:src="@drawable/ic_person"
+                    android:background="@drawable/circle_gray"
                     android:scaleType="centerCrop"
                     app:civ_border_color="@color/colorWhite"
                     app:civ_border_width="2dp"

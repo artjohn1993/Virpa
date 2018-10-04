@@ -26,6 +26,7 @@
                     android:layout_height="wrap_content"
                     android:text="LF (Looking for)"
                     android:layout_marginEnd="8dp"
+                    android:checked="true"
                     />
                 <RadioButton
                     android:id="@+id/announce"
@@ -40,31 +41,39 @@
                 android:background="@color/gray"
                 />
             <LinearLayout
+                android:id="@+id/priceWrapper"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:padding="8dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PHP"
-                    android:layout_marginEnd="8dp"
-                    android:textColor="@color/black"/>
-                <EditText
-                    android:id="@+id/postBudget"
+                android:orientation="vertical">
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/amount_to_offer"
-                    android:background="@color/transparent"
-                    android:inputType="phone"/>
+                    android:orientation="horizontal"
+                    android:padding="8dp">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="PHP"
+                        android:layout_marginEnd="8dp"
+                        android:textColor="@color/black"/>
+                    <EditText
+                        android:id="@+id/postBudget"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="@string/amount_to_offer"
+                        android:background="@color/transparent"
+                        android:inputType="phone"/>
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/gray"
+                    />
             </LinearLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/gray"
-                />
-        </LinearLayout>
+            </LinearLayout>
+
         <LinearLayout
             android:id="@+id/menu2"
             android:layout_width="match_parent"

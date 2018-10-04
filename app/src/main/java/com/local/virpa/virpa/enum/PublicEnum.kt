@@ -16,8 +16,13 @@ enum class Follow {
     FOLLOWED
 }
 
+enum class FragmentType {
+    FEED,
+    LOCATION
+}
+
 enum class OpenGallery {
-    ID { override fun getValue() = 1000 },
+    ID { override fun getValue() = 1002 },
     PROFILE { override fun getValue() = 1001 };
 
     abstract fun getValue() : Int

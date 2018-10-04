@@ -6,10 +6,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.local.virpa.virpa.R
-import com.local.virpa.virpa.activity.CommentActivity
+import com.local.virpa.virpa.activity.BiddingActivity
+import com.local.virpa.virpa.dialog.FullImageDialog
 import com.local.virpa.virpa.event.GetTime
 import com.local.virpa.virpa.model.FeedByUser
 import org.jetbrains.anko.startActivity
@@ -36,7 +38,13 @@ class VisitedAdapter(val activity: Activity, var data: FeedByUser.Result) : Recy
         holder.time.text = GetTime.calculate(data.data.feeds[pos].createdAt)
         holder.price.text = data.data.feeds[pos].budget.toString()
         holder.caption.text = data.data.feeds[pos].body
-
+        if (data.data.feeds[pos].type != 0)
+        {
+            holder.price.visibility = View.GONE
+            holder.groupReaction.visibility = View.GONE
+            holder.postType.text = "Announcement"
+            holder.postType .setBackgroundResource(R.drawable.color_primary_background)
+        }
         if (data.data.feeds[pos].coverPhotos != null) {
             Glide.with(activity)
                     .load(data.data.feeds[pos].coverPhotos!![0].filePath)
@@ -47,10 +55,13 @@ class VisitedAdapter(val activity: Activity, var data: FeedByUser.Result) : Recy
         }
 
         holder.bidding.setOnClickListener {
-            activity.startActivity<CommentActivity>()
+            activity.startActivity<BiddingActivity>()
         }
         holder.commentIcon.setOnClickListener {
-            activity.startActivity<CommentActivity>()
+            activity.startActivity<BiddingActivity>()
+        }
+        holder.post.setOnClickListener {
+            FullImageDialog(activity).show(data.data.feeds[pos].coverPhotos!![0].filePath)
         }
     }
 
@@ -62,5 +73,7 @@ class VisitedAdapter(val activity: Activity, var data: FeedByUser.Result) : Recy
         var post : ImageView = itemView.findViewById(R.id.postImage)
         var bidding : TextView = itemView.findViewById(R.id.biddingTotal)
         var commentIcon : ImageView = itemView.findViewById(R.id.commentIcon)
+        var groupReaction : LinearLayout = itemView.findViewById(R.id.reactionGroup)
+        var postType : TextView = itemView.findViewById(R.id.visitedPostType)
     }
 }

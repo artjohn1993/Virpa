@@ -66,11 +66,23 @@ interface ApiServices {
     @POST("user/profilePicture/change")
     fun changeProfile(@Body client : ChangeProfile.Post) : Observable<ChangeProfile.Result>
 
+    @Headers("Content-Type: application/json")
+    @POST("user/update")
+    fun updateUserInfo(@Body client : UpdateUser.Post) : Observable<UpdateUser.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("bid")
+    fun saveBid(@Body client : SaveBidder.Post) : Observable<SaveBidder.Result>
+
     //=========================================================
 
     @Headers("api-version: 1.0")
     @GET("feeds")
     fun getMyFeed() : Observable<Feed.Result>
+
+    @Headers("api-version: 1.0")
+    @GET("bid/{feedId}")
+    fun getBidders(@Path( value = "feedId", encoded = true) feedId : String) : Observable<GetBidder.Result>
 
     @Headers("api-version: 1.0")
     @GET("feeds/wall/{user_id}")

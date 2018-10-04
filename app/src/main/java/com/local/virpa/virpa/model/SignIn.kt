@@ -30,7 +30,8 @@ object SignIn {
     )
     data class User(
             var detail : Detail,
-            var profilePicture : ProfilePicture?
+            var profilePicture : ProfilePicture?,
+            var location : UserLocation?
     )
 
     data class Detail(
@@ -53,5 +54,14 @@ object SignIn {
             var filePath : String,
             var type : Int,
             var createdAt : String
+    )
+    data class UserLocation(
+            var latitude : Double,
+            var longitude : Double,
+            var address : String,
+            var cityName: String,
+            var state: String,
+            var countryName : String,
+            var postalCode : String
     )
 }

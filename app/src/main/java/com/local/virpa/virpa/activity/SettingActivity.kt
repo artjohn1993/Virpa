@@ -23,7 +23,9 @@ import com.local.virpa.virpa.model.SignOut
 import com.local.virpa.virpa.presenter.SettingsPresenter
 import com.local.virpa.virpa.presenter.SettingsPresenterClass
 import com.local.virpa.virpa.presenter.SettingsView
+import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.activity_visited_profile.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -36,8 +38,6 @@ class SettingActivity : AppCompatActivity(), SettingsView {
         VirpaApi.create(this)
     }
     var presenter = SettingsPresenterClass(this, apiServer)
-
-
     var loading = Loading(this)
     //endregion
 
@@ -99,6 +99,9 @@ class SettingActivity : AppCompatActivity(), SettingsView {
         userNameSettings.text = data[0].user.detail.fullname
         userEmailSettings.text = data[0].user.detail.email
         userNumberSettings.text = data[0].user.detail.mobileNumber
+        if (data[0].user.profilePicture?.filePath != "") {
+            Picasso.get().load(data[0].user.profilePicture?.filePath).into(settingProfile)
+        }
     }
     //endregion
 

@@ -38,16 +38,22 @@ import android.os.Build
 import android.os.Handler
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R.id.name
 import com.local.virpa.virpa.dialog.Loading
+import com.local.virpa.virpa.enum.FragmentType
 import com.local.virpa.virpa.enum.RequestError
 import com.local.virpa.virpa.enum.publicToken
+import com.local.virpa.virpa.event.Refresh
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.TokenRefresh
 import com.local.virpa.virpa.model.UserList
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_setting.*
+import kotlinx.android.synthetic.main.fragment_feed.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -75,6 +81,9 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     var loading = Loading(this)
     var EXTERNAL_STORAGE_PERMISSION = 1
     var permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
+    var permissionFineLoc = android.Manifest.permission.ACCESS_FINE_LOCATION
+    var REQUEST_CODE = 1
+    var permissionArray = arrayOf(permissionFineLoc)
     //endregion
 
     //region - Life Cycle
@@ -86,9 +95,10 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        changeFragment(FeedFragment(this, null), 1)
+        setProfile()
+        changeFragment(FeedFragment(this, null, true), 1)
         checkStoragePermission()
+        checkLocationPermission()
         refreshToken("session")
         navigationBar.disableShiftMode()
         navigationBar.setOnNavigationItemSelectedListener(
@@ -96,15 +106,15 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                     when (item.itemId) {
                         R.id.feed -> {
                             try {
-                                changeFragment(FeedFragment(this, this.data!!), 1)
+                                changeFragment(FeedFragment(this, this.data!!,false), 1)
                             } catch (e : Exception) {
-                                changeFragment(FeedFragment(this, null), 1)
-                            }
+                                changeFragment(FeedFragment(this, null, false), 1)
+                        }
                             presenter.getMyFeed()
                             currentfragment = 1
                         }
                         R.id.location -> {
-                            changeFragment(LocationFragment(this, null), 2)
+                            changeFragment(LocationFragment(this, null, true), 2)
                             presenter.getUserList()
                             currentfragment = 2
                         }
@@ -134,9 +144,19 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        EventBus.getDefault().register(this)
+    }
+
     override fun onPause() {
         super.onPause()
         compositeDisposable.clear()
+    }
+
+    override fun onStop() {
+        super.onStop()
+        EventBus.getDefault().unregister(this)
     }
 
     //endregion
@@ -170,8 +190,6 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
             }
         } catch (e: NoSuchFieldException) {
 
-        } catch (e: IllegalStateException) {
-
         }
     }
 
@@ -197,12 +215,24 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
             return true
         }
     }
+    fun checkLocationPermission() {
+        if(ContextCompat.checkSelfPermission(this, permissionFineLoc) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, permissionArray, REQUEST_CODE)
+        }
+    }
+    private fun setProfile() {
+        val db = DatabaseHandler(this)
+        var data = db.readSignResult()
+        if (data[0].user.profilePicture?.filePath != "") {
+            Picasso.get().load(data[0].user.profilePicture?.filePath).into(profilePicture)
+        }
+    }
     //endregion
 
     //region - Presenter
     override fun feedResponse(data: Feed.Result) {
         this.data = data
-        changeFragment(FeedFragment(this, data), 1)
+        changeFragment(FeedFragment(this, data, false), 1)
     }
 
     override fun feedError(data: String) {
@@ -218,11 +248,20 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     }
 
     override fun getUserListResponse(data: UserList.Result) {
-        changeFragment(LocationFragment(this, data), 2)
+        changeFragment(LocationFragment(this, data, false), 2)
     }
 
     //endregion
 
-    //region - EventBus
-    //endregion
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    fun onRefresh(event : Refresh) {
+        when(event.type) {
+            FragmentType.FEED -> {
+                presenter.getMyFeed()
+            }
+            FragmentType.LOCATION -> {
+                presenter.getUserList()
+            }
+        }
+    }
 }

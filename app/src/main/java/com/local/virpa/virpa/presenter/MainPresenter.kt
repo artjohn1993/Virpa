@@ -43,7 +43,6 @@ class MainPresenterClass(var view : MainView, var api : ApiServices) : MainPrese
                             if (result.succeed) {
                                 publicToken = result.data.authorization.sessionToken.token
                                 view.loginSuccess(result)
-
                             }
                             else
                             {

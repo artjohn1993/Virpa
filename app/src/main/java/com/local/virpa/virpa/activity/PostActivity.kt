@@ -23,6 +23,7 @@ import com.local.virpa.virpa.model.SaveFeed
 import com.local.virpa.virpa.presenter.PostPresenterClass
 import com.local.virpa.virpa.presenter.PostView
 import kotlinx.android.synthetic.main.activity_post.*
+import kotlinx.android.synthetic.main.layout_visited_user.*
 import org.jetbrains.anko.startActivity
 import java.io.File
 
@@ -32,6 +33,7 @@ class PostActivity : AppCompatActivity(), PostView {
     var permission = android.Manifest.permission.WRITE_EXTERNAL_STORAGE
     var EXTERNAL_STORAGE_PERMISSION = 1
     var loading = Loading(this)
+    var type : Int = 0
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
@@ -46,6 +48,21 @@ class PostActivity : AppCompatActivity(), PostView {
         image?.setOnClickListener {
             var cameraIntent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             startActivityForResult(cameraIntent, 1000)
+        }
+
+        postType.setOnCheckedChangeListener { radioGroup, i ->
+            when(i) {
+                R.id.lf -> {
+                    type = 0
+                    priceWrapper.visibility = View.VISIBLE
+                    postBudget.setText("")
+                }
+                R.id.announce -> {
+                    type = 1
+                    priceWrapper.visibility = View.GONE
+                    postBudget.setText("0.0")
+                }
+            }
         }
     }
 
@@ -72,11 +89,15 @@ class PostActivity : AppCompatActivity(), PostView {
                 backToHome()
             }
             R.id.post -> {
-                if(postBody.text.toString() != "" && postBudget.text.toString() != "") {
-                    saveFeed()
+                if (type == 0) {
+                    if (postBody.text.toString() != "" && postBudget.text.toString() != "") {
+                        saveFeed()
+                    } else {
+                        ShowSnackBar.present("Incomplete information", this)
+                    }
                 }
                 else {
-                    ShowSnackBar.present("Incomplete information", this)
+                    saveFeed()
                 }
             }
         }
@@ -95,11 +116,11 @@ class PostActivity : AppCompatActivity(), PostView {
             if(path != "") {
                 var base64 = ImageZipper.getBase64forImage(file).toString()
                 val saveFeed = SaveFeed.PostCoverPhoto(file.name, base64.toString())
-                var data = SaveFeed.Post("0",0, postBody.text.toString(), postBudget.text.toString().toDouble(),3, saveFeed)
+                var data = SaveFeed.Post("0",type, postBody.text.toString(), postBudget.text.toString().toDouble(),3, saveFeed)
                 presenter.saveMyFeed(data)
             }
             else {
-                var data = SaveFeed.Post("0",0, postBody.text.toString(), postBudget.text.toString().toDouble(),3, null)
+                var data = SaveFeed.Post("0",type, postBody.text.toString(), postBudget.text.toString().toDouble(),3, null)
                 presenter.saveMyFeed(data)
             }
 

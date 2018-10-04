@@ -1,7 +1,9 @@
 package com.local.virpa.virpa.adapter
 
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.graphics.drawable.Drawable
+import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -23,6 +25,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
     var guide : ArrayList<String> = ArrayList()
     var icon : ArrayList<Int> = ArrayList()
     var color: ArrayList<Int> = ArrayList()
+
     init {
         title.add("Total Views")
         title.add("Ratings")
@@ -104,6 +107,7 @@ class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAda
             }
         }
     }
+
 
     class SettingsViewHolder(itemview: View) : RecyclerView.ViewHolder(itemview) {
         val icon = itemview.findViewById<ImageView>(R.id.icon)

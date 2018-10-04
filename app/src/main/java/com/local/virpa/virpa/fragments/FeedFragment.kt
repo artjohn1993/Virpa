@@ -16,17 +16,21 @@ import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.PostActivity
 import com.local.virpa.virpa.adapter.FeedAdapter
+import com.local.virpa.virpa.enum.FragmentType
 import com.local.virpa.virpa.event.GetTime
+import com.local.virpa.virpa.event.Refresh
 import com.local.virpa.virpa.model.Feed
+import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.startActivity
 
 @SuppressLint("ValidFragment")
 class FeedFragment @SuppressLint("ValidFragment") constructor
-(val activity: Activity,val data : Feed.Result?) : Fragment() {
+(val activity: Activity,val data : Feed.Result?,val initial : Boolean) : Fragment() {
 
     var feedRecycler : android.support.v7.widget.RecyclerView? = null
     var fab : android.support.design.widget.FloatingActionButton? = null
     var empty :android.support.constraint.ConstraintLayout? = null
+    var refresh : android.support.v4.widget.SwipeRefreshLayout? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -35,7 +39,13 @@ class FeedFragment @SuppressLint("ValidFragment") constructor
         feedRecycler = view.findViewById(R.id.feedRecyclerView)
         fab = view.findViewById(R.id.fabButton)
         empty = view.findViewById(R.id.emptyFeedCon)
+        refresh = view.findViewById(R.id.feedRefresh)
 
+        refresh?.isRefreshing = initial
+
+        refresh?.setOnRefreshListener {
+            EventBus.getDefault().post(Refresh(FragmentType.FEED))
+        }
         feedRecycler?.layoutManager = LinearLayoutManager(context,
                 LinearLayout.VERTICAL,
                 false)

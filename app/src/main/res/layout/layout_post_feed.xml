@@ -19,12 +19,27 @@
         />
 
     <TextView
+        android:id="@+id/postType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Looking for"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/color_gray_background"
+        android:padding="@dimen/padding_xs"
+        android:textSize="12sp"
+        android:textColor="@color/colorWhite"
+        />
+
+    <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="4 hrs ago"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/postType"
+        android:textSize="12sp"
+        android:layout_marginTop="@dimen/margin_xs"
         />
 
     <TextView
@@ -75,18 +90,7 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/postImage"
         android:layout_marginTop="@dimen/margin_xs">
-        <ImageView
-            android:layout_width="15dp"
-            android:layout_height="15dp"
-            android:src="@drawable/ic_pan_tool"
-            />
-        <TextView
-            android:id="@+id/upVotesTotal"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="100 upvotes"
-            android:textSize="@dimen/material_text_caption"
-            android:layout_marginStart="@dimen/margin_xs"/>
+
 
         <ImageView
             android:id="@+id/commentIcon"

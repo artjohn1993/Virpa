@@ -6,7 +6,7 @@
     android:padding="@dimen/padding_s"
     android:layout_marginTop="@dimen/margin_m">
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profilePicture"
+        android:id="@+id/bidderPicture"
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:src="@drawable/sample_pic"
@@ -15,33 +15,50 @@
         android:layout_marginEnd="@dimen/padding_s"
         android:layout_marginStart="@dimen/margin_m"/>
     <TextView
-        android:id="@+id/name"
+        android:id="@+id/bidderName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Jessica Sanchez"
-        app:layout_constraintStart_toEndOf="@id/profilePicture"
+        app:layout_constraintStart_toEndOf="@id/bidderPicture"
         android:layout_marginStart="@dimen/margin_m"
         android:textColor="@color/black"
         android:textStyle="bold"
         />
     <TextView
+        android:id="@+id/bidderTime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="2 mins ago"
-        app:layout_constraintStart_toEndOf="@id/name"
+        app:layout_constraintStart_toEndOf="@id/bidderName"
         android:layout_marginStart="@dimen/margin_m"
         android:textSize="10sp"
-        app:layout_constraintTop_toTopOf="@id/name"
-        app:layout_constraintBottom_toBottomOf="@id/name"/>
+        app:layout_constraintTop_toTopOf="@id/bidderName"
+        app:layout_constraintBottom_toBottomOf="@id/bidderName"/>
+
     <TextView
+        android:id="@+id/bidderStatus"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Idle"
+        android:background="@drawable/color_gray_background"
+        android:paddingStart="@dimen/padding_s"
+        android:paddingEnd="@dimen/padding_s"
+        android:textColor="@color/colorWhite"
+        app:layout_constraintStart_toStartOf="@id/bidderName"
+        app:layout_constraintTop_toBottomOf="@id/bidderName"
+        />
+
+    <TextView
+        android:id="@+id/bidderMessage"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/profilePicture"
+        app:layout_constraintStart_toEndOf="@id/bidderPicture"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/name"
+        app:layout_constraintTop_toBottomOf="@id/bidderName"
         android:layout_marginStart="@dimen/margin_m"
         android:text="@string/sample_data"
         android:textColor="@color/black"
         android:layout_marginTop="@dimen/margin_s"
+        android:visibility="gone"
         />
 </android.support.constraint.ConstraintLayout>

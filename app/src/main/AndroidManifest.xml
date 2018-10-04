@@ -38,7 +38,7 @@
         <activity android:name=".activity.UpvotesActivity" />
         <activity android:name=".activity.EditInfoActivity" />
         <activity android:name=".activity.VisitedProfileActivity" />
-        <activity android:name=".activity.CommentActivity" />
+        <activity android:name=".activity.BiddingActivity" />
         <activity
             android:name=".activity.SuccessActivity"
             android:theme="@style/Theme.AppCompat.DayNight.NoActionBar" />

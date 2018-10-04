@@ -8,7 +8,18 @@
     android:layout_marginBottom="@dimen/margin_s"
     android:background="@color/colorWhite"
     >
-
+    <TextView
+        android:id="@+id/visitedPostType"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Looking for"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/color_gray_background"
+        android:padding="@dimen/padding_xs"
+        android:textSize="12sp"
+        android:textColor="@color/colorWhite"
+        />
     <TextView
         android:id="@+id/time"
         android:layout_width="wrap_content"
@@ -24,7 +35,9 @@
         android:layout_height="wrap_content"
         android:text="Lorem ipsum"
         android:textStyle="bold"
-        app:layout_constraintTop_toBottomOf="@id/time"
+        app:layout_constraintTop_toBottomOf="@id/visitedPostType"
+        android:layout_marginTop="@dimen/margin_s"
+
         />
     <TextView
         android:id="@+id/caption"
@@ -32,6 +45,7 @@
         android:layout_height="wrap_content"
         android:text="Lorem ipsum"
         app:layout_constraintTop_toBottomOf="@id/price"
+        android:layout_marginTop="@dimen/margin_s"
         />
     <ImageView
         android:id="@+id/postImage"
@@ -49,6 +63,7 @@
         android:orientation="horizontal"
         app:layout_constraintTop_toBottomOf="@id/postImage"
         android:layout_marginTop="@dimen/margin_xs">
+
         <ImageView
             android:layout_width="15dp"
             android:layout_height="15dp"

@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity(), MainView {
         }
     }
 
+
     @Subscribe(threadMode = ThreadMode.MAIN)
     fun onForgetPass(event : ForgetPassEvent) {
         var forgetPass = ForgetPass.Post(event.email)
@@ -176,6 +177,7 @@ class MainActivity : AppCompatActivity(), MainView {
             nextActivity()
         }
         else {
+            loading.hide()
             snackBar("Saving to local database failed")
         }
     }

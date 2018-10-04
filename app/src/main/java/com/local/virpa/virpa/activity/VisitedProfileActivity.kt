@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
+import android.view.View
 import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.VisitedAdapter
@@ -16,6 +17,7 @@ import com.local.virpa.virpa.presenter.VisitedProfileView
 import com.squareup.moshi.Moshi
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_visited_profile.*
+import kotlinx.android.synthetic.main.layout_empty_recycler.*
 
 class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
 
@@ -36,7 +38,6 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
         followWrapper.setOnClickListener {
             checkFollow()
         }
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
@@ -97,6 +98,7 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
 
     override fun responseUserFeed(data: FeedByUser.Result?) {
         if(data?.data != null) {
+            emptyFeedCon.visibility = View.GONE
             visitedProfileRecycler?.adapter = VisitedAdapter(this, data)
         }
     }

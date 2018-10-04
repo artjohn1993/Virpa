@@ -10,6 +10,12 @@
     <color name="darkGray">#9c9c9c</color>
     <color name="black">#000000</color>
     <color name="transparent">#00000000</color>
+
     <color name="yellow">#fc3</color>
+    <color name="red">#E45C5D</color>
+    <color name="green">#2E8B57</color>
+    <color name="orange">#F7A555</color>
+
+    <color name="black_transparent">#80000000</color>
 
 </resources>

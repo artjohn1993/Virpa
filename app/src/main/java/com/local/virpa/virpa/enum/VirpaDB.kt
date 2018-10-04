@@ -6,7 +6,9 @@ var publicToken : String? = null
     DATABASE_NAME { override fun getValue() = "Virpa" },
     TABLE_SESSION { override fun getValue() = "Session_Token" },
     TABLE_REFRESH { override fun getValue() = "Refresh_Token" },
+    TABLE_LOCATION { override fun getValue() = "User_Location" },
     USER_INFO { override fun getValue() = "User_Info" };
+
 
     abstract fun getValue() : String
 }
@@ -25,6 +27,18 @@ object Table {
         abstract fun getValue() : String
     }
 
+    enum class UserLocation {
+        LATITUDE { override fun getValue() = "latitude" },
+        LONGITUDE { override fun getValue() = "longitude" },
+        ADDRESS { override fun getValue() = "address" },
+        CITY_NAME { override fun getValue() = "cityName" },
+        STATE { override fun getValue() = "state" },
+        COUNTRY_NAME { override fun getValue() = "countryName" },
+        POSTAL_CODE { override fun getValue() = "postalCode" };
+
+        abstract fun getValue() : String
+    }
+
     enum class UserInfo {
         ID { override fun getValue() = "id" },
         USERNAME { override fun getValue() = "userName" },
@@ -32,9 +46,10 @@ object Table {
         FULLNAME { override fun getValue() = "fullname" },
         MOBILE_NUMBER { override fun getValue() = "mobileNumber" },
         FOLLOWERS { override fun getValue() = "followersCount" },
-        SUMMARY { override fun getValue() = "backgroundSummary" },
         CREATED_AT { override fun getValue() = "createdAt" },
-        UPDATED_AT { override fun getValue() = "updatedAt" };
+        UPDATED_AT { override fun getValue() = "updatedAt" },
+        BACKGROUND_SUMMARY { override fun getValue() = "backgroundSummary" },
+        FILE_PATH { override fun getValue() = "filePath" };
 
         abstract fun getValue() : String
     }

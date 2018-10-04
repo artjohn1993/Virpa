@@ -4,6 +4,7 @@ import com.local.virpa.virpa.api.ApiServices
 import com.local.virpa.virpa.model.ChangeProfile
 import com.local.virpa.virpa.model.DeleteFiles
 import com.local.virpa.virpa.model.SaveFiles
+import com.local.virpa.virpa.model.UpdateUser
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.schedulers.Schedulers
@@ -34,6 +35,20 @@ class EditInfoPresenterClass(var view : EditInfoView, var api : ApiServices) : E
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
                             view.successProfile(result)
+                        },{
+                            error ->
+                            println(error.cause?.message.toString())
+                        })
+        )
+    }
+
+    override fun updateUserInfo(data: UpdateUser.Post) {
+        compositeDisposable.add(
+                api.updateUserInfo(data)
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribeOn(Schedulers.newThread())
+                        .subscribe({ result ->
+                            view.successUpdateUser(result)
                         },{
                             error ->
                             println(error.cause?.message.toString())
@@ -74,10 +89,12 @@ interface EditInfoPresenter {
     fun getFiles()
     fun deleteFile(data : DeleteFiles.Post)
     fun changeProfile(data : ChangeProfile.Post)
+    fun updateUserInfo(data : UpdateUser.Post)
 }
 interface EditInfoView {
     fun successSaveFiles(data : SaveFiles.Result)
     fun successGetFiles(data : SaveFiles.Result)
     fun sucessDeleteFile(data : DeleteFiles.Result)
     fun successProfile(data : ChangeProfile.Result)
+    fun successUpdateUser(data : UpdateUser.Result)
 }

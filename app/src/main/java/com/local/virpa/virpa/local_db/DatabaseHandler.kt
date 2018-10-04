@@ -20,7 +20,8 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
                 Table.UserInfo.FULLNAME.getValue() + " VARCHAR(100)," +
                 Table.UserInfo.MOBILE_NUMBER.getValue() + " VARCHAR(20)," +
                 Table.UserInfo.FOLLOWERS.getValue() + " INTEGER," +
-                /*Table.UserInfo.SUMMARY.getValue() + " VARCHAR(200)," +*/
+                Table.UserInfo.BACKGROUND_SUMMARY.getValue() + " TEXT," +
+                Table.UserInfo.FILE_PATH.getValue() + " TEXT," +
                 Table.UserInfo.CREATED_AT.getValue() + " VARCHAR(100)," +
                 Table.UserInfo.UPDATED_AT.getValue() + " VARCHAR(100))"
         )
@@ -28,10 +29,22 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
                 Table.Refresh.TOKEN.getValue() + " TEXT," +
                 Table.Refresh.EXPIRED.getValue() + " TEXT)"
         )
+
         db?.execSQL("CREATE TABLE " + VirpaDB.TABLE_SESSION.getValue() + " (" +
                 Table.Session.TOKEN.getValue() + " TEXT," +
                 Table.Session.EXPIRED.getValue() + " TEXT)"
         )
+
+        db?.execSQL("CREATE TABLE " + VirpaDB.TABLE_LOCATION.getValue() + " (" +
+                Table.UserLocation.LATITUDE.getValue() + " VARCHAR(50)," +
+                Table.UserLocation.LONGITUDE.getValue() + " VARCHAR(50)," +
+                Table.UserLocation.ADDRESS.getValue() + " VARCHAR(100)," +
+                Table.UserLocation.CITY_NAME.getValue() + " VARCHAR(100)," +
+                Table.UserLocation.STATE.getValue() + " VARCHAR(100)," +
+                Table.UserLocation.COUNTRY_NAME.getValue() + " VARCHAR(100)," +
+                Table.UserLocation.POSTAL_CODE.getValue() + " VARCHAR(100))"
+        )
+
     }
 
     override fun onUpgrade(p0: SQLiteDatabase?, p1: Int, p2: Int) {
@@ -53,6 +66,20 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db.close()
     }
 
+    fun updateData(table : String, column : String, newData : String) {
+        val db = this.readableDatabase
+        var query = "Select * from " + table
+        var result = db.rawQuery(query, null)
+        if(result.moveToFirst()){
+            do {
+                var cv = ContentValues()
+                cv.put(column,newData)
+                db.update(table, cv, "", null)
+            }while (result.moveToNext())
+        }
+        db.close()
+    }
+
     fun insertSignInResult(data : SignIn.Result) : Boolean {
         val db = this.writableDatabase
         var cvUser = ContentValues()
@@ -63,7 +90,19 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         cvUser.put(Table.UserInfo.FULLNAME.getValue(), data.data.user.detail.fullname)
         cvUser.put(Table.UserInfo.MOBILE_NUMBER.getValue(), data.data.user.detail.mobileNumber)
         cvUser.put(Table.UserInfo.FOLLOWERS.getValue(), data.data.user.detail.followersCount)
-        /*cvUser.put(Table.UserInfo.SUMMARY.getValue(), checkData(data.data.user.detail.backgroundSummary))*/
+        if (data.data.user.detail.backgroundSummary != null) {
+            cvUser.put(Table.UserInfo.BACKGROUND_SUMMARY.getValue(), data.data.user.detail.backgroundSummary!!)
+        }
+        else {
+            cvUser.put(Table.UserInfo.BACKGROUND_SUMMARY.getValue(), "")
+        }
+        if (data.data.user.profilePicture != null) {
+            cvUser.put(Table.UserInfo.FILE_PATH.getValue(), data.data.user.profilePicture!!.filePath)
+        }
+        else {
+            cvUser.put(Table.UserInfo.FILE_PATH.getValue(), "")
+        }
+
         cvUser.put(Table.UserInfo.CREATED_AT.getValue(), data.data.user.detail.createdAt)
         cvUser.put(Table.UserInfo.UPDATED_AT.getValue(), data.data.user.detail.updatedAt)
         var result1 = db.insert(VirpaDB.USER_INFO.getValue(), null, cvUser)
@@ -79,8 +118,30 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         cvRefresh.put(Table.Refresh.EXPIRED.getValue(), data.data.authorization.refreshToken.expiredAt)
         var result3 = db.insert(VirpaDB.TABLE_REFRESH.getValue(), null, cvRefresh)
 
+        var cvUserLocation = ContentValues()
+        if (data.data.user.location != null) {
+            var locationInfo = data.data.user.location;
+            cvUserLocation.put(Table.UserLocation.LATITUDE.getValue(), locationInfo?.latitude.toString())
+            cvUserLocation.put(Table.UserLocation.LONGITUDE.getValue(), locationInfo?.longitude.toString())
+            cvUserLocation.put(Table.UserLocation.ADDRESS.getValue(), locationInfo?.address)
+            cvUserLocation.put(Table.UserLocation.CITY_NAME.getValue(), locationInfo?.cityName)
+            cvUserLocation.put(Table.UserLocation.STATE.getValue(), locationInfo?.state)
+            cvUserLocation.put(Table.UserLocation.COUNTRY_NAME.getValue(), locationInfo?.countryName)
+            cvUserLocation.put(Table.UserLocation.POSTAL_CODE.getValue(), locationInfo?.postalCode)
+        }
+        else {
+            cvUserLocation.put(Table.UserLocation.LATITUDE.getValue(), "0.0")
+            cvUserLocation.put(Table.UserLocation.LONGITUDE.getValue(), "0.0")
+            cvUserLocation.put(Table.UserLocation.ADDRESS.getValue(), "")
+            cvUserLocation.put(Table.UserLocation.CITY_NAME.getValue(), "")
+            cvUserLocation.put(Table.UserLocation.STATE.getValue(), "")
+            cvUserLocation.put(Table.UserLocation.COUNTRY_NAME.getValue(), "")
+            cvUserLocation.put(Table.UserLocation.POSTAL_CODE.getValue(), "0")
+        }
+        var result4 = db.insert(VirpaDB.TABLE_LOCATION.getValue(), null, cvUserLocation)
+
         db.close()
-        return result1 != (-1).toLong() && result2 != (-1).toLong() && result3 != (-1).toLong()
+        return result1 != (-1).toLong() && result2 != (-1).toLong() && result3 != (-1).toLong() && result4 != (-1).toLong()
     }
 
     fun checkSignInResult() : Boolean {
@@ -100,7 +161,12 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db.close()
         result.close()
 
-        return list.size != 0
+        if(list.size != 0) {
+            return true
+        }
+        else {
+            return false
+        }
     }
 
     fun readSignResult() : MutableList<SignIn.Data> {
@@ -109,8 +175,9 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         val result1 = db.rawQuery("SELECT * from " + VirpaDB.USER_INFO.getValue(), null)
         val result2 = db.rawQuery("SELECT * from " + VirpaDB.TABLE_SESSION.getValue(), null)
         val result3 = db.rawQuery("SELECT * from " + VirpaDB.TABLE_REFRESH.getValue(), null)
+        val result4 = db.rawQuery("SELECT * from " + VirpaDB.TABLE_LOCATION.getValue(), null)
 
-        if(result1.moveToFirst() && result2.moveToFirst() && result3.moveToFirst()) {
+        if(result1.moveToFirst() && result2.moveToFirst() && result3.moveToFirst() && result4.moveToFirst()) {
             do {
                 var session = SignIn.SessionToken(
                         result2.getString(result2.getColumnIndex(Table.Session.TOKEN.getValue())),
@@ -128,20 +195,38 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
                         result1.getString(result1.getColumnIndex(Table.UserInfo.FULLNAME.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.MOBILE_NUMBER.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.FOLLOWERS.getValue())).toInt(),
-                        null,
+                        result1.getString(result1.getColumnIndex(Table.UserInfo.BACKGROUND_SUMMARY.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.CREATED_AT.getValue())),
                         result1.getString(result1.getColumnIndex(Table.UserInfo.UPDATED_AT.getValue()))
                 )
+                var profile = SignIn.ProfilePicture(
+                        "",
+                "",
+                "",
+                "",
+                result1.getString(result1.getColumnIndex(Table.UserInfo.FILE_PATH.getValue())),
+                3,
+                ""
+                )
+                var location = SignIn.UserLocation(
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.LATITUDE.getValue())).toDouble(),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.LONGITUDE.getValue())).toDouble(),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.ADDRESS.getValue())),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.CITY_NAME.getValue())),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.STATE.getValue())),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.COUNTRY_NAME.getValue())),
+                        result4.getString(result4.getColumnIndex(Table.UserLocation.POSTAL_CODE.getValue()))
+                )
 
-                var user = SignIn.User(detail, null)
+                var user = SignIn.User(detail, profile,location)
                 var data = SignIn.Data(authorization, user)
                 list.add(data)
-            }while(result1.moveToNext() && result2.moveToNext() && result3.moveToNext())
+            }while(result1.moveToNext() && result2.moveToNext() && result3.moveToNext() && result4.moveToNext())
         }
         db.close()
         return list
     }
-    fun checkData(data : String) : String {
+    fun checkData(data : String?) : String {
         var dataHolder = ""
         if (data != null ) {
           dataHolder = data
@@ -153,6 +238,7 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db.delete(VirpaDB.TABLE_REFRESH.getValue(),null,null)
         db.delete(VirpaDB.TABLE_SESSION.getValue(),null,null)
         db.delete(VirpaDB.USER_INFO.getValue(),null,null)
+        db.delete(VirpaDB.TABLE_LOCATION.getValue(),null,null)
         db.close()
     }
 
