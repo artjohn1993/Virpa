@@ -1,12 +1,10 @@
 package com.local.virpa.virpa.activity
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -14,11 +12,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
-import android.util.Log
-import android.view.ContextMenu
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import com.bumptech.glide.Glide
 import com.developers.imagezipper.ImageZipper
 import com.local.virpa.virpa.R
@@ -36,18 +31,7 @@ import com.local.virpa.virpa.presenter.EditInfoPresenterClass
 import com.local.virpa.virpa.presenter.EditInfoView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_edit_info.*
-import kotlinx.android.synthetic.main.fragment_signup.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import org.greenrobot.eventbus.EventBus
-import org.jetbrains.anko.image
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 @Suppress("DEPRECATED_IDENTITY_EQUALS")
 class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRequestPermissionsResultCallback{

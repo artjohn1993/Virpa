@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activity.ThreadActivity">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/infoCon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:padding="@dimen/padding_s"
+        android:background="@color/lightgray">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/bidderPictureMes"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/sample_pic"
+            android:scaleType="centerCrop"
+            android:layout_gravity="right"
+            android:layout_marginEnd="@dimen/padding_s"
+            android:layout_marginStart="@dimen/margin_m"/>
+
+        <TextView
+            android:id="@+id/bidderNameMes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Name"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toEndOf="@id/bidderPictureMes"
+            app:layout_constraintEnd_toStartOf="@id/bidderStatusMes"
+            android:layout_marginStart="@dimen/margin_m"
+            android:textColor="@color/black"
+            android:layout_marginEnd="@dimen/margin_m"
+            />
+
+        <TextView
+            android:id="@+id/bidderPriceMes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="1000"
+            app:layout_constraintTop_toBottomOf="@id/bidderNameMes"
+            app:layout_constraintStart_toEndOf="@id/bidderPictureMes"
+            app:layout_constraintEnd_toStartOf="@id/bidderStatusMes"
+            android:layout_marginStart="@dimen/margin_m"
+            android:textColor="@color/red"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:textSize="12sp"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/bidderMessageMes"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sample initial Message"
+            app:layout_constraintTop_toBottomOf="@id/bidderPriceMes"
+            app:layout_constraintStart_toEndOf="@id/bidderPictureMes"
+            app:layout_constraintEnd_toStartOf="@id/bidderStatusMes"
+            android:layout_marginStart="@dimen/margin_m"
+            android:layout_marginEnd="@dimen/margin_m"
+            android:textSize="12sp"
+            android:lines="1"
+            />
+
+        <TextView
+            android:id="@+id/bidderStatusMes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Idle"
+            android:background="@drawable/color_gray_background"
+            android:paddingStart="@dimen/padding_s"
+            android:paddingEnd="@dimen/padding_s"
+            android:textColor="@color/colorWhite"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toBottomOf="@id/infoCon"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/commentCon"/>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/commentCon"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        >
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/gray"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/commentEdit"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@color/transparent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/commentButton"
+            android:padding="@dimen/padding_s"
+            />
+        <Button
+            android:id="@+id/commentButton"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:text="Send"
+            android:textAllCaps="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            />
+    </android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout>

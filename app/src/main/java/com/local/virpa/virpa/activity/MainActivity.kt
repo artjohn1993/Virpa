@@ -4,7 +4,6 @@ import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import com.local.virpa.virpa.fragments.SignInFragment
-import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.fragments.SignupFragment
@@ -20,6 +19,7 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import android.support.design.widget.Snackbar
 import android.view.View
+import com.local.virpa.virpa.R
 import com.local.virpa.virpa.fragments.ForgetPassFragment
 import com.local.virpa.virpa.enum.LoginFragment
 import com.local.virpa.virpa.event.*

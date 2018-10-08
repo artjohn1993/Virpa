@@ -1,50 +1,32 @@
 package com.local.virpa.virpa.activity
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Geocoder
 import android.location.Location
-import android.location.LocationListener
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import com.local.virpa.virpa.R
 import com.local.virpa.virpa.event.ShowSnackBar
 import android.location.LocationManager
-import android.os.Build
-import android.support.annotation.RequiresApi
-import android.test.mock.MockPackageManager
 import android.view.Menu
 import android.view.MenuItem
-import com.alirezaashrafi.library.MapType
-import com.developers.imagezipper.ImageZipper
-import com.example.easywaylocation.EasyWayLocation
-import com.example.easywaylocation.Listener
-import com.google.android.gms.common.api.Api
-import com.google.android.gms.common.api.GoogleApi
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.MapsInitializer
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.tasks.OnCompleteListener
+import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.enum.Table
 import com.local.virpa.virpa.enum.VirpaDB
 import com.local.virpa.virpa.local_db.DatabaseHandler
-import com.local.virpa.virpa.model.SaveFiles
 import com.local.virpa.virpa.presenter.LocationPresenterClass
 import com.local.virpa.virpa.presenter.LocationView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_set_location.*
-import org.ankit.gpslibrary.MyTracker
-import java.io.File
 
 
 class SetLocationActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationChangeListener, LocationView {

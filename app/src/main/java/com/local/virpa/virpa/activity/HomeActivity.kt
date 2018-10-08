@@ -1,28 +1,15 @@
 package com.local.virpa.virpa.activity
 
 import android.annotation.SuppressLint
-import android.graphics.Bitmap
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.MenuItem
-import com.local.virpa.virpa.R
 import kotlinx.android.synthetic.main.activity_home.*
-import android.support.annotation.NonNull
 import android.support.design.internal.BottomNavigationItemView
 import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
-import android.support.v7.app.ActionBar
-import android.util.Log
-import android.view.Menu
-import android.widget.Toolbar
 import com.local.virpa.virpa.api.VirpaApi
-import com.local.virpa.virpa.enum.LoginFragment
-import com.local.virpa.virpa.event.LoginChangeFragment
-import com.local.virpa.virpa.event.PostEvent
-import com.local.virpa.virpa.event.ShowSnackBar
 import com.local.virpa.virpa.fragments.*
 import com.local.virpa.virpa.model.Feed
-import com.local.virpa.virpa.model.SaveFeed
 import com.local.virpa.virpa.presenter.HomePresenterClass
 import com.local.virpa.virpa.presenter.HomeView
 import io.reactivex.disposables.CompositeDisposable
@@ -31,19 +18,13 @@ import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
-import android.R.attr.bitmap
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
 import android.os.Build
-import android.os.Handler
-import android.support.annotation.RequiresApi
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
-import com.developers.imagezipper.ImageZipper
-import com.local.virpa.virpa.R.id.name
+import com.local.virpa.virpa.R
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.enum.FragmentType
-import com.local.virpa.virpa.enum.RequestError
 import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.event.Refresh
 import com.local.virpa.virpa.local_db.DatabaseHandler
@@ -52,18 +33,6 @@ import com.local.virpa.virpa.model.UserList
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_setting.*
-import kotlinx.android.synthetic.main.fragment_feed.*
-import okhttp3.MediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
-import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
-import kotlin.Error
 
 
 class HomeActivity : AppCompatActivity(), HomeView, TokenView {
@@ -232,6 +201,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     //region - Presenter
     override fun feedResponse(data: Feed.Result) {
         this.data = data
+
         changeFragment(FeedFragment(this, data, false), 1)
     }
 

@@ -1,9 +1,6 @@
 package com.local.virpa.virpa.adapter
 
 import android.app.Activity
-import android.content.pm.PackageManager
-import android.graphics.drawable.Drawable
-import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
@@ -11,14 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.local.virpa.virpa.R
+import com.local.virpa.virpa.*
 import com.local.virpa.virpa.activity.*
 import com.local.virpa.virpa.event.SignOutEvent
-import com.local.virpa.virpa.model.SignOut
 import org.greenrobot.eventbus.EventBus
 import org.jetbrains.anko.backgroundDrawable
 import org.jetbrains.anko.startActivity
-import java.util.zip.Inflater
 
 class SettingsAdapter(val activity: Activity) : RecyclerView.Adapter<SettingsAdapter.SettingsViewHolder>() {
     var title : ArrayList<String> = ArrayList()

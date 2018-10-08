@@ -28,7 +28,12 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
     }
 
     override fun getItemCount(): Int {
-        return feed.data.feeds.size
+        try {
+            return feed.data.feeds.size
+        }catch (e : NullPointerException) {
+            println(e.toString())
+            return 0
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -75,14 +80,16 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
             activity.startActivity<VisitedProfileActivity>()
         }
         holder.biddingTotal.setOnClickListener {
-            if (feed.data.feeds[pos].type == 0) {
-                var intent = Intent(activity, BiddingActivity::class.java)
-                intent.putExtra("feedID", feed.data.feeds[pos].feedId)
-                activity.startActivity(intent)
-            }
+            gotoBidding(feed.data.feeds[pos].type,
+                    feed.data.feeds[pos].feedId,
+                    feed.data.feeds[pos].feederId
+
+            )
         }
         holder.commentIcon.setOnClickListener {
-            activity.startActivity<BiddingActivity>()
+            gotoBidding(feed.data.feeds[pos].type,
+                    feed.data.feeds[pos].feedId,
+                    feed.data.feeds[pos].feederId)
         }
         holder.post.setOnClickListener {
             FullImageDialog(activity).show(feed.data.feeds[pos].coverPhotos!![0].filePath)
@@ -101,4 +108,17 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         var type : TextView = itemView.findViewById(R.id.postType)
         var biddingGroup : LinearLayout = itemView.findViewById(R.id.reactionGroup)
     }
+
+    fun gotoBidding(type : Int, feedID : String, feederID : String) {
+        if(type == 0) {
+            var intent = Intent(activity, BiddingActivity::class.java)
+            intent.putExtra("feedID", feedID)
+            intent.putExtra("feederID", feederID)
+            activity.startActivity(intent)
+        }
+        else {
+            
+        }
+    }
+
 }

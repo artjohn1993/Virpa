@@ -9,6 +9,7 @@ object Feed {
             var feeds: List<Feeds>
     )
     data class Feeds(
+            var feederId : String,
             var feeder : String,
             var profilePicture : ProfilePicture?,
             var feedId : String,

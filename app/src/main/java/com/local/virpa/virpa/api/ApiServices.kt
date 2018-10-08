@@ -85,6 +85,11 @@ interface ApiServices {
     fun getBidders(@Path( value = "feedId", encoded = true) feedId : String) : Observable<GetBidder.Result>
 
     @Headers("api-version: 1.0")
+    @GET("bid/byId?")
+    fun getBidderById(@Query("feedId") feed_Id : String,
+                      @Query("bidderId") bidder_Id : String) : Observable<GetBidderById.Result>
+
+    @Headers("api-version: 1.0")
     @GET("feeds/wall/{user_id}")
     fun getFeedByUser(@Path(value = "user_id", encoded = true) userId : String) : Observable<FeedByUser.Result>
 

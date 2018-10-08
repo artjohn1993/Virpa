@@ -1,15 +1,9 @@
 package com.local.virpa.virpa.fragments
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.net.Uri
 import android.os.Bundle
-import android.os.Handler
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
-import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.GridLayoutManager
-import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -17,10 +11,7 @@ import android.view.ViewGroup
 
 import com.local.virpa.virpa.R
 
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import com.local.virpa.virpa.activity.HomeActivity
-import com.local.virpa.virpa.adapter.FeedAdapter
 import com.local.virpa.virpa.adapter.LocationAdapter
 import com.local.virpa.virpa.enum.FragmentType
 import com.local.virpa.virpa.event.Refresh
@@ -30,7 +21,7 @@ import org.greenrobot.eventbus.EventBus
 
 @SuppressLint("ValidFragment")
 class LocationFragment @SuppressLint("ValidFragment") constructor
-(val activity: HomeActivity,val data: UserList.Result?, var initial : Boolean) : Fragment() {
+(val activity: HomeActivity, val data: UserList.Result?, var initial : Boolean) : Fragment() {
 
 
     var fragment : RecyclerView? = null

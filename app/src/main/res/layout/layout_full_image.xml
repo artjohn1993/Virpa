@@ -17,7 +17,7 @@
         android:id="@+id/fullImageClose"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/ic_dialog_close_dark"
+        android:src="@drawable/blogging"
         android:background="@color/transparent"
         android:tint="@color/colorWhite"
         app:layout_constraintTop_toTopOf="parent"

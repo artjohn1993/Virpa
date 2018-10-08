@@ -6,9 +6,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import com.google.firebase.database.FirebaseDatabase
 import com.local.virpa.virpa.R
-import com.local.virpa.virpa.adapter.CommentAdapter
-import com.local.virpa.virpa.adapter.SettingsAdapter
+import com.local.virpa.virpa.adapter.BiddingAdapter
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.GetBidder
@@ -17,7 +17,7 @@ import com.local.virpa.virpa.presenter.BidderPresenterClass
 import com.local.virpa.virpa.presenter.BidderView
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_comment.*
-import kotlinx.android.synthetic.main.activity_setting.*
+import java.util.*
 
 class BiddingActivity : AppCompatActivity(), BidderView {
 
@@ -63,11 +63,25 @@ class BiddingActivity : AppCompatActivity(), BidderView {
 
     override fun responseGetBidder(data: GetBidder.Result) {
         checkBidders(data)
-        commentRecycler.adapter = CommentAdapter(this, data)
+        commentRecycler.adapter = BiddingAdapter(this, data, getFeederId(), getCurrentUserId(), getFeedId())
     }
 
     override fun responseSaveBid(data: SaveBidder.Result) {
+
         presenter.getBidders(getFeedId())
+        var root = FirebaseDatabase.getInstance().reference
+        var threadID = data.data.bidder.userId + getFeedId()
+        val mapFeed = HashMap<String, String>()
+        mapFeed.put(getFeedId(),"")
+        val mapthread = HashMap<String, String>()
+        mapthread.put(threadID,"")
+        root.child(getString(R.string.feed_thread))
+                .updateChildren(mapFeed as Map<String, Any>?)
+
+        root.child(getString(R.string.feed_thread))
+                .child(getFeedId())
+                .updateChildren(mapthread as Map<String, Any>?)
+
     }
 
     private fun setRecycler() {
@@ -86,14 +100,28 @@ class BiddingActivity : AppCompatActivity(), BidderView {
             return ""
         }
     }
+    private fun getFeederId() : String {
+        if (intent.extras != null) {
+            return intent.getStringExtra("feederID")
+        }
+        else {
+            return ""
+        }
+    }
+    private fun getCurrentUserId() : String {
+        return database.readSignResult()[0].user.detail.id
+    }
 
     private fun checkBidders(data: GetBidder.Result) {
-        var result = database.readSignResult()
 
         for (bidders : GetBidder.Bidders in data.data.bidders) {
-            if (bidders.user.detail.id == result[0].user.detail.id) {
+            if (bidders.user.detail.id == getCurrentUserId()) {
                 commentBox.visibility = View.GONE
             }
         }
+        if(getFeederId() == getCurrentUserId()) {
+            commentBox.visibility = View.GONE
+        }
     }
+
 }

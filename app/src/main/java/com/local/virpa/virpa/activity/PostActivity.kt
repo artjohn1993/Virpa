@@ -18,12 +18,10 @@ import com.local.virpa.virpa.R
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.event.ShowSnackBar
-import com.local.virpa.virpa.model.ForgetPass
 import com.local.virpa.virpa.model.SaveFeed
 import com.local.virpa.virpa.presenter.PostPresenterClass
 import com.local.virpa.virpa.presenter.PostView
 import kotlinx.android.synthetic.main.activity_post.*
-import kotlinx.android.synthetic.main.layout_visited_user.*
 import org.jetbrains.anko.startActivity
 import java.io.File
 

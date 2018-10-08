@@ -8,14 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import com.bumptech.glide.Glide
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.VisitedProfileActivity
 import com.local.virpa.virpa.model.UserList
 import com.squareup.moshi.Moshi
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_edit_info.*
-import org.jetbrains.anko.startActivity
 
 class LocationAdapter(val activity: Activity,var data: UserList.Result) : RecyclerView.Adapter<LocationAdapter.LocationViewHolder>() {
     var dataArray = data.data.users
@@ -58,7 +55,7 @@ class LocationAdapter(val activity: Activity,var data: UserList.Result) : Recycl
         val moshi = Moshi.Builder().build()
         val adapter = moshi.adapter<UserList.Users>(UserList.Users::class.java)
         var jsonData = adapter.toJson(data)
-        var intent = Intent(activity,VisitedProfileActivity::class.java)
+        var intent = Intent(activity, VisitedProfileActivity::class.java)
         intent.putExtra("userInfo", jsonData)
         activity.startActivity(intent)
     }
