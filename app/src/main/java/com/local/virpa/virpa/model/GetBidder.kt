@@ -10,8 +10,11 @@ object GetBidder {
             var bidders : List<Bidders>
     )
     data class Bidders(
+            var  bidId : String,
             var user : User,
             var createdAt : String,
+            var initialMessage : String,
+            var bidPrice : Int,
             var status : Int
     )
     data class User(

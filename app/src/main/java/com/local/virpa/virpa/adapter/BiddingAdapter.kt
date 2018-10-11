@@ -67,6 +67,7 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
             intent.putExtra("bidderID" , data?.data?.bidders!![pos].user.detail.id)
             intent.putExtra("feedID" , feedID)
             intent.putExtra("feederID" , feederID)
+            intent.putExtra("threadID", data?.data?.bidders!![pos].bidId)
             activity.startActivity(intent)
         }
     }

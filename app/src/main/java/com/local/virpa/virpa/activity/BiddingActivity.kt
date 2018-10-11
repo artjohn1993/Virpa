@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
+import com.bumptech.glide.Glide
 import com.google.firebase.database.FirebaseDatabase
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.BiddingAdapter
@@ -36,11 +37,16 @@ class BiddingActivity : AppCompatActivity(), BidderView {
         title = "Bidding"
         setRecycler()
 
+        Glide.with(this)
+                .load(database.readSignResult()[0].user.profilePicture!!.filePath)
+                .into(profilePicture)
+
         postText.setOnClickListener {
             if (postEditText.text.toString() != "") {
                 var data = SaveBidder.Post(
                         getFeedId(),
-                        postEditText.text.toString()
+                        postEditText.text.toString(),
+                        postPriceEditText.text.toString()
                 )
                 presenter.saveBid(data)
             }
@@ -70,7 +76,7 @@ class BiddingActivity : AppCompatActivity(), BidderView {
 
         presenter.getBidders(getFeedId())
         var root = FirebaseDatabase.getInstance().reference
-        var threadID = data.data.bidder.userId + getFeedId()
+        var threadID = data.data.bidder.bidId
         val mapFeed = HashMap<String, String>()
         mapFeed.put(getFeedId(),"")
         val mapthread = HashMap<String, String>()

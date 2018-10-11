@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/padding_s">
+
+    <LinearLayout
+        android:id="@+id/message1Con"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/message1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/message_1"
+            android:paddingStart="@dimen/padding_m"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_s"
+            android:paddingBottom="@dimen/padding_s"
+            android:text="Sample Name"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/black"
+            android:layout_marginEnd="100dp"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/message2Con"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:gravity="right"
+        >
+        <TextView
+            android:id="@+id/message2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/message_2"
+            android:paddingStart="@dimen/padding_m"
+            android:paddingEnd="@dimen/padding_m"
+            android:paddingTop="@dimen/padding_s"
+            android:paddingBottom="@dimen/padding_s"
+            android:text="Sample Name"
+            android:textSize="14sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/message1Con"
+            app:layout_constraintTop_toTopOf="parent"
+            android:textColor="@color/colorWhite"
+            android:layout_marginStart="100dp"
+            />
+    </LinearLayout>
+
+
+</android.support.constraint.ConstraintLayout>
