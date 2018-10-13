@@ -12,6 +12,7 @@
         android:layout_height="match_parent"
         android:apiKey="AIzaSyCULFod-yNFSP7EkYcXch7xdUMmYpNNK7U"
         />
+    
     <TextView
         android:id="@+id/locationPreview"
         android:layout_width="match_parent"

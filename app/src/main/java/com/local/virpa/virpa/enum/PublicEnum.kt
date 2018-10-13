@@ -1,5 +1,7 @@
 package com.local.virpa.virpa.enum
 
+
+var myID = ""
 enum class LoginFragment {
     SIGNIN,
     SIGNUP,

@@ -31,29 +31,29 @@ import kotlinx.android.synthetic.main.activity_set_location.*
 
 class SetLocationActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.OnMyLocationChangeListener, LocationView {
 
-    private val apiServer by lazy {
-        VirpaApi.create(this)
-    }
-    var presenter = LocationPresenterClass(this,apiServer)
-    var permissionFineLoc = android.Manifest.permission.ACCESS_FINE_LOCATION
-    var REQUEST_CODE = 1
-    var permissionArray = arrayOf(permissionFineLoc)
-    private var compositeDisposable : CompositeDisposable = CompositeDisposable()
-    lateinit var locationManager : LocationManager
-    var location : Location? = null
-    var latitude : Double = 0.0
-    var longitude : Double = 0.0
-    var address : String = ""
-    var state : String = ""
-    var countryName : String = ""
-    var cityName : String = ""
-    var postalCode : String = ""
-    var googleMap : GoogleMap? = null
-    var isLocationSaved : Boolean = false
-    var db = DatabaseHandler(this)
-    var dbLatitude : Double = 0.0
-    var dbLongitude : Double = 0.0
-    var hasNewLocation : Boolean = false
+     private val apiServer by lazy {
+         VirpaApi.create(this)
+     }
+     var presenter = LocationPresenterClass(this,apiServer)
+     var permissionFineLoc = android.Manifest.permission.ACCESS_FINE_LOCATION
+     var REQUEST_CODE = 1
+     var permissionArray = arrayOf(permissionFineLoc)
+     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
+     lateinit var locationManager : LocationManager
+     var location : Location? = null
+     var latitude : Double = 0.0
+     var longitude : Double = 0.0
+     var address : String = ""
+     var state : String = ""
+     var countryName : String = ""
+     var cityName : String = ""
+     var postalCode : String = ""
+     var googleMap : GoogleMap? = null
+     var isLocationSaved : Boolean = false
+     var db = DatabaseHandler(this)
+     var dbLatitude : Double = 0.0
+     var dbLongitude : Double = 0.0
+     var hasNewLocation : Boolean = false
 
 
 
@@ -155,25 +155,27 @@ class SetLocationActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
         super.onBackPressed()
         finish()
     }
-
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap?) {
         MapsInitializer.initialize(this)
-        this.googleMap = googleMap
-        googleMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
-        googleMap?.isMyLocationEnabled = false
-        //googleMap?.uiSettings?.isMyLocationButtonEnabled = true
-        googleMap?.setOnMyLocationChangeListener(this)
+        if(googleMap != null) {
+            this.googleMap = googleMap
+            googleMap?.mapType = GoogleMap.MAP_TYPE_NORMAL
+            googleMap?.isMyLocationEnabled = false
+            //googleMap?.uiSettings?.isMyLocationButtonEnabled = true
+            googleMap?.setOnMyLocationChangeListener(this)
 
-        if (googleMap == null) {
-            ShowSnackBar.present("Sorry! unable to create map", this)
-        }
-        if (isLocationSaved) {
-            var locationData = LatLng(dbLatitude,dbLongitude)
-            this.googleMap?.addMarker(MarkerOptions().position(locationData).title("Saved Location").visible(true))
-            this.googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(locationData, 16.0f))
+            if (googleMap == null) {
+                ShowSnackBar.present("Sorry! unable to create map", this)
+            }
+            if (isLocationSaved) {
+                var locationData = LatLng(dbLatitude, dbLongitude)
+                this.googleMap?.addMarker(MarkerOptions().position(locationData).title("Saved Location").visible(true))
+                this.googleMap?.animateCamera(CameraUpdateFactory.newLatLngZoom(locationData, 16.0f))
+            }
         }
     }
+
 
     @SuppressLint("MissingPermission")
     override fun onMyLocationChange(location: Location?) {
@@ -210,6 +212,7 @@ class SetLocationActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
 
     }
 
+
     override fun responsePinLocation(data: com.local.virpa.virpa.model.Location.Result) {
         db.updateData(VirpaDB.TABLE_LOCATION.getValue(), Table.UserLocation.LATITUDE.getValue(), data.data.location.latitude.toString())
         db.updateData(VirpaDB.TABLE_LOCATION.getValue(), Table.UserLocation.LONGITUDE.getValue(), data.data.location.longitude.toString())
@@ -220,7 +223,6 @@ class SetLocationActivity : AppCompatActivity(), OnMapReadyCallback, GoogleMap.O
         db.updateData(VirpaDB.TABLE_LOCATION.getValue(), Table.UserLocation.POSTAL_CODE.getValue(), data.data.location.postalCode.toString())
         ShowSnackBar.present("Location Save", this)
     }
-
     fun checkData(data : String?) : String {
         if (data != null) {
             return data

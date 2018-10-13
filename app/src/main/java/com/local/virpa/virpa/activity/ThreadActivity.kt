@@ -60,27 +60,28 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 .child(threadID)
 
         sample.addChildEventListener(object : ChildEventListener {
-                    override fun onCancelled(p0: DatabaseError?) {
+            override fun onCancelled(p0: DatabaseError) {
 
-                    }
+            }
 
-                    override fun onChildMoved(p0: DataSnapshot?, p1: String?) {
+            override fun onChildMoved(p0: DataSnapshot, p1: String?) {
 
-                    }
+            }
 
-                    override fun onChildChanged(p0: DataSnapshot?, p1: String?) {
-                        setData(p0)
-                    }
+            override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                setData(p0)
+            }
 
-                    override fun onChildAdded(p0: DataSnapshot?, p1: String?) {
-                        setData(p0)
-                    }
+            override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                setData(p0)
+            }
 
-                    override fun onChildRemoved(p0: DataSnapshot?) {
+            override fun onChildRemoved(p0: DataSnapshot) {
 
-                    }
+            }
 
-                })
+
+        })
 
     }
 
@@ -140,15 +141,15 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
         root.child(getString(R.string.feed_thread))
                 .child(feed)
                 .child(threadID)
-                .updateChildren(map2 as Map<String, Any>?)
+                .updateChildren((map2 as Map<String, Any>?)!!)
 
         var messageRoot = FirebaseDatabase.getInstance().reference
                 .child(getString(R.string.feed_thread))
                 .child(feed)
                 .child(threadID)
-                .child(tempKey)
+                .child(tempKey!!)
 
-        messageRoot.updateChildren(map as Map<String, Any>?).addOnCompleteListener {
+        messageRoot.updateChildren((map as Map<String, Any>?)!!).addOnCompleteListener {
             commentEdit.setText("")
         }
 

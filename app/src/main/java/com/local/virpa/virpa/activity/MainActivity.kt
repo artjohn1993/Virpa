@@ -19,9 +19,11 @@ import org.greenrobot.eventbus.ThreadMode
 import org.jetbrains.anko.startActivity
 import android.support.design.widget.Snackbar
 import android.view.View
+import com.google.firebase.database.FirebaseDatabase
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.fragments.ForgetPassFragment
 import com.local.virpa.virpa.enum.LoginFragment
+import com.local.virpa.virpa.enum.myID
 import com.local.virpa.virpa.event.*
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.ForgetPass
@@ -40,6 +42,8 @@ class MainActivity : AppCompatActivity(), MainView {
     }
     val presenter : MainPresenter = MainPresenterClass(this, apiServer)
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
+    var root = FirebaseDatabase.getInstance().reference
+
     //endregion
 
     //region - Life Cycle
@@ -88,6 +92,23 @@ class MainActivity : AppCompatActivity(), MainView {
     private fun snackBar(data : String) {
         val snackbar = Snackbar.make(findViewById<View>(android.R.id.content), data, Snackbar.LENGTH_LONG)
         snackbar.show()
+    }
+    private fun addToFirebase(data: SignIn.Result) {
+        myID = data.data.user.detail.id
+        var map = HashMap<String , Any>()
+        var map2 = HashMap<String , Any>()
+        map.put(data.data.user.detail.id, "")
+        root.child(getString(R.string.user_table))
+                .updateChildren(map)
+
+        map2.put(getString(R.string.user_id), data.data.user.detail.id)
+        map2.put(getString(R.string.user_name), data.data.user.detail.fullname)
+        map2.put(getString(R.string.user_token), "")
+
+        root.child(getString(R.string.user_table))
+                .child(data.data.user.detail.id)
+                .updateChildren(map2)
+
     }
     //endregion
 
@@ -170,7 +191,7 @@ class MainActivity : AppCompatActivity(), MainView {
         val moshi = Moshi.Builder().build()
         val jsonAdapter = moshi.adapter<SignIn.Result>(SignIn.Result::class.java)
         val json = jsonAdapter.toJson(data)
-        println(json)
+        addToFirebase(data)
         var success = db.insertSignInResult(data)
         if(success) {
             loading.hide()
@@ -198,6 +219,7 @@ class MainActivity : AppCompatActivity(), MainView {
     override fun forgetPassFailed(data: String) {
         ShowSnackBar.present(data, this)
     }
+
     //endregion
 }
 

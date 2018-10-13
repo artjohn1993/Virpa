@@ -15,6 +15,11 @@
     <string name="thread_email">email</string>
     <string name="thread_user_id">user_id</string>
 
+    <string name="user_table">user</string>
+    <string name="user_id">id</string>
+    <string name="user_name">name</string>
+    <string name="user_token">token</string>
+
 
 
 </resources>

@@ -22,9 +22,16 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v4.app.ActivityCompat
 import android.support.v4.content.ContextCompat
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.iid.FirebaseInstanceId
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.enum.FragmentType
+import com.local.virpa.virpa.enum.myID
+import com.local.virpa.virpa.enum.publicFKey
 import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.event.Refresh
 import com.local.virpa.virpa.local_db.DatabaseHandler
@@ -65,6 +72,8 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
         setProfile()
+        initFCM()
+        getkey()
         changeFragment(FeedFragment(this, null, true), 1)
         checkStoragePermission()
         checkLocationPermission()
@@ -195,6 +204,38 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         if (data[0].user.profilePicture?.filePath != "") {
             Picasso.get().load(data[0].user.profilePicture?.filePath).into(profilePicture)
         }
+    }
+    private fun initFCM() {
+        var token = FirebaseInstanceId.getInstance().getToken()
+        println(token)
+        updateToken(token)
+    }
+    private fun updateToken(token : String?) {
+        FirebaseDatabase.getInstance().reference
+                .child("user")
+                .child(DatabaseHandler(this).readSignResult()[0].user.detail.id)
+                .child("token")
+                .setValue(token).addOnCompleteListener {
+                    println("token updated")
+                }
+    }
+    private fun getkey() {
+        var root = FirebaseDatabase.getInstance().reference
+        var query = root.child("server")
+                .orderByValue()
+
+        query.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(p0: DatabaseError) {
+
+            }
+
+            override fun onDataChange(p0: DataSnapshot) {
+                publicFKey = p0.children.iterator().next().value.toString()
+                println(publicFKey)
+
+            }
+
+        })
     }
     //endregion
 
