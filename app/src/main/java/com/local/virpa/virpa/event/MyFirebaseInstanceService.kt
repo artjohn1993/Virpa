@@ -4,6 +4,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.FirebaseInstanceIdService
 import com.local.virpa.virpa.enum.myID
+import com.local.virpa.virpa.local_db.DatabaseHandler
 
 class MyFirebaseInstanceService : FirebaseInstanceIdService() {
 
@@ -14,8 +15,9 @@ class MyFirebaseInstanceService : FirebaseInstanceIdService() {
     private fun updateToken(token : String?) {
         FirebaseDatabase.getInstance().reference
                 .child("user")
-                .child(myID)
+                .child(DatabaseHandler(this).readSignResult()[0].user.detail.id)
                 .child("token")
                 .setValue(token)
     }
+
 }

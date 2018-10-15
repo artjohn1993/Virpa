@@ -1,6 +1,9 @@
 package com.local.virpa.virpa.activity
 
 import android.annotation.SuppressLint
+import android.app.NotificationChannel
+import android.app.NotificationManager
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import kotlinx.android.synthetic.main.activity_home.*
@@ -21,6 +24,8 @@ import org.jetbrains.anko.startActivity
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.NotificationCompat
+import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -50,6 +55,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
+    var CHANNEL_ID = "SAMPLE_CHANNEL"
     val presenter = HomePresenterClass(this, apiServer)
     val presenterToken = TokenPresenterClass(this, apiServer)
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
@@ -162,7 +168,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
             shiftingMode.isAccessible = false
             for (i in 0 until menuView.childCount) {
                 val item = menuView.getChildAt(i) as BottomNavigationItemView
-                item.setShiftingMode(false)
+                item.setShifting(false)
                 // set once again checked value, so view will be updated
                 item.setChecked(item.itemData.isChecked)
             }
@@ -275,4 +281,5 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
             }
         }
     }
+
 }

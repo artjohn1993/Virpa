@@ -48,7 +48,7 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         title = "Bidding"
         setRecycler()
-        sendNotification()
+        getUserToken()
         Glide.with(this)
                 .load(database.readSignResult()[0].user.profilePicture!!.filePath)
                 .into(profilePicture)
@@ -145,25 +145,24 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
             commentBox.visibility = View.GONE
         }
     }
-    private fun sendNotification() {
+    private fun sendNotification(key : String) {
         var myInfo = database.readSignResult()[0]
         var postData = FSend.Data(
                 myInfo.user.detail.fullname,
         "Bid in your post",
+                "data_type_admin_broadcast"/*,
         getFeedId(),
         myInfo.user.detail.id,
                 myInfo.user.detail.id,
-        getFeederId()
+        getFeederId()*/
         )
-        getUserToken()
         var post = FSend.Post(
-            userToken,
+                key,
             postData
         )
         fpresenter.send(post)
     }
     private fun getUserToken() {
-        var token = ""
         var root = FirebaseDatabase.getInstance().reference
         var query = root.child("user")
                 .child(getFeederId())
@@ -175,7 +174,9 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
             }
 
             override fun onDataChange(p0: DataSnapshot) {
-                userToken = p0.child("token").value.toString()
+                var sample = p0.child("token").value.toString()
+                sendNotification(sample)
+                println()
             }
 
         })

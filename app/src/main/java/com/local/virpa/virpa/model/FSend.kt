@@ -8,10 +8,11 @@ object FSend {
     data class Data(
             var title : String,
             var message : String,
+            var data_type : String/*,
             var feedID : String,
             var myID : String,
             var bidderID : String,
-            var feederID : String
+            var feederID : String*/
     )
     data class Result(
             var success : Int,
