@@ -14,14 +14,18 @@ import com.google.firebase.database.FirebaseDatabase
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.FTAdapter
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.event.CustomNotification
 import com.local.virpa.virpa.event.ShowSnackBar
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.FeedThread
 import com.local.virpa.virpa.model.GetBidderById
+import com.local.virpa.virpa.model.UpdateBid
 import com.local.virpa.virpa.presenter.ThreadPresenterClass
 import com.local.virpa.virpa.presenter.ThreadView
+import com.squareup.moshi.Moshi
 import kotlinx.android.synthetic.main.activity_thread.*
 import kotlinx.android.synthetic.main.layout_comment.*
+import org.jetbrains.anko.backgroundResource
 import java.util.ArrayList
 
 class ThreadActivity : AppCompatActivity(), ThreadView {
@@ -30,12 +34,14 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
     var feederID = ""
     var feed = ""
     var threadID = ""
+    var bidderStatus = 0
     var database = DatabaseHandler(this)
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
     var presenter = ThreadPresenterClass(this, apiServer)
     var dataArray : ArrayList<FeedThread.Message> = ArrayList()
+    var customNotification = CustomNotification(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,12 +60,12 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
             }
         }
 
-        var sample = FirebaseDatabase.getInstance().reference
+        var thread = FirebaseDatabase.getInstance().reference
                 .child(getString(R.string.feed_thread))
                 .child(feed)
                 .child(threadID)
 
-        sample.addChildEventListener(object : ChildEventListener {
+        thread.addChildEventListener(object : ChildEventListener {
             override fun onCancelled(p0: DatabaseError) {
 
             }
@@ -98,11 +104,36 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
         bidderNameMes.text = data.data.user.detail.fullname
         bidderMessageMes.text = data.data.initialMessage
         bidderPriceMes.text = data.data.bidPrice.toString()
+        bidderStatus = data.data.status
+        updateStatus(data.data.status)
         Glide.with(this)
                 .load(data.data.user.profilePicture.filePath)
                 .into(bidderPictureMes)
     }
 
+    override fun responseUpdateBid(data: UpdateBid.Result) {
+        updateStatus(data.data.bidder.status)
+    }
+    private fun updateStatus(status : Int) {
+        when(status) {
+            0 -> {
+                bidderStatusMes.text = "Open"
+                bidderStatusMes.setBackgroundResource(R.drawable.color_primary_background)
+            }
+            1 -> {
+                bidderStatusMes.text = "Negotiate"
+                bidderStatusMes.setBackgroundResource(R.drawable.color_orange_background)
+            }
+            2 -> {
+                bidderStatusMes.text = "Accept"
+                bidderStatusMes.setBackgroundResource(R.drawable.color_green_background)
+            }
+            3 -> {
+                bidderStatusMes.text = "Close"
+                bidderStatusMes.setBackgroundResource(R.drawable.color_gray_background)
+            }
+        }
+    }
     private fun getIntentData() {
         if (intent.extras != null) {
             bidderID = intent.getStringExtra("bidderID")
@@ -115,10 +146,10 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
         var currentUser = database.readSignResult()[0].user.detail.id
 
         if (currentUser == bidderID) {
-            infoCon.visibility = View.GONE
+            acceptButtonMes.visibility = View.GONE
         }
         if (currentUser == feederID) {
-            infoCon.visibility = View.VISIBLE
+            acceptButtonMes.visibility = View.VISIBLE
         }
     }
     private fun sendMessage() {
@@ -153,12 +184,44 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
             commentEdit.setText("")
         }
 
+        customNotification.sendNotification(checkUserID(),
+                database.readSignResult()[0].user.detail.fullname,
+                commentEdit.text.toString()
+                )
+
+        if (database.readSignResult()[0].user.detail.id == feederID) {
+            if (bidderStatus == 0) {
+                var data = UpdateBid.Negotiate(
+                        threadID,
+                        "Update bid status",
+                        "0"
+                )
+                var moshi = Moshi.Builder().build()
+                var adapter  = moshi.adapter<UpdateBid.Negotiate>(UpdateBid.Negotiate::class.java)
+                var json = adapter.toJson(data)
+                println(json)
+                presenter.negotiateBid(data)
+            }
+        }
+
     }
 
     private fun setRecycler() {
         FTRecycler.layoutManager = LinearLayoutManager(this,
                 LinearLayout.VERTICAL,
                 false)
+    }
+
+    private fun checkUserID() : String {
+        var currentUser = database.readSignResult()[0].user.detail.id
+        var id = ""
+        if (currentUser == bidderID) {
+            id = feederID
+        }
+        if (currentUser == feederID) {
+            id = bidderID
+        }
+        return id
     }
 
     private fun setData(data : DataSnapshot?) {

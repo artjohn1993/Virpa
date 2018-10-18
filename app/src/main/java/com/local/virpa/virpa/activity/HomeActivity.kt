@@ -85,34 +85,33 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         checkLocationPermission()
         refreshToken("session")
         navigationBar.disableShiftMode()
-        navigationBar.setOnNavigationItemSelectedListener(
-                BottomNavigationView.OnNavigationItemSelectedListener { item ->
-                    when (item.itemId) {
-                        R.id.feed -> {
-                            try {
-                                changeFragment(FeedFragment(this, this.data!!,false), 1)
-                            } catch (e : Exception) {
-                                changeFragment(FeedFragment(this, null, false), 1)
-                        }
-                            presenter.getMyFeed()
-                            currentfragment = 1
-                        }
-                        R.id.location -> {
-                            changeFragment(LocationFragment(this, null, true), 2)
-                            presenter.getUserList()
-                            currentfragment = 2
-                        }
-                        R.id.notif -> {
-                            changeFragment(NotificationFragment(), 4)
-                            currentfragment = 3
-                        }
-                        R.id.message -> {
-                            changeFragment(MessageFragment(), 5)
-                            currentfragment = 4
-                        }
+        navigationBar.setOnNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.feed -> {
+                    try {
+                        changeFragment(FeedFragment(this, this.data!!,false), 1)
+                    } catch (e : Exception) {
+                        changeFragment(FeedFragment(this, null, false), 1)
                     }
-                    true
-                })
+                    presenter.getMyFeed()
+                    currentfragment = 1
+                }
+                R.id.location -> {
+                    changeFragment(LocationFragment(this, null, true), 2)
+                    presenter.getUserList()
+                    currentfragment = 2
+                }
+                R.id.notif -> {
+                    changeFragment(NotificationFragment(), 4)
+                    currentfragment = 3
+                }
+                R.id.message -> {
+                    changeFragment(MessageFragment(), 5)
+                    currentfragment = 4
+                }
+            }
+            true
+        }
         profilePicture.setOnClickListener {
             startActivity<SettingActivity>()
             finish()

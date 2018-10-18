@@ -6,12 +6,15 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.activity.PortfolioActivity
 import com.local.virpa.virpa.activity.ThreadActivity
 import com.local.virpa.virpa.model.GetBidder
+import org.jetbrains.anko.startActivity
 
 class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var feederID : String, var currentUserID : String, var feedID : String) : RecyclerView.Adapter<BiddingAdapter.CommentViewHolder>() {
 
@@ -43,9 +46,11 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
         if (!isReplyButtonEnable(bidder.user.detail.id)) {
             holder.comment.visibility = View.GONE
         }
-        Glide.with(activity)
-                .load(data?.data?.bidders!![pos].user.profilePicture.filePath)
-                .into(holder.picture)
+        if(data?.data?.bidders!![pos].user.profilePicture != null) {
+            Glide.with(activity)
+                    .load(data?.data?.bidders!![pos].user.profilePicture.filePath)
+                    .into(holder.picture)
+        }
 
         when(bidder.status) {
             0 -> {
@@ -70,6 +75,12 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
             intent.putExtra("threadID", data?.data?.bidders!![pos].bidId)
             activity.startActivity(intent)
         }
+        holder.portfolio.setOnClickListener {
+            activity.startActivity<PortfolioActivity>()
+        }
+        if (currentUserID != feederID) {
+            holder.portfolio.visibility = View.GONE
+        }
     }
 
 
@@ -78,7 +89,8 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
         var name = itemView.findViewById<TextView>(R.id.bidderName)
         var status = itemView.findViewById<TextView>(R.id.bidderStatus)
         var time = itemView.findViewById<TextView>(R.id.bidderTime)
-        var comment = itemView.findViewById<LinearLayout>(R.id.threadGroup)
+        var comment = itemView.findViewById<ImageView>(R.id.commentIcon)
+        var portfolio = itemView.findViewById<ImageView>(R.id.portfolioIcon)
     }
 
     private fun isReplyButtonEnable(bidderID : String) : Boolean {

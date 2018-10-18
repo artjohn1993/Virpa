@@ -29,3 +29,10 @@ enum class OpenGallery {
 
     abstract fun getValue() : Int
 }
+enum class NotificationType {
+
+    THREADING { override fun getValue() = "message_in_thread" },
+    BIDDING { override fun getValue() = "bidding" };
+
+    abstract fun getValue() : String
+}

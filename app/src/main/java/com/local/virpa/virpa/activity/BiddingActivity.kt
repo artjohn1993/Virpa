@@ -15,6 +15,7 @@ import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.BiddingAdapter
 import com.local.virpa.virpa.api.FirebaseApi
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.event.CustomNotification
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.FSend
 import com.local.virpa.virpa.model.GetBidder
@@ -27,19 +28,16 @@ import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_comment.*
 import java.util.*
 
-class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
+class BiddingActivity : AppCompatActivity(), BidderView{
 
     private val apiServer by lazy {
         VirpaApi.create(this)
     }
-    private val firebaseApiServer by lazy {
-        FirebaseApi.create(this)
-    }
     val presenter = BidderPresenterClass(this, apiServer)
-    val fpresenter = FirebasePresenterClass(this, firebaseApiServer)
     private var compositeDisposable : CompositeDisposable = CompositeDisposable()
     var database = DatabaseHandler(this)
     var userToken = ""
+    var customNotification = CustomNotification(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,7 +46,7 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
         supportActionBar?.setDisplayShowHomeEnabled(true)
         title = "Bidding"
         setRecycler()
-        getUserToken()
+        checkCurrentUser()
         Glide.with(this)
                 .load(database.readSignResult()[0].user.profilePicture!!.filePath)
                 .into(profilePicture)
@@ -100,9 +98,10 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
                 .child(getFeedId())
                 .updateChildren((mapthread as Map<String, Any>?)!!)
 
-    }
-
-    override fun SendResponse(data: FSend.Result) {
+        customNotification.sendNotification(getFeederId(),
+                database.readSignResult()[0].user.detail.fullname,
+                data.data.bidder.initialMessage
+        )
 
     }
 
@@ -133,6 +132,11 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
     private fun getCurrentUserId() : String {
         return database.readSignResult()[0].user.detail.id
     }
+    private fun checkCurrentUser() {
+        if(getCurrentUserId() == getFeederId()) {
+            commentBox.visibility = View.GONE
+        }
+    }
 
     private fun checkBidders(data: GetBidder.Result) {
 
@@ -145,40 +149,5 @@ class BiddingActivity : AppCompatActivity(), BidderView, FirebaseView {
             commentBox.visibility = View.GONE
         }
     }
-    private fun sendNotification(key : String) {
-        var myInfo = database.readSignResult()[0]
-        var postData = FSend.Data(
-                myInfo.user.detail.fullname,
-        "Bid in your post",
-                "data_type_admin_broadcast"/*,
-        getFeedId(),
-        myInfo.user.detail.id,
-                myInfo.user.detail.id,
-        getFeederId()*/
-        )
-        var post = FSend.Post(
-                key,
-            postData
-        )
-        fpresenter.send(post)
-    }
-    private fun getUserToken() {
-        var root = FirebaseDatabase.getInstance().reference
-        var query = root.child("user")
-                .child(getFeederId())
 
-
-        query.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onCancelled(p0: DatabaseError) {
-
-            }
-
-            override fun onDataChange(p0: DataSnapshot) {
-                var sample = p0.child("token").value.toString()
-                sendNotification(sample)
-                println()
-            }
-
-        })
-    }
 }

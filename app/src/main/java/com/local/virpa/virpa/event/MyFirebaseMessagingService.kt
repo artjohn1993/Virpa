@@ -3,6 +3,7 @@ package com.local.virpa.virpa.event
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
+import android.graphics.Color
 import android.os.Build
 import android.support.v4.app.NotificationCompat
 import android.support.v4.app.NotificationManagerCompat
@@ -21,7 +22,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         var message = p0?.data!!["message"].toString()
         createNotificationChannel()
         var mBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
-                .setSmallIcon(R.mipmap.ic_launcher_round)
+                .setSmallIcon(R.drawable.ic_logo)
+                .setColor(Color.BLUE)
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)

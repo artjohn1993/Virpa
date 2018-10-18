@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -9,7 +10,8 @@
         android:id="@+id/bidderPicture"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:src="@drawable/sample_pic"
+        android:src="@drawable/ic_person"
+        android:background="@drawable/circle_gray"
         android:scaleType="centerCrop"
         android:layout_gravity="right"
         android:layout_marginEnd="@dimen/padding_s"
@@ -75,6 +77,13 @@
            android:layout_width="18dp"
            android:layout_height="18dp"
            android:src="@drawable/blogging"
+           android:layout_marginEnd="@dimen/margin_m"
            />
+        <ImageView
+            android:id="@+id/portfolioIcon"
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:src="@drawable/ic_portfolio"
+            />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

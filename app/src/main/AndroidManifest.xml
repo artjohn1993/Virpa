@@ -64,7 +64,8 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyCULFod-yNFSP7EkYcXch7xdUMmYpNNK7U" />
 
-        <activity android:name=".activity.ThreadActivity"></activity>
+        <activity android:name=".activity.ThreadActivity" />
+        <activity android:name=".activity.PortfolioActivity"></activity>
     </application>
 
 </manifest>

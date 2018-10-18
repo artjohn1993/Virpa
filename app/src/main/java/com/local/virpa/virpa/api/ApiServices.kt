@@ -74,6 +74,18 @@ interface ApiServices {
     @POST("bid")
     fun saveBid(@Body client : SaveBidder.Post) : Observable<SaveBidder.Result>
 
+    @Headers("Content-Type: application/json")
+    @POST("bid/negotiate")
+    fun negotiate(@Body client : UpdateBid.Negotiate) : Observable<UpdateBid.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("bid/accept")
+    fun accept(@Body client : UpdateBid.Accept) : Observable<UpdateBid.Result>
+
+    @Headers("Content-Type: application/json")
+    @POST("bid/close")
+    fun close(@Body client : UpdateBid.Close) : Observable<UpdateBid.Result>
+
     //=========================================================
 
     @Headers("api-version: 1.0")

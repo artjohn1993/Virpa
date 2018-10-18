@@ -10,9 +10,9 @@ var publicFKey : String? = null
     TABLE_LOCATION { override fun getValue() = "User_Location" },
     USER_INFO { override fun getValue() = "User_Info" };
 
-
     abstract fun getValue() : String
 }
+
 object Table {
     enum class Session {
         TOKEN { override fun getValue() = "token" },
