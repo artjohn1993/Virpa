@@ -101,6 +101,9 @@ class MainActivity : AppCompatActivity(), MainView {
         root.child(getString(R.string.user_table))
                 .updateChildren(map)
 
+        root.child("notification")
+                .updateChildren(map)
+
         map2.put(getString(R.string.user_id), data.data.user.detail.id)
         map2.put(getString(R.string.user_name), data.data.user.detail.fullname)
         map2.put(getString(R.string.user_token), "")

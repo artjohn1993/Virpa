@@ -15,7 +15,10 @@ import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.BiddingAdapter
 import com.local.virpa.virpa.api.FirebaseApi
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.enum.ActivityType
 import com.local.virpa.virpa.event.CustomNotification
+import com.local.virpa.virpa.event.FirebaseNotify
+import com.local.virpa.virpa.event.ShowSnackBar
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.FSend
 import com.local.virpa.virpa.model.GetBidder
@@ -38,6 +41,7 @@ class BiddingActivity : AppCompatActivity(), BidderView{
     var database = DatabaseHandler(this)
     var userToken = ""
     var customNotification = CustomNotification(this)
+    var notify = FirebaseNotify()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,9 +51,12 @@ class BiddingActivity : AppCompatActivity(), BidderView{
         title = "Bidding"
         setRecycler()
         checkCurrentUser()
-        Glide.with(this)
-                .load(database.readSignResult()[0].user.profilePicture!!.filePath)
-                .into(profilePicture)
+        refresh(true)
+        if(database.readSignResult()[0].user.profilePicture!!.filePath != "") {
+            Glide.with(this)
+                    .load(database.readSignResult()[0].user.profilePicture!!.filePath)
+                    .into(profilePicture)
+        }
 
         postText.setOnClickListener {
             if (postEditText.text.toString() != "") {
@@ -60,6 +67,9 @@ class BiddingActivity : AppCompatActivity(), BidderView{
                 )
                 presenter.saveBid(data)
             }
+        }
+        bidRefresh.setOnRefreshListener {
+            presenter.getBidders(getFeedId())
         }
     }
 
@@ -79,6 +89,7 @@ class BiddingActivity : AppCompatActivity(), BidderView{
 
     override fun responseGetBidder(data: GetBidder.Result) {
         checkBidders(data)
+        refresh(false)
         commentRecycler.adapter = BiddingAdapter(this, data, getFeederId(), getCurrentUserId(), getFeedId())
     }
 
@@ -98,11 +109,29 @@ class BiddingActivity : AppCompatActivity(), BidderView{
                 .child(getFeedId())
                 .updateChildren((mapthread as Map<String, Any>?)!!)
 
+
+        var json = notify.toJson(data.data.bidder.userId,
+                getFeederId(),
+                getFeedId(),
+                data.data.bidder.bidId)
+
+        notify.notify(getFeederId(),
+                database.readSignResult()[0].user.detail.fullname,
+                json,
+                ActivityType.THREADING
+        )
+
         customNotification.sendNotification(getFeederId(),
                 database.readSignResult()[0].user.detail.fullname,
                 data.data.bidder.initialMessage
         )
 
+    }
+
+    override fun responseGetBidderNull(data: String) {
+        checkCurrentUser()
+        refresh(false)
+        ShowSnackBar.present(data,this)
     }
 
     private fun setRecycler() {
@@ -132,6 +161,7 @@ class BiddingActivity : AppCompatActivity(), BidderView{
     private fun getCurrentUserId() : String {
         return database.readSignResult()[0].user.detail.id
     }
+
     private fun checkCurrentUser() {
         if(getCurrentUserId() == getFeederId()) {
             commentBox.visibility = View.GONE
@@ -140,14 +170,15 @@ class BiddingActivity : AppCompatActivity(), BidderView{
 
     private fun checkBidders(data: GetBidder.Result) {
 
-        for (bidders : GetBidder.Bidders in data.data.bidders) {
+        for (bidders : GetBidder.Bidders in data.data!!.bidders) {
             if (bidders.user.detail.id == getCurrentUserId()) {
                 commentBox.visibility = View.GONE
             }
         }
-        if(getFeederId() == getCurrentUserId()) {
-            commentBox.visibility = View.GONE
-        }
+        checkCurrentUser()
+    }
+    private fun refresh(data : Boolean) {
+        bidRefresh.isRefreshing = data
     }
 
 }

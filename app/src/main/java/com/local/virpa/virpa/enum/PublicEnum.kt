@@ -8,6 +8,11 @@ enum class LoginFragment {
     FORGET_PASSWORD
 }
 
+enum class ActivityType {
+    THREADING,
+    PERSONAL_MESSAGE
+}
+
 enum class RequestError {
     UNAUTHORIZED,
     INVALID

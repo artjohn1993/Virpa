@@ -16,7 +16,11 @@ class BidderPresenterClass(var view : BidderView, var api : ApiServices) : Bidde
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribeOn(Schedulers.newThread())
                         .subscribe({ result ->
-                            view.responseGetBidder(result)
+                            if (result.data != null) {
+                                view.responseGetBidder(result)
+                            } else {
+                                view.responseGetBidderNull(result.message[0])
+                            }
                         },{
                             error ->
                             println(error.cause?.message.toString())
@@ -46,5 +50,6 @@ interface BidderPresenter {
 }
 interface BidderView {
     fun responseGetBidder(data : GetBidder.Result)
+    fun responseGetBidderNull(data : String)
     fun responseSaveBid(data : SaveBidder.Result)
 }

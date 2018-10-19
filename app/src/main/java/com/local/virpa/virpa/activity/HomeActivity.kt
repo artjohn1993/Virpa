@@ -116,15 +116,6 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
             startActivity<SettingActivity>()
             finish()
         }
-
-        /*Thread(Runnable {
-            do {
-                Handler().postDelayed({
-                    refreshToken("session")
-                },1500000)
-            }while (true)
-        }).start()*/
-
     }
 
     override fun onStart() {
