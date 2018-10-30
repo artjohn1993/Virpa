@@ -1,5 +1,7 @@
 package com.local.virpa.virpa.adapter
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.activity.ThreadActivity
+import com.local.virpa.virpa.model.FirebaseModel
 
-class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.NotifViewHolder>() {
+class NotificationAdapter(val activity : Activity,val array : ArrayList<FirebaseModel.Response>) : RecyclerView.Adapter<NotificationAdapter.NotifViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotifViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
@@ -16,12 +20,31 @@ class NotificationAdapter : RecyclerView.Adapter<NotificationAdapter.NotifViewHo
         return NotificationAdapter.NotifViewHolder(layout)
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return position
+    }
     override fun getItemCount(): Int {
-        return 10
+        var total = 0
+        if (array != null) {
+            total = array.size
+        }
+        return total
     }
 
     override fun onBindViewHolder(holder: NotifViewHolder, position: Int) {
+        var pos = getItemViewType(position)
+        holder.title.text = array[pos].name
+        holder.desc.text = array[pos].description
+        holder.time.text = ""
 
+        holder.itemView.setOnClickListener {
+            var intent = Intent(activity, ThreadActivity::class.java)
+            intent.putExtra("bidderID" , array[pos].intent.bidderID)
+            intent.putExtra("feedID" , array[pos].intent.feedID)
+            intent.putExtra("feederID" , array[pos].intent.feederID)
+            intent.putExtra("threadID", array[pos].intent.threadID)
+            activity.startActivity(intent)
+        }
     }
 
     class NotifViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView) {

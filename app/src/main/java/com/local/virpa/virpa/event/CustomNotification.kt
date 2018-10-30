@@ -22,11 +22,12 @@ class CustomNotification(var activity : Activity) : FirebaseView {
     override fun SendResponse(data: FSend.Result) {
 
     }
-    private fun request(key : String, title : String, message : String) {
+    private fun request(key : String, title : String, message : String, data : String) {
         var myInfo = database.readSignResult()[0]
         var postData = FSend.Data(
                 title,
-                message
+                message,
+                data
         )
         var post = FSend.Post(
                 key,
@@ -35,7 +36,7 @@ class CustomNotification(var activity : Activity) : FirebaseView {
         fpresenter.send(post)
     }
 
-    fun sendNotification(toUserID : String, title : String, message : String) {
+    fun sendNotification(toUserID : String, title : String, message : String, data : String) {
         var root = FirebaseDatabase.getInstance().reference
         var query = root.child("user")
                 .child(toUserID)
@@ -48,7 +49,7 @@ class CustomNotification(var activity : Activity) : FirebaseView {
 
             override fun onDataChange(p0: DataSnapshot) {
                 var sample = p0.child("token").value.toString()
-                request(sample, title, message)
+                request(sample, title, message, data)
                 println()
             }
 

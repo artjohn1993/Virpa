@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.VisitedAdapter
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.dialog.FullImageDialog
 import com.local.virpa.virpa.model.FeedByUser
 import com.local.virpa.virpa.model.Follow
 import com.local.virpa.virpa.model.UserList
@@ -26,6 +27,7 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
     }
     val presenter = VisitedProfilePresenterClass(this, apiServer)
     var userId = ""
+    var path = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +39,11 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
         getIntentData()
         followWrapper.setOnClickListener {
             checkFollow()
+        }
+        profilePicture.setOnClickListener {
+            if (path != "") {
+                FullImageDialog(this).show(path)
+            }
         }
     }
 
@@ -59,13 +66,19 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
         if (intent.extras != null) {
             val bundle = intent.extras
             val jsonData = intent.getStringExtra("userInfo")
-            assignUserInfo(convertToObject(jsonData))
+
+            try {
+                assignUserInfo(convertToObject(jsonData))
+            }catch (e : Exception) {
+                getFeedIntent()
+            }
         }
     }
     private fun assignUserInfo(data : UserList.Users) {
         userName.text = data.fullname
         if (data.profilePicture != null) {
-            Picasso.get().load(data.profilePicture[0]?.filePath).into(profilePicture)
+            path = data.profilePicture[0]?.filePath!!
+            Picasso.get().load(path).into(profilePicture)
         }
         if (data.isFollow != 0) {
             followText.text = "followed"
@@ -77,6 +90,17 @@ class VisitedProfileActivity : AppCompatActivity(), VisitedProfileView {
         }
         presenter.getUserFeed(data.userId)
         userId = data.userId
+    }
+    private fun getFeedIntent() {
+        var  name = intent.getStringExtra("name")
+        var  id = intent.getStringExtra("id")
+        path = intent.getStringExtra("profile")
+        if (path != "") {
+            Picasso.get().load(path).into(profilePicture)
+        }
+        userName.text = name
+        presenter.getUserFeed(id)
+        userId = id
     }
     private fun convertToObject(data : String) :  UserList.Users {
         val moshi = Moshi.Builder().build()

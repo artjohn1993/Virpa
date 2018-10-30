@@ -29,6 +29,7 @@ import com.local.virpa.virpa.model.SaveFiles
 import com.local.virpa.virpa.model.UpdateUser
 import com.local.virpa.virpa.presenter.EditInfoPresenterClass
 import com.local.virpa.virpa.presenter.EditInfoView
+import com.squareup.picasso.Picasso
 import io.reactivex.disposables.CompositeDisposable
 import kotlinx.android.synthetic.main.activity_edit_info.*
 import java.io.File
@@ -243,9 +244,11 @@ class EditInfoActivity : AppCompatActivity(), EditInfoView , ActivityCompat.OnRe
     }
     private fun setUserInfo() {
         var result = database.readSignResult()
-        Glide.with(this)
-                .load(result[0].user.profilePicture?.filePath)
-                .into(profilePicture)
+        if(result[0].user.profilePicture?.filePath != "") {
+            Glide.with(this)
+                    .load(result[0].user.profilePicture?.filePath)
+                    .into(profilePicture)
+        }
         tempFullname = result[0].user.detail.fullname
         tempBackground = result[0].user.detail.backgroundSummary!!
         tempNumber = result[0].user.detail.mobileNumber

@@ -12,7 +12,6 @@ import android.support.design.internal.BottomNavigationMenuView
 import android.support.design.widget.BottomNavigationView
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.fragments.*
-import com.local.virpa.virpa.model.Feed
 import com.local.virpa.virpa.presenter.HomePresenterClass
 import com.local.virpa.virpa.presenter.HomeView
 import io.reactivex.disposables.CompositeDisposable
@@ -24,27 +23,27 @@ import org.jetbrains.anko.startActivity
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v4.app.ActivityCompat
-import android.support.v4.app.NotificationCompat
-import android.support.v4.app.NotificationManagerCompat
 import android.support.v4.content.ContextCompat
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import android.view.LayoutInflater
+import android.view.View
+import com.google.firebase.database.*
 import com.google.firebase.iid.FirebaseInstanceId
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.adapter.NotificationAdapter
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.enum.FragmentType
-import com.local.virpa.virpa.enum.myID
 import com.local.virpa.virpa.enum.publicFKey
 import com.local.virpa.virpa.enum.publicToken
+import com.local.virpa.virpa.event.FirebaseNotify
 import com.local.virpa.virpa.event.Refresh
 import com.local.virpa.virpa.local_db.DatabaseHandler
-import com.local.virpa.virpa.model.TokenRefresh
-import com.local.virpa.virpa.model.UserList
+import com.local.virpa.virpa.model.*
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.fragment_login.*
+import kotlinx.android.synthetic.main.layout_notification_badge.*
+import java.util.ArrayList
 
 
 class HomeActivity : AppCompatActivity(), HomeView, TokenView {
@@ -66,6 +65,10 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     var permissionFineLoc = android.Manifest.permission.ACCESS_FINE_LOCATION
     var REQUEST_CODE = 1
     var permissionArray = arrayOf(permissionFineLoc)
+    var database = DatabaseHandler(this)
+    var notifArray : ArrayList<FirebaseModel.Response> = ArrayList()
+    var randomNotifIDArray : ArrayList<String> = ArrayList()
+    var isNotificationClick = false
     //endregion
 
     //region - Life Cycle
@@ -80,11 +83,14 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         setProfile()
         initFCM()
         getkey()
+        notification()
+        setNotification()
         changeFragment(FeedFragment(this, null, true), 1)
         checkStoragePermission()
         checkLocationPermission()
         refreshToken("session")
         navigationBar.disableShiftMode()
+
         navigationBar.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.feed -> {
@@ -102,8 +108,11 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                     currentfragment = 2
                 }
                 R.id.notif -> {
-                    changeFragment(NotificationFragment(), 4)
+                    isNotificationClick = true
+                    seenNotif()
+                    changeFragment(NotificationFragment(this, notifArray), 4)
                     currentfragment = 3
+
                 }
                 R.id.message -> {
                     changeFragment(MessageFragment(), 5)
@@ -147,7 +156,6 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         }
         fragment.replace(R.id.homeFrameLayout, data).commit()
     }
-
     @SuppressLint("RestrictedApi")
     fun BottomNavigationView.disableShiftMode() {
         val menuView = getChildAt(0) as BottomNavigationMenuView
@@ -166,7 +174,68 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
         }
     }
+    private fun notification() {
+        var notif = FirebaseDatabase.getInstance().reference
+                .child("notification")
+                .child(database.readSignResult()[0].user.detail.id)
 
+         notif.addChildEventListener( object : ChildEventListener {
+                override fun onCancelled(p0: DatabaseError) {
+
+                }
+
+                override fun onChildMoved(p0: DataSnapshot, p1: String?) {
+
+                }
+
+                override fun onChildChanged(p0: DataSnapshot, p1: String?) {
+                    if (isNotificationClick) {
+                        setData(p0)
+                        randomNotifIDArray.add(p0.key!!)
+                    }
+                }
+
+                override fun onChildAdded(p0: DataSnapshot, p1: String?) {
+                    if (!isNotificationClick) {
+                        setData(p0)
+                        randomNotifIDArray.add(p0.key!!)
+                    }
+                }
+
+                override fun onChildRemoved(p0: DataSnapshot) {
+
+                }
+
+            })
+    }
+    private fun setData(data : DataSnapshot?) {
+        var i = data!!.children.iterator()
+        while (i.hasNext()) {
+            var activity = i.next().value.toString()
+            var data = i.next().value.toString()
+            var description = i.next().value.toString()
+            var name = i.next().value.toString()
+            var seen = i.next().value.toString()
+            var time = i.next().value.toString()
+            var info = FirebaseNotify().fromJson(data)
+            var intent = FirebaseModel.Intent(info.bidderID,
+            info.feedID,
+            info.feederID,
+            info.threadID
+            )
+
+            var dataArray = FirebaseModel.Response(
+                    activity,
+                    description,
+                    name,
+                    seen,
+                    time,
+                    intent
+            )
+            notifArray.add(dataArray)
+        }
+        checkNotifArray(notifArray)
+    }
     private fun refreshToken(tokenType : String) {
         var data = DatabaseHandler(this).readSignResult()
         var email = data[0].user.detail.email
@@ -227,11 +296,59 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
             override fun onDataChange(p0: DataSnapshot) {
                 publicFKey = p0.children.iterator().next().value.toString()
-                println(publicFKey)
-
             }
 
         })
+    }
+    private fun checkNotifArray(data : ArrayList<FirebaseModel.Response>) {
+        var total = 0
+
+       for (item in data) {
+           if (item.seen == "false") {
+                  total++
+           }
+       }
+        if (total in 1..9) {
+            //notificationBadge.text = " $total "
+            notificationBadge.text = "   $total   "
+        }
+        else if(total in 10..99) {
+            notificationBadge.text = "  $total  "
+        }
+        else {
+            notificationBadge.text = " $total "
+        }
+
+        if (total == 0) {
+            notificationBadge.visibility = View.GONE
+        }
+        else {
+            notificationBadge.visibility = View.VISIBLE
+        }
+    }
+    private fun setNotification() {
+        val bottomNavigationMenuView = navigationBar.getChildAt(0) as BottomNavigationMenuView
+        val v = bottomNavigationMenuView.getChildAt(2)
+        val itemView = v as BottomNavigationItemView
+
+        val badge = LayoutInflater.from(this)
+                .inflate(R.layout.layout_notification_badge, bottomNavigationMenuView, false)
+
+        itemView.addView(badge)
+    }
+    private fun seenNotif() {
+        var notif = FirebaseDatabase.getInstance().reference
+                .child("notification")
+                .child(database.readSignResult()[0].user.detail.id)
+
+        for (item in randomNotifIDArray) {
+            notif.child(item)
+                    .child("seen")
+                    .setValue("true")
+        }
+        randomNotifIDArray.clear()
+        notificationBadge.visibility = View.GONE
+
     }
     //endregion
 

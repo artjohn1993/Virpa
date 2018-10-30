@@ -1,7 +1,9 @@
 package com.local.virpa.virpa.activity
 
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
@@ -14,7 +16,9 @@ import com.google.firebase.database.FirebaseDatabase
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.FTAdapter
 import com.local.virpa.virpa.api.VirpaApi
+import com.local.virpa.virpa.enum.ActivityType
 import com.local.virpa.virpa.event.CustomNotification
+import com.local.virpa.virpa.event.FirebaseNotify
 import com.local.virpa.virpa.event.ShowSnackBar
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.FeedThread
@@ -42,7 +46,9 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
     var presenter = ThreadPresenterClass(this, apiServer)
     var dataArray : ArrayList<FeedThread.Message> = ArrayList()
     var customNotification = CustomNotification(this)
+    var notify = FirebaseNotify()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_thread)
@@ -152,7 +158,12 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
             acceptButtonMes.visibility = View.VISIBLE
         }
     }
+    @RequiresApi(Build.VERSION_CODES.O)
     private fun sendMessage() {
+        var json = notify.toJson(bidderID,
+                feederID,
+                feed,
+                threadID)
         var myInfo = database.readSignResult()[0]
         var root = FirebaseDatabase.getInstance().reference
         var map = HashMap<String, String>()
@@ -186,7 +197,8 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
 
         customNotification.sendNotification(checkUserID(),
                 database.readSignResult()[0].user.detail.fullname,
-                commentEdit.text.toString()
+                commentEdit.text.toString(),
+                json
                 )
 
         if (database.readSignResult()[0].user.detail.id == feederID) {
@@ -203,6 +215,14 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 presenter.negotiateBid(data)
             }
         }
+
+
+        notify.notify(checkUserID(),
+                database.readSignResult()[0].user.detail.fullname,
+                json,
+                ActivityType.THREADING,
+                commentEdit.text.toString()
+        )
 
     }
 

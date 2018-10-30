@@ -13,11 +13,15 @@ class MyFirebaseInstanceService : FirebaseInstanceIdService() {
         updateToken(token)
     }
     private fun updateToken(token : String?) {
-        FirebaseDatabase.getInstance().reference
-                .child("user")
-                .child(DatabaseHandler(this).readSignResult()[0].user.detail.id)
-                .child("token")
-                .setValue(token)
+        try {
+            FirebaseDatabase.getInstance().reference
+                    .child("user")
+                    .child(DatabaseHandler(this).readSignResult()[0].user.detail.id)
+                    .child("token")
+                    .setValue(token)
+        } catch (e : Exception) {
+            println("Firebase Token Error:" + e.message.toString())
+        }
     }
 
 }

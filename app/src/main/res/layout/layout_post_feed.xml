@@ -55,6 +55,7 @@
         android:layout_marginEnd="@dimen/margin_s"
         />
     <TextView
+        android:id="@+id/userLocation"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/profilePicture"
@@ -63,7 +64,6 @@
         android:layout_marginStart="@dimen/margin_s"
         android:layout_marginTop="@dimen/margin_xs"
         android:layout_marginEnd="@dimen/margin_s"
-        android:text="Matina 300m. away"
         android:textSize="@dimen/material_text_caption"
         />
     <TextView

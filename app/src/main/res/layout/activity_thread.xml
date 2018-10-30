@@ -123,7 +123,9 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toStartOf="@id/commentButton"
+            android:imeOptions="actionDone"
             android:padding="@dimen/padding_s"
+            android:singleLine="true"
             />
         <Button
             android:id="@+id/commentButton"

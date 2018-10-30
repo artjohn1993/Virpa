@@ -1,7 +1,9 @@
 package com.local.virpa.virpa.activity
 
+import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import android.view.View
@@ -93,6 +95,7 @@ class BiddingActivity : AppCompatActivity(), BidderView{
         commentRecycler.adapter = BiddingAdapter(this, data, getFeederId(), getCurrentUserId(), getFeedId())
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun responseSaveBid(data: SaveBidder.Result) {
 
         presenter.getBidders(getFeedId())
@@ -118,12 +121,14 @@ class BiddingActivity : AppCompatActivity(), BidderView{
         notify.notify(getFeederId(),
                 database.readSignResult()[0].user.detail.fullname,
                 json,
-                ActivityType.THREADING
+                ActivityType.THREADING,
+                "Bid in your post"
         )
 
         customNotification.sendNotification(getFeederId(),
                 database.readSignResult()[0].user.detail.fullname,
-                data.data.bidder.initialMessage
+                data.data.bidder.initialMessage,
+                json
         )
 
     }
@@ -167,7 +172,6 @@ class BiddingActivity : AppCompatActivity(), BidderView{
             commentBox.visibility = View.GONE
         }
     }
-
     private fun checkBidders(data: GetBidder.Result) {
 
         for (bidders : GetBidder.Bidders in data.data!!.bidders) {

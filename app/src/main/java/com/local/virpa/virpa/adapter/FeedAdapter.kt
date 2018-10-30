@@ -47,6 +47,7 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
 
         holder.time.text = GetTime.calculate(feed.data.feeds[pos].createdAt)
         holder.name.text = feed.data.feeds[pos].feeder
+
         if (feed.data.feeds[pos].profilePicture != null) {
             Glide.with(activity)
                     .load(feed.data.feeds[pos].profilePicture?.filePath)
@@ -74,10 +75,14 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
 
 
         holder.profile.setOnClickListener {
-            activity.startActivity<VisitedProfileActivity>()
+            gotoVisit(feed.data.feeds[pos].feeder,
+                    feed.data.feeds[pos].feederId
+            , feed.data.feeds[pos].profilePicture?.filePath!!)
         }
         holder.name.setOnClickListener {
-            activity.startActivity<VisitedProfileActivity>()
+            gotoVisit(feed.data.feeds[pos].feeder,
+                    feed.data.feeds[pos].feederId,
+                    feed.data.feeds[pos].profilePicture?.filePath!!)
         }
         holder.biddingTotal.setOnClickListener {
             gotoBidding(feed.data.feeds[pos].type,
@@ -107,6 +112,7 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         var commentIcon : ImageView = itemView.findViewById(R.id.commentIcon)
         var type : TextView = itemView.findViewById(R.id.postType)
         var biddingGroup : LinearLayout = itemView.findViewById(R.id.reactionGroup)
+        var location : TextView = itemView.findViewById(R.id.userLocation)
     }
 
     fun gotoBidding(type : Int, feedID : String, feederID : String) {
@@ -119,6 +125,13 @@ class FeedAdapter(val activity: Activity,val feed : Feed.Result) : RecyclerView.
         else {
             
         }
+    }
+    fun gotoVisit(name : String, id : String, profile : String) {
+        var intent = Intent(activity, VisitedProfileActivity::class.java)
+        intent.putExtra("name", name)
+        intent.putExtra("id", id)
+        intent.putExtra("profile", profile)
+        activity.startActivity(intent)
     }
 
 }

@@ -2,7 +2,9 @@ package com.local.virpa.virpa.event
 
 import android.app.NotificationChannel
 import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Build
 import android.support.v4.app.NotificationCompat
@@ -11,6 +13,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.local.virpa.virpa.R
+import com.local.virpa.virpa.activity.ThreadActivity
 import com.local.virpa.virpa.local_db.DatabaseHandler
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -19,7 +22,19 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(p0: RemoteMessage?) {
 
         var title = p0?.data!!["title"].toString()
-        var message = p0?.data!!["message"].toString()
+        var message = p0.data!!["message"].toString()
+        var jsonData = p0.data!!["data"].toString()
+        var info = FirebaseNotify().fromJson(jsonData)
+
+        var intent = Intent(this, ThreadActivity::class.java).apply {
+            putExtra("bidderID" , info.bidderID)
+            putExtra("feedID" , info.feedID)
+            putExtra("feederID" , info.feederID)
+            putExtra("threadID", info.threadID)
+        }
+
+        var pending : PendingIntent = PendingIntent.getActivity(this, 0, intent, 0)
+
         createNotificationChannel()
         var mBuilder = NotificationCompat.Builder(this, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_logo)
@@ -27,6 +42,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setContentTitle(title)
                 .setContentText(message)
                 .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pending)
+                .setAutoCancel(true)
                 .build()
         var notificationManager = NotificationManagerCompat.from(this)
         notificationManager.notify(num++, mBuilder)

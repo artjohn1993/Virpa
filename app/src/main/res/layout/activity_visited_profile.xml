@@ -36,8 +36,7 @@
                 android:id="@+id/userName"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Juan Dela Cruz"
-               app:layout_constraintTop_toBottomOf="@id/profilePicture"
+                app:layout_constraintTop_toBottomOf="@id/profilePicture"
                 app:layout_constraintStart_toStartOf="@id/profilePicture"
                 app:layout_constraintEnd_toEndOf="@id/profilePicture"
                 android:textSize="16sp"
@@ -52,23 +51,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:padding="@dimen/padding_s">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center">
-                    <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
-                        android:src="@drawable/ic_email"
-                        android:tint="@color/colorWhite"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="message"
-                        android:textColor="@color/colorWhite"
-                        android:textSize="10sp"/>
-                </LinearLayout>
                 <LinearLayout
                     android:id="@+id/followWrapper"
                     android:layout_width="wrap_content"

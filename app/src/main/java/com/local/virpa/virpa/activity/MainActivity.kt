@@ -101,9 +101,6 @@ class MainActivity : AppCompatActivity(), MainView {
         root.child(getString(R.string.user_table))
                 .updateChildren(map)
 
-        root.child("notification")
-                .updateChildren(map)
-
         map2.put(getString(R.string.user_id), data.data.user.detail.id)
         map2.put(getString(R.string.user_name), data.data.user.detail.fullname)
         map2.put(getString(R.string.user_token), "")
@@ -188,6 +185,10 @@ class MainActivity : AppCompatActivity(), MainView {
     //region - Presenter delegates
     override fun createSuccess(data : CreateUser.Result) {
         loading.hide()
+        var map = HashMap<String , String>()
+        map.put(data.data.user.detail.id,"")
+        root.child("notification")
+                .updateChildren(map as Map<String, Any>)
         successSignup(data)
     }
     override fun loginSuccess(data: SignIn.Result) {

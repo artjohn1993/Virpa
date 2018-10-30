@@ -7,7 +7,8 @@ object FSend {
     )
     data class Data(
             var title : String,
-            var message : String/*,
+            var message : String,
+            var data : String/*,
             var feedID : String,
             var myID : String,
             var bidderID : String,

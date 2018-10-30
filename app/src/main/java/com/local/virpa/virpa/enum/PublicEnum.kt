@@ -9,8 +9,10 @@ enum class LoginFragment {
 }
 
 enum class ActivityType {
-    THREADING,
-    PERSONAL_MESSAGE
+    THREADING { override fun getValue() = "threading" },
+    PERSONAL_MESSAGE { override fun getValue() = "personal_message" };
+
+    abstract fun getValue() : String
 }
 
 enum class RequestError {
@@ -29,8 +31,8 @@ enum class FragmentType {
 }
 
 enum class OpenGallery {
-    ID { override fun getValue() = 1002 },
-    PROFILE { override fun getValue() = 1001 };
+    ID { override fun getValue() = 1003 },
+    PROFILE { override fun getValue() = 1002 };
 
     abstract fun getValue() : Int
 }
