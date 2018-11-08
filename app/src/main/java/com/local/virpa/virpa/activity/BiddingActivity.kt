@@ -18,6 +18,7 @@ import com.local.virpa.virpa.adapter.BiddingAdapter
 import com.local.virpa.virpa.api.FirebaseApi
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.enum.ActivityType
+import com.local.virpa.virpa.enum.NotifAction
 import com.local.virpa.virpa.event.CustomNotification
 import com.local.virpa.virpa.event.FirebaseNotify
 import com.local.virpa.virpa.event.ShowSnackBar
@@ -122,7 +123,8 @@ class BiddingActivity : AppCompatActivity(), BidderView{
                 database.readSignResult()[0].user.detail.fullname,
                 json,
                 ActivityType.THREADING,
-                "Bid in your post"
+                "Bid in your post",
+                NotifAction.BID.getValue()
         )
 
         customNotification.sendNotification(getFeederId(),

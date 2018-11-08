@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v7.widget.LinearLayoutManager
+import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.LinearLayout
@@ -17,6 +18,7 @@ import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.FTAdapter
 import com.local.virpa.virpa.api.VirpaApi
 import com.local.virpa.virpa.enum.ActivityType
+import com.local.virpa.virpa.enum.NotifAction
 import com.local.virpa.virpa.event.CustomNotification
 import com.local.virpa.virpa.event.FirebaseNotify
 import com.local.virpa.virpa.event.ShowSnackBar
@@ -27,9 +29,11 @@ import com.local.virpa.virpa.model.UpdateBid
 import com.local.virpa.virpa.presenter.ThreadPresenterClass
 import com.local.virpa.virpa.presenter.ThreadView
 import com.squareup.moshi.Moshi
+import kotlinx.android.synthetic.main.activity_post.*
 import kotlinx.android.synthetic.main.activity_thread.*
 import kotlinx.android.synthetic.main.layout_comment.*
 import org.jetbrains.anko.backgroundResource
+import org.jetbrains.anko.startActivity
 import java.util.ArrayList
 
 class ThreadActivity : AppCompatActivity(), ThreadView {
@@ -102,6 +106,9 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
             android.R.id.home -> {
                 this.finish()
             }
+            R.id.portfolio -> {
+                startActivity<VisitedProfileActivity>()
+            }
         }
         return true
     }
@@ -120,6 +127,14 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
     override fun responseUpdateBid(data: UpdateBid.Result) {
         updateStatus(data.data.bidder.status)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        if (database.readSignResult()[0].user.detail.id == feederID) {
+            menuInflater.inflate(R.menu.message_menu, menu)
+        }
+        return true
+    }
+
     private fun updateStatus(status : Int) {
         when(status) {
             0 -> {
@@ -221,7 +236,8 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 database.readSignResult()[0].user.detail.fullname,
                 json,
                 ActivityType.THREADING,
-                commentEdit.text.toString()
+                commentEdit.text.toString(),
+                NotifAction.MESSAGE.getValue()
         )
 
     }
@@ -229,7 +245,7 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
     private fun setRecycler() {
         FTRecycler.layoutManager = LinearLayoutManager(this,
                 LinearLayout.VERTICAL,
-                false)
+                true)
     }
 
     private fun checkUserID() : String {
@@ -261,6 +277,7 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
             )
             dataArray.add(data)
         }
-        FTRecycler.adapter = FTAdapter(dataArray, database.readSignResult()[0].user.detail.id)
+
+        FTRecycler.adapter = FTAdapter(dataArray.asReversed(), database.readSignResult()[0].user.detail.id)
     }
 }

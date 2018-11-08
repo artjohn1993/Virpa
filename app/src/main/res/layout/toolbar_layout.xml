@@ -15,12 +15,11 @@
 
                 <ImageView
                     android:id="@+id/toolbar_logo"
-                    android:src="@mipmap/ic_logo"
+                    android:src="@drawable/sb_banner"
                     android:layout_width="100dp"
                     android:layout_height="40dp"
                     android:layout_gravity="center"
                     android:tint="@color/colorWhite"
-                    android:scaleType="center"
                     />
 
 

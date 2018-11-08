@@ -66,7 +66,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     var REQUEST_CODE = 1
     var permissionArray = arrayOf(permissionFineLoc)
     var database = DatabaseHandler(this)
-    var notifArray : ArrayList<FirebaseModel.Response> = ArrayList()
+    var notifArray : MutableList<FirebaseModel.Response> = ArrayList()
     var randomNotifIDArray : ArrayList<String> = ArrayList()
     var isNotificationClick = false
     //endregion
@@ -189,14 +189,16 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 }
 
                 override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-                    if (isNotificationClick) {
+                    println(p1)
+                    if(isNotificationClick) {
                         setData(p0)
                         randomNotifIDArray.add(p0.key!!)
                     }
                 }
 
                 override fun onChildAdded(p0: DataSnapshot, p1: String?) {
-                    if (!isNotificationClick) {
+                    println(p1)
+                    if(!isNotificationClick) {
                         setData(p0)
                         randomNotifIDArray.add(p0.key!!)
                     }
@@ -211,6 +213,8 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     private fun setData(data : DataSnapshot?) {
         var i = data!!.children.iterator()
         while (i.hasNext()) {
+
+            var action = i.next().value.toString()
             var activity = i.next().value.toString()
             var data = i.next().value.toString()
             var description = i.next().value.toString()
@@ -230,9 +234,12 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                     name,
                     seen,
                     time,
+                    action,
                     intent
             )
-            notifArray.add(dataArray)
+            if(!notifArray.contains(dataArray)) {
+                notifArray.add(dataArray)
+            }
         }
         checkNotifArray(notifArray)
     }
@@ -300,7 +307,7 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
 
         })
     }
-    private fun checkNotifArray(data : ArrayList<FirebaseModel.Response>) {
+    private fun  checkNotifArray(data : MutableList<FirebaseModel.Response>) {
         var total = 0
 
        for (item in data) {
@@ -337,6 +344,8 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         itemView.addView(badge)
     }
     private fun seenNotif() {
+        notificationBadge.visibility = View.GONE
+
         var notif = FirebaseDatabase.getInstance().reference
                 .child("notification")
                 .child(database.readSignResult()[0].user.detail.id)
@@ -347,8 +356,6 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                     .setValue("true")
         }
         randomNotifIDArray.clear()
-        notificationBadge.visibility = View.GONE
-
     }
     //endregion
 

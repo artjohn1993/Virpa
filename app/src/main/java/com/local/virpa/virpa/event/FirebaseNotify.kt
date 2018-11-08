@@ -14,7 +14,7 @@ class FirebaseNotify {
     var threadAdapter = moshi.adapter<FirebaseModel.data>(FirebaseModel.data::class.java)
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun notify(toUserID : String, toUserName : String, jsonData : String, type : ActivityType, description : String) {
+    fun notify(toUserID : String, toUserName : String, jsonData : String, type : ActivityType, description : String, action : String) {
         var root = FirebaseDatabase.getInstance().reference.child("notification")
         var map = HashMap<String, String>()
         var temp = root.child(toUserID).push().key
@@ -31,6 +31,7 @@ class FirebaseNotify {
         map2.put("name", toUserName)
         map2.put("seen", "false")
         map2.put("time", "")
+        map2.put("action", action)
 
         root.child(toUserID)
                 .child(temp!!)

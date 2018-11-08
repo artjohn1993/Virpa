@@ -15,6 +15,13 @@ enum class ActivityType {
     abstract fun getValue() : String
 }
 
+enum class NotifAction {
+    BID { override fun getValue() = "bid" },
+    MESSAGE { override fun getValue() = "message" };
+
+    abstract fun getValue() : String
+}
+
 enum class RequestError {
     UNAUTHORIZED,
     INVALID

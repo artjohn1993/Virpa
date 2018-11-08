@@ -43,15 +43,12 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
         var bidder = data?.data?.bidders!![pos]
         holder.name.text = bidder.user.detail.fullname
 
-        if (!isReplyButtonEnable(bidder.user.detail.id)) {
-            holder.comment.visibility = View.GONE
-        }
         if(data?.data?.bidders!![pos].user.profilePicture != null) {
             Glide.with(activity)
                     .load(data?.data?.bidders!![pos].user.profilePicture.filePath)
                     .into(holder.picture)
         }
-
+        holder.message.text = data?.data?.bidders!![pos].initialMessage
         when(bidder.status) {
             0 -> {
                 holder.status.setBackgroundResource(R.drawable.color_primary_background)
@@ -67,19 +64,13 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
             }
         }
 
-        holder.comment.setOnClickListener {
+        holder.itemView.setOnClickListener {
             var intent = Intent(activity, ThreadActivity::class.java)
             intent.putExtra("bidderID" , data?.data?.bidders!![pos].user.detail.id)
             intent.putExtra("feedID" , feedID)
             intent.putExtra("feederID" , feederID)
             intent.putExtra("threadID", data?.data?.bidders!![pos].bidId)
             activity.startActivity(intent)
-        }
-        holder.portfolio.setOnClickListener {
-            activity.startActivity<PortfolioActivity>()
-        }
-        if (currentUserID != feederID) {
-            holder.portfolio.visibility = View.GONE
         }
     }
 
@@ -89,8 +80,7 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
         var name = itemView.findViewById<TextView>(R.id.bidderName)
         var status = itemView.findViewById<TextView>(R.id.bidderStatus)
         var time = itemView.findViewById<TextView>(R.id.bidderTime)
-        var comment = itemView.findViewById<ImageView>(R.id.commentIcon)
-        var portfolio = itemView.findViewById<ImageView>(R.id.portfolioIcon)
+        var message = itemView.findViewById<TextView>(R.id.bidderIMes)
     }
 
     private fun isReplyButtonEnable(bidderID : String) : Boolean {

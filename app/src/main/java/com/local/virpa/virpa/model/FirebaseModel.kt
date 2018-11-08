@@ -15,6 +15,7 @@ object FirebaseModel {
             var name : String,
             var seen : String,
             var time : String,
+            var action : String,
             var intent : Intent
     )
     data class Intent(

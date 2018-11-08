@@ -10,9 +10,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.local.virpa.virpa.R
 import com.local.virpa.virpa.activity.ThreadActivity
+import com.local.virpa.virpa.enum.NotifAction
 import com.local.virpa.virpa.model.FirebaseModel
 
-class NotificationAdapter(val activity : Activity,val array : ArrayList<FirebaseModel.Response>) : RecyclerView.Adapter<NotificationAdapter.NotifViewHolder>() {
+class NotificationAdapter(val activity : Activity,val array : MutableList<FirebaseModel.Response>) : RecyclerView.Adapter<NotificationAdapter.NotifViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotifViewHolder {
         val inflater = LayoutInflater.from(parent?.context)
@@ -44,6 +45,17 @@ class NotificationAdapter(val activity : Activity,val array : ArrayList<Firebase
             intent.putExtra("feederID" , array[pos].intent.feederID)
             intent.putExtra("threadID", array[pos].intent.threadID)
             activity.startActivity(intent)
+        }
+        when(array[pos].action) {
+            NotifAction.BID.getValue() -> {
+                holder.icon.setImageResource(R.drawable.ic_bid)
+            }
+            NotifAction.MESSAGE.getValue() -> {
+                holder.icon.setImageResource(R.drawable.ic_comment_black_24dp)
+            }
+            "" -> {
+                holder.icon.setImageResource(R.drawable.ic_comment_black_24dp)
+            }
         }
     }
 

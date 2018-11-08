@@ -20,7 +20,7 @@ import com.local.virpa.virpa.model.FirebaseModel
 
 @SuppressLint("ValidFragment")
 class NotificationFragment @SuppressLint("ValidFragment") constructor
-(val activity : Activity,val array : ArrayList<FirebaseModel.Response>) : Fragment() {
+(val activity : Activity,val array : MutableList<FirebaseModel.Response>) : Fragment() {
     var notification : android.support.v7.widget.RecyclerView? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,9 +31,8 @@ class NotificationFragment @SuppressLint("ValidFragment") constructor
         notification?.layoutManager = LinearLayoutManager(context,
                 LinearLayout.VERTICAL,
                 false)
-        notification?.adapter = NotificationAdapter(activity, array)
+        notification?.adapter = NotificationAdapter(activity, array.asReversed())
 
         return view
     }
-
 }

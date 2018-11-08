@@ -8,9 +8,8 @@
     android:padding="30dp">
     <ImageView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:src="@drawable/ic_logo"
-        android:tint="@color/colorPrimary"
+        android:layout_height="150dp"
+        android:src="@drawable/ic_launcher"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="100dp"
