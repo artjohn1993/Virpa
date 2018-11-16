@@ -69,6 +69,10 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 sendMessage()
             }
         }
+        acceptButtonMes.setOnClickListener {
+            var data = UpdateBid.Accept(threadID)
+            presenter.acceptBid(data)
+        }
 
         var thread = FirebaseDatabase.getInstance().reference
                 .child(getString(R.string.feed_thread))
@@ -107,7 +111,7 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 this.finish()
             }
             R.id.portfolio -> {
-                startActivity<VisitedProfileActivity>()
+                startActivity<PortfolioActivity>()
             }
         }
         return true
@@ -146,7 +150,7 @@ class ThreadActivity : AppCompatActivity(), ThreadView {
                 bidderStatusMes.setBackgroundResource(R.drawable.color_orange_background)
             }
             2 -> {
-                bidderStatusMes.text = "Accept"
+                bidderStatusMes.text = "Accepted"
                 bidderStatusMes.setBackgroundResource(R.drawable.color_green_background)
             }
             3 -> {

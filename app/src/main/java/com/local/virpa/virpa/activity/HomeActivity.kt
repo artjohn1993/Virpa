@@ -32,21 +32,24 @@ import com.local.virpa.virpa.R
 import com.local.virpa.virpa.adapter.NotificationAdapter
 import com.local.virpa.virpa.dialog.Loading
 import com.local.virpa.virpa.enum.FragmentType
+import com.local.virpa.virpa.enum.Table
 import com.local.virpa.virpa.enum.publicFKey
 import com.local.virpa.virpa.enum.publicToken
 import com.local.virpa.virpa.event.FirebaseNotify
 import com.local.virpa.virpa.event.Refresh
+import com.local.virpa.virpa.event.connection.BaseActivity
 import com.local.virpa.virpa.local_db.DatabaseHandler
 import com.local.virpa.virpa.model.*
 import com.local.virpa.virpa.presenter.TokenPresenterClass
 import com.local.virpa.virpa.presenter.TokenView
+import com.squareup.moshi.Moshi
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_login.*
 import kotlinx.android.synthetic.main.layout_notification_badge.*
 import java.util.ArrayList
 
 
-class HomeActivity : AppCompatActivity(), HomeView, TokenView {
+class HomeActivity : BaseActivity(), HomeView, TokenView {
 
 
     //region - Variables
@@ -80,12 +83,13 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
         supportActionBar?.setDisplayHomeAsUpEnabled(false)
         supportActionBar?.setDisplayShowTitleEnabled(false)
         supportActionBar?.setDisplayShowHomeEnabled(true)
+        data = database.readFeed()
         setProfile()
         initFCM()
         getkey()
         notification()
         setNotification()
-        changeFragment(FeedFragment(this, null, true), 1)
+        changeFragment(FeedFragment(this, data, true), 1)
         checkStoragePermission()
         checkLocationPermission()
         refreshToken("session")
@@ -189,18 +193,21 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 }
 
                 override fun onChildChanged(p0: DataSnapshot, p1: String?) {
-                    println(p1)
+                   /* println(p1)
                     if(isNotificationClick) {
                         setData(p0)
                         randomNotifIDArray.add(p0.key!!)
+                    }*/
+                    if (p1 != null) {
+                        changeData(p0, p1)
                     }
                 }
 
                 override fun onChildAdded(p0: DataSnapshot, p1: String?) {
                     println(p1)
                     if(!isNotificationClick) {
-                        setData(p0)
                         randomNotifIDArray.add(p0.key!!)
+                        setData(p0)
                     }
                 }
 
@@ -209,6 +216,41 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
                 }
 
             })
+    }
+    private fun  changeData(data : DataSnapshot?, ID : String) {
+        var index = 0
+        if (randomNotifIDArray.contains(ID)) {
+            var i = data!!.children.iterator()
+            while (i.hasNext()) {
+
+                var action = i.next().value.toString()
+                var activity = i.next().value.toString()
+                var data = i.next().value.toString()
+                var description = i.next().value.toString()
+                var name = i.next().value.toString()
+                var seen = i.next().value.toString()
+                var time = i.next().value.toString()
+                var info = FirebaseNotify().fromJson(data)
+                var intent = FirebaseModel.Intent(info.bidderID,
+                        info.feedID,
+                        info.feederID,
+                        info.threadID
+                )
+
+                var dataArray = FirebaseModel.Response(
+                        activity,
+                        description,
+                        name,
+                        seen,
+                        time,
+                        action,
+                        intent
+                )
+               index = randomNotifIDArray.indexOf(ID)
+                notifArray[index] = dataArray
+            }
+        }
+        checkNotifArray(notifArray)
     }
     private fun setData(data : DataSnapshot?) {
         var i = data!!.children.iterator()
@@ -362,12 +404,15 @@ class HomeActivity : AppCompatActivity(), HomeView, TokenView {
     //region - Presenter
     override fun feedResponse(data: Feed.Result) {
         this.data = data
+        var moshi = Moshi.Builder().build()
+        var adapter = moshi.adapter<Feed.Result>(Feed.Result::class.java)
 
+        database.updateUserData(Table.UserData.FEED.getValue(), adapter.toJson(data))
         changeFragment(FeedFragment(this, data, false), 1)
     }
 
     override fun feedError(data: String) {
-
+        changeFragment(FeedFragment(this, this.data, true), 1)
     }
 
     override fun refreshSuccess(data : TokenRefresh.Result) {

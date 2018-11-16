@@ -8,12 +8,22 @@ var publicFKey : String? = null
     TABLE_SESSION { override fun getValue() = "Session_Token" },
     TABLE_REFRESH { override fun getValue() = "Refresh_Token" },
     TABLE_LOCATION { override fun getValue() = "User_Location" },
-    USER_INFO { override fun getValue() = "User_Info" };
+    USER_INFO { override fun getValue() = "User_Info" },
+    USER_DATA { override fun getValue() = "User_Data" };
+
 
     abstract fun getValue() : String
 }
 
 object Table {
+    enum class UserData {
+        FEED { override fun getValue() = "feed" },
+        LOCATION { override fun getValue() = "location" },
+        NOTIFICATION { override fun getValue() = "notification" };
+
+        abstract fun getValue() : String
+    }
+
     enum class Session {
         TOKEN { override fun getValue() = "token" },
         EXPIRED { override fun getValue() = "expiredAt" };

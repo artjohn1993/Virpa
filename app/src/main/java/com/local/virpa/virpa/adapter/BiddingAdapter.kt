@@ -65,12 +65,14 @@ class BiddingAdapter(var activity : Activity, var data : GetBidder.Result?, var 
         }
 
         holder.itemView.setOnClickListener {
-            var intent = Intent(activity, ThreadActivity::class.java)
-            intent.putExtra("bidderID" , data?.data?.bidders!![pos].user.detail.id)
-            intent.putExtra("feedID" , feedID)
-            intent.putExtra("feederID" , feederID)
-            intent.putExtra("threadID", data?.data?.bidders!![pos].bidId)
-            activity.startActivity(intent)
+            if (isReplyButtonEnable(bidder.user.detail.id)) {
+                var intent = Intent(activity, ThreadActivity::class.java)
+                intent.putExtra("bidderID" , data?.data?.bidders!![pos].user.detail.id)
+                intent.putExtra("feedID" , feedID)
+                intent.putExtra("feederID" , feederID)
+                intent.putExtra("threadID", data?.data?.bidders!![pos].bidId)
+                activity.startActivity(intent)
+            }
         }
     }
 

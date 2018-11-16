@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import com.local.virpa.virpa.enum.Table
 import com.local.virpa.virpa.enum.VirpaDB
+import com.local.virpa.virpa.model.Feed
 import com.local.virpa.virpa.model.SignIn
+import com.squareup.moshi.Moshi
 
 
 class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB.DATABASE_NAME.getValue(), null, 1) {
@@ -28,6 +30,12 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db?.execSQL("CREATE TABLE " + VirpaDB.TABLE_REFRESH.getValue() + " (" +
                 Table.Refresh.TOKEN.getValue() + " TEXT," +
                 Table.Refresh.EXPIRED.getValue() + " TEXT)"
+        )
+
+        db?.execSQL("CREATE TABLE " + VirpaDB.USER_DATA.getValue() + " (" +
+                Table.UserData.FEED.getValue() + " TEXT," +
+                Table.UserData.NOTIFICATION.getValue() + " TEXT," +
+                Table.UserData.LOCATION.getValue() + " TEXT)"
         )
 
         db?.execSQL("CREATE TABLE " + VirpaDB.TABLE_SESSION.getValue() + " (" +
@@ -78,6 +86,54 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
             }while (result.moveToNext())
         }
         db.close()
+    }
+
+    fun updateUserData(column : String, newData : String) {
+        var table = VirpaDB.USER_DATA.getValue()
+        val db = this.readableDatabase
+        var query = "Select * from " + table
+        var result = db.rawQuery(query, null)
+        if(result.moveToFirst()){
+            do {
+                var cv = ContentValues()
+                cv.put(column,newData)
+                db.update(table, cv, "", null)
+            }while (result.moveToNext())
+        }
+        db.close()
+    }
+
+    fun readFeed() : Feed.Result? {
+        var moshi = Moshi.Builder().build()
+        val db = this.readableDatabase
+        val result = db.rawQuery("SELECT * from " + VirpaDB.USER_DATA.getValue(), null)
+        var data = ""
+        var adapter = moshi.adapter<Feed.Result>(Feed.Result::class.java)
+        if(result.moveToFirst()) {
+            do {
+                data = result.getString(result.getColumnIndex(Table.UserData.FEED.getValue()))
+            } while (result.moveToNext())
+        }
+        db.close()
+
+        if (data != "") {
+            return adapter.fromJson(data)
+        }
+        else {
+            return null
+        }
+    }
+
+    fun insertUserData() : Boolean {
+        val db = this.writableDatabase
+        var cvUser = ContentValues()
+
+        cvUser.put(Table.UserData.FEED.getValue(), "")
+        cvUser.put(Table.UserData.LOCATION.getValue(), "")
+        cvUser.put(Table.UserData.NOTIFICATION.getValue(), "")
+        var result = db.insert(VirpaDB.USER_DATA.getValue(), null , cvUser)
+        db.close()
+        return result != (-1).toLong()
     }
 
     fun insertSignInResult(data : SignIn.Result) : Boolean {
@@ -161,12 +217,7 @@ class DatabaseHandler(val context : Context) : SQLiteOpenHelper(context, VirpaDB
         db.close()
         result.close()
 
-        if(list.size != 0) {
-            return true
-        }
-        else {
-            return false
-        }
+        return list.size != 0
     }
 
     fun readSignResult() : MutableList<SignIn.Data> {

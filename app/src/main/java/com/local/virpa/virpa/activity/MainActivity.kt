@@ -197,7 +197,8 @@ class MainActivity : AppCompatActivity(), MainView {
         val json = jsonAdapter.toJson(data)
         addToFirebase(data)
         var success = db.insertSignInResult(data)
-        if(success) {
+        var success2 = db.insertUserData()
+        if(success && success2) {
             loading.hide()
             nextActivity()
         }
